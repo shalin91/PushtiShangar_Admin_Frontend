@@ -10,12 +10,11 @@ const AddGalleryDetails = () => {
     imageTitle: "",
     description: "",
     imagePath: "",
-    galleryCategoryDetails: "",
+    galleryCategory: "",
     active: true,
   });
   const [ImagePath, setImagePath] = useState("");
   const [GalleryCategory, setGalleryCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
 
   const Getgallerycat = async () => {
     const res = await GetGalleryCat();
@@ -52,7 +51,7 @@ const AddGalleryDetails = () => {
         imageTitle: "",
         description: "",
         imagePath: "",
-        galleryCategoryDetails: "",
+        galleryCategory: "",
         active: true,
       });
     } else {
@@ -94,7 +93,7 @@ const AddGalleryDetails = () => {
                                 className="form-control"
                                 id="product-orders-input"
                                 placeholder="Enter Title"
-                                name="gallaryCategoryTitle"
+                                name="imageTitle"
                                 aria-label="orders"
                                 aria-describedby="product-orders-addon"
                                 value={GalleryDetData.imageTitle}
@@ -159,21 +158,19 @@ const AddGalleryDetails = () => {
                               <select
                                 className="form-select"
                                 id="gallery-category-select"
-                                name="galleryCategoryId"
-                                // value={GalleryDetData.galleryCategoryDetails}
-                                // onChange={(e) =>
-                                //   setSelectedCategory(e.target.value)
-                                // }
+                                name="galleryCategory"
+                                value={GalleryDetData.galleryCategory}
+                                onChange={handleChange}
                               >
                                 <option value="">Select a Category</option>
-                                {/* {GalleryCategory.map((category) => (
+                                {GalleryCategory.map((category) => (
                                   <option
-                                    key={category.id}
+                                    key={category.gallaryCategoryTitle}
                                     value={category.gallaryCategoryTitle}
                                   >
                                     {category.gallaryCategoryTitle}
                                   </option>
-                                ))} */}
+                                ))}
                               </select>
                             </div>
                           </div>

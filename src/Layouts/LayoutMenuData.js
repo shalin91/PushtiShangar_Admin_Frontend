@@ -405,8 +405,8 @@ const Navdata = () => {
                 parentId: "apps",
                 stateVariables: isNFTMarketplace,
                 childItems: [
-                    { id: 1, label: "Gallery-Details", link: "/gallerycontent" },
-                    { id: 1, label: "Gallery-Category", link: "/gallerycatcontent" },
+                  { id: 1, label: "Gallery-Category", link: "/gallerycatcontent" },
+                  { id: 1, label: "Gallery-Details", link: "/gallerycontent" },
                 ]
             },
 

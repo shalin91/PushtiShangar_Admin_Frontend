@@ -489,7 +489,7 @@ export const SignState = (props) => {
   // Delete GalleryContent 
   const DeleteGalleryCat = async (id) =>{
     try {
-      const response = await axios.post(`${url}/content/deletecontent/${id}`, {
+      const response = await axios.post(`${url}/gallery/deletegallerycat/${id}`, {
     
       });
       return response;
@@ -515,8 +515,7 @@ export const SignState = (props) => {
       const formData = new FormData();
       formData.append("imageTitle", GalleryDetailsData.imageTitle);
       formData.append("description", GalleryDetailsData.description);
-      formData.append("gallaryCategoryId", GalleryDetailsData.gallaryCategoryId);
-      formData.append("galleryCategoryDetails", GalleryDetailsData.galleryCategoryDetails);
+      formData.append("galleryCategory", GalleryDetailsData.galleryCategory);
       formData.append("active", GalleryDetailsData.active);
       formData.append("deleted", GalleryDetailsData.deleted);
       if (imagePath) {
@@ -550,13 +549,12 @@ export const SignState = (props) => {
   };
  
   // Update GalleyDetails
-  const updateGalleryDetails = async (GalleryDetailsData , id ,imagePath) => {
+  const updateGalleryDetails = async (GalleryDetailsData ,imagePath , id) => {
     try {
       const formData = new FormData();
       formData.append("imageTitle", GalleryDetailsData.imageTitle);
       formData.append("description", GalleryDetailsData.description);
-      formData.append("gallaryCategoryId", GalleryDetailsData.gallaryCategoryId);
-      formData.append("galleryCategoryDetails", GalleryDetailsData.galleryCategoryDetails);
+      formData.append("galleryCategory", GalleryDetailsData.galleryCategory);
       formData.append("active", GalleryDetailsData.active);
       formData.append("deleted", GalleryDetailsData.deleted);
       if (imagePath) {
@@ -576,6 +574,18 @@ export const SignState = (props) => {
       console.error('Axios Error:', error);
     }
   };
+
+   // Delete GalleryDetails 
+   const DeleteGalleryDetails = async (id) =>{
+    try {
+      const response = await axios.post(`${url}/gallerydetails/deletegalleryitem/${id}`, {
+    
+      });
+      return response;
+    } catch (error) {
+      return ({ success: false, msg: "server Error" })
+    }
+  } 
 
 
 
@@ -620,6 +630,7 @@ export const SignState = (props) => {
         createGalleryDetails,
         GetSpecificGalleryDetails,
         updateGalleryDetails,
+        DeleteGalleryDetails,
       }}
     >
       {props.children}

@@ -1,14 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
 import BreadCrumb from '../../Components/Common/BreadCrumb'
-import { Link, useParams } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 import SignContext from '../../contextAPI/Context/SignContext'
 
 const ManageGallery = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
-  const {id} = useParams();
-  const { GetGalleryDetails} = useContext(SignContext);
+  const { GetGalleryDetails , DeleteGalleryDetails} = useContext(SignContext);
   const [GalleryDetData, setGalleryDetData] = useState([]);
+  const [deletemodal, setDeleteModal] = useState(false);
+  const [GalleryDetToDelete, setGalleryDetToDelete] = useState(null);
+
+  const toggledeletemodal = () => {
+    setDeleteModal(!deletemodal);
+  };
 
   const getgalleryDetails = async () => {
     const res = await GetGalleryDetails();
@@ -20,6 +25,23 @@ const ManageGallery = () => {
     }));
     console.log(transformedData);
     setGalleryDetData(transformedData);
+  };
+
+  const handleDeleteGalleryCategory = async (id) => {
+    const res = await DeleteGalleryDetails(id);
+    console.log(res);
+    if (res.success) {
+      // Product was successfully deleted
+      // Perform any necessary state updates or notifications
+      // Reset productToDelete and close the modal
+      setGalleryDetToDelete(null);
+      setDeleteModal(false);
+      // Refresh the product list after deletion
+      getgalleryDetails();
+    } else {
+      // Handle deletion error, show error message
+      // You might want to display an error notification
+    }
   };
 
   useEffect(() => {
@@ -164,10 +186,10 @@ const ManageGallery = () => {
                                       className="btn btn-sm btn-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
-                                      // onClick={() => {
-                                      //   toggledeletemodal();
-                                      //   setContentToDelete(content);
-                                      // }}
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setGalleryDetToDelete(galleryDet);
+                                      }}
                                     >
                                       Remove
                                     </button>
@@ -186,6 +208,59 @@ const ManageGallery = () => {
           </Row>
         </Container>
       </div>
+
+      {/* modal Delete Content */}
+      <Modal
+        isOpen={deletemodal}
+        role="dialog"
+        autoFocus={true}
+        centered
+        id="removeItemModal"
+        toggle={toggledeletemodal}
+      >
+        <ModalHeader
+          toggle={() => {
+            setDeleteModal(!deletemodal);
+          }}
+        ></ModalHeader>
+        <ModalBody>
+          <div className="mt-2 text-center">
+            <lord-icon
+              src="https://cdn.lordicon.com/gsqxdxog.json"
+              trigger="loop"
+              colors="primary:#f7b84b,secondary:#f06548"
+              style={{ width: "100px", height: "100px" }}
+            ></lord-icon>
+            <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+              <h4>Are you sure ?</h4>
+              <p className="text-muted mx-4 mb-0">
+                Are you Sure You want to Remove this Gallery-Items ?
+              </p>
+            </div>
+          </div>
+          <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-danger"
+              onClick={() => {
+                handleDeleteGalleryCategory(GalleryDetToDelete._id);
+                setDeleteModal(false);
+              }}
+            >
+              Yes, Delete It!
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
    </>
   )
 }

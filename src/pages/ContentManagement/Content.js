@@ -214,7 +214,7 @@ const Content = () => {
             <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
               <h4>Are you sure ?</h4>
               <p className="text-muted mx-4 mb-0">
-                Are you Sure You want to Remove this Product ?
+                Are you Sure You want to Remove this Content ?
               </p>
             </div>
           </div>
