@@ -30,7 +30,6 @@ export const SignState = (props) => {
   }
   };
 
-
   // try {
   //   if (UserInfo.password !== UserInfo.confirmPassword) {
   //     return {
