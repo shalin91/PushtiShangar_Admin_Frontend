@@ -16,6 +16,7 @@ const Navdata = () => {
   const [isIcons, setIsIcons] = useState(false);
   const [isMaps, setIsMaps] = useState(false);
   const [isMultiLevel, setIsMultiLevel] = useState(false);
+  const [isCategory,setCategory] = useState(false)
 
   // Apps
   const [isEmail, setEmail] = useState(false);
@@ -114,6 +115,9 @@ const Navdata = () => {
       document.body.classList.add("twocolumn-panel");
     }
     if (iscurrentState !== "Landing") {
+      setIsLanding(false);
+    }
+    if (iscurrentState !== "category") {
       setIsLanding(false);
     }
   }, [
@@ -330,23 +334,23 @@ const Navdata = () => {
             // { id: 3, label: "Create Project", link: "/apps-projects-create", parentId: "apps", },
           ],
         },
-        // {
-        //     id: "appsprojects",
-        //     label: "Customers",
-        //     link: "/#",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setIsProjects(!isProjects);
-        //     },
-        //     parentId: "apps",
-        //     stateVariables: isProjects,
-        //     childItems: [
-        //         { id: 1, label: "Customers", link: "/apps-ecommerce-customers", parentId: "apps" },
-        //         { id: 2, label: "Shopping Cart", link: "/apps-ecommerce-cart", parentId: "apps" },
-        //         { id: 3, label: "Checkout", link: "/apps-ecommerce-checkout", parentId: "apps" },
-        //     ]
-        // },
+        {
+            id: "appsprojects",
+            label: "manage category",
+            link: "/#",
+            isChildItem: true,
+            click: function (e) {
+                e.preventDefault();
+                setCategory(!isCategory);
+            },
+            parentId: "apps",
+            stateVariables: isCategory,
+            childItems: [
+                { id: 1, label: "category", link: "/category-master", parentId: "apps" },
+                { id: 2, label: "sub category", link: "/apps-ecommerce-cart", parentId: "apps" },
+                { id: 3, label: "sub category", link: "/apps-ecommerce-checkout", parentId: "apps" },
+            ]
+        },
         {
           id: "tasks",
           label: "Customers",
