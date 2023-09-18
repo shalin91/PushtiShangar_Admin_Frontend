@@ -13,24 +13,13 @@ import {
   Alert,
 } from "reactstrap";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+import logo from '../../assets/images/PushtiShangarLight.png'
 
 //redux
 
 
 import { Link, useNavigate } from "react-router-dom";
 
-// Formik validation
-
-
-//Social Media Imports
-
-// import TwitterLogin from "react-twitter-auth"
-
-// actions
-
-
-import logoLight from "../../assets/images/logo-light.png";
-//Import config
 
 
 import withRouter from "../../Components/Common/withRouter";
@@ -90,9 +79,7 @@ const Login = () => {
               <Col lg={12}>
                 <div className="text-center mt-sm-5 mb-4 text-white-50">
                   <div>
-                    <Link to="/" className="d-inline-block auth-logo" style={{fontSize : "20px" , color : "white"}}>
-                      Shalin
-                    </Link>
+                    <img src={logo} alt="pushti shangar" style={{maxHeight:"200px"}}></img>
                   </div>
                   {/* <p className="mt-3 fs-15 fw-medium">
                     Premium Admin & Dashboard Template
