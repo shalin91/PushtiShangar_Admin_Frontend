@@ -191,13 +191,14 @@ export const SignState = (props) => {
   };
 
   // Add Product
-  const addProduct = async (ProductData , imageGallery ,mainImage) => {
+  const addProduct = async (ProductData , imageGallery ) => {
     try {
       const formData = new FormData();
       formData.append("name", ProductData.name);
       formData.append("description", ProductData.description);
       formData.append("category", ProductData.category);
       formData.append("subCategory", ProductData.subCategory);
+      formData.append("subSubCategory", ProductData.subSubCategory);
       formData.append("original", ProductData.original);
       formData.append("discounted", ProductData.discounted);
       formData.append("stock", ProductData.stock);
@@ -205,15 +206,12 @@ export const SignState = (props) => {
       formData.append("status", ProductData.status);
       // formData.append("original", ProductData.original);
       // formData.append("original", ProductData.original);
-      if (mainImage) {
-        formData.append("mainImage", mainImage);
-      }
       if (imageGallery) {
         console.log(imageGallery)
         formData.append("imageGallery", imageGallery);
       }
       const response = await axios.post(
-        `${url}/api/addproduct`,
+        `${url}/product/addproduct`,
         formData,
         {
           headers: {
