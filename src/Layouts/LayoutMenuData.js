@@ -298,6 +298,12 @@ const Navdata = () => {
               link: "/apps-ecommerce-add-product",
               parentId: "apps",
             },
+            {
+              id: 3,
+              label: "Create Product New",
+              link: "/addproduct",
+              parentId: "apps",
+            },
             // { id: 4, label: "Orders", link: "/apps-ecommerce-orders", parentId: "apps" },
             // { id: 5, label: "Order Details", link: "/apps-ecommerce-order-details", parentId: "apps" },
             // { id: 6, label: "Customers", link: "/apps-ecommerce-customers", parentId: "apps" },

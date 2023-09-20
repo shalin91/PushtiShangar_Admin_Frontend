@@ -183,8 +183,11 @@ import EditGalleryCat from "../pages/GalleryManagement/EditGalleryCat";
 import AddGalleryDetails from "../pages/GalleryManagement/AddGalleryDetails";
 import EditGalleryDetails from "../pages/GalleryManagement/EditGalleryDetails";
 import CategoryMaster from "../pages/manageCategory/category";
+
 import SubCategoryMaster from "../pages/manageCategory/subCategory";
 import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
+import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
+
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 
 
@@ -194,6 +197,7 @@ const authProtectedRoutes = [
   { path: "/allproducts", component: <SignState><EcommerceAllProducts/></SignState> },
   { path: "/apps-ecommerce-product-details", component: <EcommerceProductDetail /> },
   { path: "/apps-ecommerce-add-product", component: <SignState><EcommerceAddProduct /></SignState> },
+  { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
   { path: "/updateproduct/:id", component: <SignState><EcommerceEditProduct /></SignState> },
   { path: "/addcategory", component: <SignState><EcommerceAddCategory /></SignState> },
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
