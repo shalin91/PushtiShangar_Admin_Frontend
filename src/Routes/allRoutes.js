@@ -183,7 +183,11 @@ import EditGalleryCat from "../pages/GalleryManagement/EditGalleryCat";
 import AddGalleryDetails from "../pages/GalleryManagement/AddGalleryDetails";
 import EditGalleryDetails from "../pages/GalleryManagement/EditGalleryDetails";
 import CategoryMaster from "../pages/manageCategory/category";
+
+import SubCategoryMaster from "../pages/manageCategory/subCategory";
+import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
 import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
+
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 
 
@@ -208,6 +212,8 @@ const authProtectedRoutes = [
 
 //category Master
   { path: "/category-master", component: <CategoryMaster /> },
+  { path: "/sub-category-master", component: <SubCategoryMaster/> },
+  { path: "/sub-sub-category-master", component: <SubSubCategoryMaster/> },
 
 
   
