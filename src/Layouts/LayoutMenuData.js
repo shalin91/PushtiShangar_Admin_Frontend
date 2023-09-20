@@ -347,8 +347,8 @@ const Navdata = () => {
             stateVariables: isCategory,
             childItems: [
                 { id: 1, label: "category", link: "/category-master", parentId: "apps" },
-                { id: 2, label: "sub category", link: "/apps-ecommerce-cart", parentId: "apps" },
-                { id: 3, label: "sub category", link: "/apps-ecommerce-checkout", parentId: "apps" },
+                { id: 2, label: "sub category", link: "/sub-category-master", parentId: "apps" },
+                { id: 3, label: "sub sub category", link: "/sub-sub-category-master", parentId: "apps" },
             ]
         },
         {

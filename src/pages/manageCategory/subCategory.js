@@ -20,15 +20,17 @@ import { ToastContainer } from "react-toastify";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
-import { addCategory, getCategory } from "../../helpers/backend_helper";
+import { addCategory, getCategory, getSubCategory } from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
+import { getCategories } from "../../store/actions";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
-const CategoryMaster = () => {
-  document.title = "Category Master";
+const SubCategoryMaster = () => {
+  document.title = "sub category Master";
 
   const [deleteModal, setDeleteModal] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
   const [recordForSubmit, setrecordForSubmit] = useState(null);
   const [errorBanner, setErrorBanner] = useState("");
   const [successBanner, setSuccessBanner] = useState("");
@@ -39,8 +41,10 @@ const CategoryMaster = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getCategory();
+      const response = await getSubCategory();
       setTableData(response);
+      const res = await getCategory();
+      setCategoryData(res);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -60,8 +64,8 @@ const CategoryMaster = () => {
   }, [showModal]);
 
   const handleEdit = (item) => {
-    setShowModal(true)
-      console.log(item)
+    setShowModal(true);
+    console.log(item);
   };
 
   const handleDelete = (selectedCategory) => {
@@ -79,6 +83,7 @@ const CategoryMaster = () => {
 
   const categoryValidation = Yup.object().shape({
     name: Yup.string().required("Name is must be required !!!"),
+    Category: Yup.string().required("plese select One"),
   });
   return (
     <React.Fragment>
@@ -121,7 +126,8 @@ const CategoryMaster = () => {
                           toggle();
                         }}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add Category
+                        <i className="ri-add-fill align-bottom" /> Add Sub
+                        Category
                       </button>
                     </Col>
                   </div>
@@ -147,6 +153,7 @@ const CategoryMaster = () => {
                   <thead>
                     <tr>
                       <th>index</th>
+                      <th>CategoryId</th>
                       <th>Category Title</th>
                       <th>Status</th>
                       <th>Action</th>
@@ -154,9 +161,10 @@ const CategoryMaster = () => {
                   </thead>
                   <tbody>
                     {tableData
-                      ? tableData.map((item,key) => (
+                      ? tableData.map((item, key) => (
                           <tr key={key}>
-                            <td>{key+1}</td>
+                            <td>{key + 1}</td>
+                            <td>{item.Category}</td>
                             <td>{item.name}</td>
                             <td>
                               {" "}
@@ -224,7 +232,7 @@ const CategoryMaster = () => {
             </div>
           ) : null}
           <Formik
-            initialValues={{ name: "",isActive:null }}
+            initialValues={{ name: "", isActive: null,Category:"" }}
             validationSchema={categoryValidation}
             onSubmit={async (values, { resetForm }) => {
               console.log(values);
@@ -244,40 +252,67 @@ const CategoryMaster = () => {
                 <div>
                   <Form>
                   <Col md={12}>
-                    <label className="modalLable">category title</label>
-                    <input
-                      type="text"
-                      name="name"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.name}
-                      placeholder="Enter category title"
-                      className="form-control inp_text modalInput"
-                      
-                      id="name"
-                    />
-                    {/* If validation is not passed show errors */}
-                    <p style={{color:"red",fontSize:"12px"}}>
-                      {errors.name && touched.name && errors.name}
-                    </p>
+                      <label className="modalLabel">Category Title</label>
+                      <select
+                        name="Category"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.Category}
+                        className="form-control inp_text modalInput"
+                        id="Category"
+                      >
+                        {/* Add a default option or label */}
+                        <option value="" disabled>
+                          --select--
+                        </option>
+                        {/* Map through your category data to create dropdown options */}
+                        {categoryData ? categoryData.map((category) => (
+                          <option key={category._id} value={category._id}>
+                            {category.name}
+                          </option>
+                        )):null}
+                      </select>
+                      {/* If validation is not passed, show errors */}
+                      <p style={{ color: "red", fontSize: "12px" }}>
+                        {errors.Category && touched.Category && errors.Category}
+                      </p>
+                    </Col>
+                    <Col md={12}>
+                      <label className="modalLable">category title</label>
+                      <input
+                        type="text"
+                        name="name"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                        placeholder="Enter category title"
+                        className="form-control inp_text modalInput"
+                        id="name"
+                      />
+                      {/* If validation is not passed show errors */}
+                      <p style={{ color: "red", fontSize: "12px" }}>
+                        {errors.name && touched.name && errors.name}
+                      </p>
                     </Col>
 
+                    
+
                     <Col md={12}>
-                <div className="form-check mb-2">
-                  <Input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="active"
-                    name="active"
-                    checked={values.isActive}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <Label className="form-check-label" htmlFor="active">
-                    Is Active
-                  </Label>
-                </div>
-              </Col>
+                      <div className="form-check mb-2">
+                        <Input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="active"
+                          name="active"
+                          checked={values.isActive}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <Label className="form-check-label" htmlFor="active">
+                          Is Active
+                        </Label>
+                      </div>
+                    </Col>
                   </Form>
                   <div className="hstack gap-2 justify-content-end">
                     <button
@@ -329,4 +364,4 @@ const CategoryMaster = () => {
   );
 };
 
-export default CategoryMaster;
+export default SubCategoryMaster;

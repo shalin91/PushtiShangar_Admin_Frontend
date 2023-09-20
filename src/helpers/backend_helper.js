@@ -52,9 +52,17 @@ export const postJwtRegister = (url, data) => {
     });
 };
 
-// To Do
+//category
 export const addCategory = (todo) => api.post("http://localhost:5000", todo);
 export const deleteCategory = (todo) => api.delete(url.DELETE_TODO, { headers: { todo } });
-export const getCategory = (todo) => api.create(url.ADD_NEW_TODO, todo);
+export const getCategory = async() => await api.create("http://localhost:5000/category/getcategories");
 export const updateCategory = (todo) => api.put(url.UPDATE_TODO, todo);
+
+
+// sub category
+export const getSubCategory = async() => await api.create("http://localhost:5000/subcategory/getsubcategories");
+
+//sub sub category
+
+export const getSubSubCategory = async() => await api.create("http://localhost:5000/subsubcategory/getsubsubcategories");
 

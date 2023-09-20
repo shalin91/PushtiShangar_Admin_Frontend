@@ -16,11 +16,7 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import logo from '../../assets/images/PushtiShangarLight.png'
 
 //redux
-
-
 import { Link, useNavigate } from "react-router-dom";
-
-
 
 import withRouter from "../../Components/Common/withRouter";
 import SignContext from "../../contextAPI/Context/SignContext";
@@ -29,15 +25,14 @@ const Login = () => {
   const { loginUser } = useContext(SignContext);
   const navigate = useNavigate();
   const [UserInfo, setUserInfo] = useState({
-    email: "",
-    password: "",
+    email: "shalinsheth4915@gmail.com",
+    password: "shalin123",
   });
 
 
   const handleChange = (e) => {
     setUserInfo({ ...UserInfo, [e.target.name]: e.target.value });
   };
-
   const [Error, setError] = useState("");
   const [Success, setSuccess] = useState("");
 
