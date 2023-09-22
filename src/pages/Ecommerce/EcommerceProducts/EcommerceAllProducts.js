@@ -1,24 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import {
-  Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardHeader,
   Col,
   Container,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Input,
-  Label,
   Modal,
   ModalBody,
   ModalHeader,
   Row,
-  Table,
-  UncontrolledDropdown,
 } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { BiDotsHorizontal } from "react-icons/bi";
@@ -26,12 +17,13 @@ import { AiFillEye } from "react-icons/ai";
 import { MdEdit, MdDelete } from "react-icons/md";
 // import { FaEdit, FaTrash } from "react-icons/fa";
 import SignContext from "../../../contextAPI/Context/SignContext";
+import { deleteProduct, getProducts } from "../../../helpers/backend_helper";
 // import ReactPaginate from 'react-paginate';
 
 const EcommerceAllProducts = () => {
-  const url = `${process.env.REACT_APP_BASE_URL}`;
+  // const url = `${process.env.REACT_APP_BASE_URL}`;
+  const url = `http://localhost:5000/uploads/products/`;
   // const params = useParams();
-  const { getProducts, getCategories, deleteProduct } = useContext(SignContext);
   const [ProductData, setProductData] = useState([]);
   const [categoryNameMapping, setCategoryNameMapping] = useState({});
   const [deletemodal, setDeleteModal] = useState(false);
@@ -41,38 +33,32 @@ const EcommerceAllProducts = () => {
     setDeleteModal(!deletemodal);
   };
 
-  const Getproduct = async () => {
-    const res = await getProducts();
-    console.log(res);
 
-    const categoryRes = await getCategories();
-    if (categoryRes.success) {
-      const mapping = {};
-      categoryRes.categories.forEach((category) => {
-        mapping[category._id] = category.name;
-      });
-      setCategoryNameMapping(mapping);
+  const fetchData = async () => {
+    try {
+      const res = await getProducts();
+      setProductData(res.products);
+      console.log(res)
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-
-    const transformedData = res.products.map((product, index) => ({
-      ...product,
-      id: index + 1,
-    }));
-    setProductData(transformedData);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
 
   // Function to handle product deletion
   const handleDeleteProduct = async (ProductId) => {
     const res = await deleteProduct(ProductId);
     console.log(res);
     if (res.success) {
-      // Product was successfully deleted
-      // Perform any necessary state updates or notifications
-      // Reset productToDelete and close the modal
+
       setProductToDelete(null);
       setDeleteModal(false);
-      // Refresh the product list after deletion
-      Getproduct();
+      fetchData();
     } else {
       // Handle deletion error, show error message
       // You might want to display an error notification
@@ -80,9 +66,6 @@ const EcommerceAllProducts = () => {
   };
 
 
-  useEffect(() => {
-    Getproduct();
-  }, []);
 
   document.title = "Products | By Shalin";
 
@@ -141,18 +124,10 @@ const EcommerceAllProducts = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            <th scope="col" style={{ width: "50px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="checkAll"
-                                  value="option"
-                                />
-                              </div>
-                            </th>
-                            <th className="name">Name</th>
+                           
+                            <th className="name">index</th>
                             <th className="Image">Image</th>
+                            <th className="name">Name</th>
                             <th className="Category">Category</th>
                             <th className="stock">Stock</th>
                             <th className="price">Original Price</th>
@@ -162,7 +137,7 @@ const EcommerceAllProducts = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {ProductData.map((product) => (
+                          {ProductData ? ProductData.map((product) => (
                             <tr key={product.id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -174,7 +149,6 @@ const EcommerceAllProducts = () => {
                                   />
                                 </div>
                               </th>
-                              <td className="product-name">{product.name}</td>
                               <td className="product-image">
                                 <div
                                   style={{
@@ -185,7 +159,7 @@ const EcommerceAllProducts = () => {
                                   }}
                                 >
                                   <img
-                                    src={`${url}/${product.mainImageURL}`}
+                                    src= {url+product.productGallery[-1]}
                                     alt="productImage"
                                     style={{
                                       width: "100%",
@@ -194,16 +168,18 @@ const EcommerceAllProducts = () => {
                                   />
                                 </div>
                               </td>
+                              <td className="product-name">{product.name}</td>
+
 
                               <td className="category">
                                 {categoryNameMapping[product.category]}
                               </td>
                               <td className="stock">{product.stock}</td>
                               <td className="original-price">
-                                ₹{product.prices.original}
+                                ₹{product.price}
                               </td>
                               <td className="discounted-price">
-                                ₹{product.prices.discounted}
+                                ₹{product.discountePrice}
                               </td>
                               <td className="status">
                                 {product.status === "active" ? (
@@ -256,7 +232,7 @@ const EcommerceAllProducts = () => {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )):null}
                         </tbody>
                       </table>
                       <div className="noresult" style={{ display: "none" }}>

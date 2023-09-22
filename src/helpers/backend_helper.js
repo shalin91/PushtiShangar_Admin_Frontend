@@ -57,6 +57,8 @@ export const addCategory = (todo) => api.post("http://localhost:5000", todo);
 export const deleteCategory = (todo) => api.delete(url.DELETE_TODO, { headers: { todo } });
 export const getCategory = async() => await api.create("http://localhost:5000/category/getcategories");
 export const updateCategory = (todo) => api.put(url.UPDATE_TODO, todo);
+export const getProducts = async() => await api.create("http://localhost:5000/product/getallproducts");
+export const deleteProduct = async() => await api.create("http://localhost:5000/product/deleteproduct");
 
 
 // sub category
@@ -66,3 +68,5 @@ export const getSubCategory = async() => await api.create("http://localhost:5000
 
 export const getSubSubCategory = async() => await api.create("http://localhost:5000/subsubcategory/getsubsubcategories");
 
+
+export const addProduct = async (data) => await api.create("http://localhost:5000/product/addproduct", data);
