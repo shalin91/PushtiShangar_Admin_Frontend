@@ -5,12 +5,6 @@ import { SignState } from "../contextAPI/State/SignState";
 //Dashboard
 import DashboardEcommerce from "../pages/DashboardEcommerce";
 
-//Calendar
-// Email box
-import MailInbox from "../pages/EmailInbox";
-import BasicAction from "../pages/Email/EmailTemplates/BasicAction";
-import EcommerceAction from "../pages/Email/EmailTemplates/EcommerceAction";
-
 //Chat
 import Chat from "../pages/Chat";
 import Calendar from "../pages/Calendar";
@@ -221,11 +215,7 @@ const authProtectedRoutes = [
   //Chat
   { path: "/apps-chat", component: <Chat /> },
 
-  //EMail
-  { path: "/apps-mailbox", component: <MailInbox /> },
-  { path: "/apps-email-basic", component: <BasicAction /> },
-  { path: "/apps-email-ecommerce", component: <EcommerceAction /> },
-
+ 
   //Projects
   { path: "/apps-projects-list", component: <ProjectList /> },
   { path: "/apps-projects-overview", component: <ProjectOverview /> },
