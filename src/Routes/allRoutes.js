@@ -5,12 +5,6 @@ import { SignState } from "../contextAPI/State/SignState";
 //Dashboard
 import DashboardEcommerce from "../pages/DashboardEcommerce";
 
-//Calendar
-// Email box
-import MailInbox from "../pages/EmailInbox";
-import BasicAction from "../pages/Email/EmailTemplates/BasicAction";
-import EcommerceAction from "../pages/Email/EmailTemplates/EcommerceAction";
-
 //Chat
 import Chat from "../pages/Chat";
 import Calendar from "../pages/Calendar";
@@ -48,16 +42,11 @@ import ListView from '../pages/SupportTickets/ListView';
 import TicketsDetails from '../pages/SupportTickets/TicketsDetails';
 
 // //Ecommerce Pages
-import EcommerceProducts from "../pages/Ecommerce/EcommerceProducts/index";
-import EcommerceProductDetail from "../pages/Ecommerce/EcommerceProducts/EcommerceProductDetail";
-import EcommerceAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceAddProduct";
 import EcommerceOrders from "../pages/Ecommerce/EcommerceOrders/index";
 import EcommerceOrderDetail from "../pages/Ecommerce/EcommerceOrders/EcommerceOrderDetail";
 import EcommerceCustomers from "../pages/Ecommerce/EcommerceCustomers/index";
 import EcommerceCart from "../pages/Ecommerce/EcommerceCart";
 import EcommerceCheckout from "../pages/Ecommerce/EcommerceCheckout";
-import EcommerceSellers from "../pages/Ecommerce/EcommerceSellers/index";
-import EcommerceSellerDetail from "../pages/Ecommerce/EcommerceSellers/EcommerceSellerDetail";
 
 // NFT Marketplace Pages
 import Marketplace from "../pages/NFTMarketplace/Marketplace";
@@ -168,9 +157,7 @@ import JobLanding from "../pages/Job_Landing/Job";
 import UserProfile from "../pages/Authentication/user-profile";
 import NewTeam from "../pages/Pages/Team/NewTeam";
 import ToDoList from "../pages/ToDo";
-import EcommerceAddCategory from "../pages/Ecommerce/EcommerceProducts/EcommerceAddCategory";
 import EcommerceAllProducts from "../pages/Ecommerce/EcommerceProducts/EcommerceAllProducts";
-import EcommerceEditProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceEditProduct";
 // import NewCutomer from "../pages/Ecommerce/EcommerceCustomers/NewCutomer";
 import NewCustomer from "../pages/Ecommerce/EcommerceCustomers/NewCustomer";
 import Content from "../pages/ContentManagement/Content";
@@ -193,21 +180,14 @@ import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/Ecommer
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
-  { path: "/apps-ecommerce-products", component: <EcommerceProducts /> },
   { path: "/allproducts", component: <SignState><EcommerceAllProducts/></SignState> },
-  { path: "/apps-ecommerce-product-details", component: <EcommerceProductDetail /> },
-  { path: "/apps-ecommerce-add-product", component: <SignState><EcommerceAddProduct /></SignState> },
   { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
-  { path: "/updateproduct/:id", component: <SignState><EcommerceEditProduct /></SignState> },
-  { path: "/addcategory", component: <SignState><EcommerceAddCategory /></SignState> },
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
   { path: "/apps-ecommerce-order-details", component: <EcommerceOrderDetail /> },
   { path: "/apps-ecommerce-customers", component: <EcommerceCustomers /> },
   { path: "/customers", component: <SignState><NewCustomer/></SignState> },
   { path: "/apps-ecommerce-cart", component: <EcommerceCart /> },
   { path: "/apps-ecommerce-checkout", component: <EcommerceCheckout /> },
-  { path: "/apps-ecommerce-sellers", component: <EcommerceSellers /> },
-  { path: "/apps-ecommerce-seller-details", component: <EcommerceSellerDetail /> },
   { path: "/apps-todo", component: <ToDoList /> },
 
 //category Master
@@ -235,11 +215,7 @@ const authProtectedRoutes = [
   //Chat
   { path: "/apps-chat", component: <Chat /> },
 
-  //EMail
-  { path: "/apps-mailbox", component: <MailInbox /> },
-  { path: "/apps-email-basic", component: <BasicAction /> },
-  { path: "/apps-email-ecommerce", component: <EcommerceAction /> },
-
+ 
   //Projects
   { path: "/apps-projects-list", component: <ProjectList /> },
   { path: "/apps-projects-overview", component: <ProjectOverview /> },
