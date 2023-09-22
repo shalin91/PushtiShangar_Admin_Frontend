@@ -1,4 +1,6 @@
+
 import React, { useEffect, useMemo, useState } from "react";
+
 import {
   Card,
   CardBody,
@@ -25,6 +27,7 @@ import {
   getSubSubCategory,
 } from "../../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
+
 import { Link, useNavigate } from "react-router-dom";
 
 const EcommerceNewAddProduct = () => {
@@ -158,6 +161,7 @@ const EcommerceNewAddProduct = () => {
     productForm.setFieldValue("description", content);
   };
 
+
   return (
     <>
       <div className="page-content">
@@ -165,6 +169,7 @@ const EcommerceNewAddProduct = () => {
           <BreadCrumb title="Add Product" pageTitle="Products" />
           <Row>
             <Col lg={12}>
+
               <Form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -172,6 +177,7 @@ const EcommerceNewAddProduct = () => {
                   return false;
                 }}
               >
+
                 <Card>
                   <div className="card-body">
                     <div className="live-preview">
@@ -187,6 +193,7 @@ const EcommerceNewAddProduct = () => {
                             </label>
                             <select
                               className="form-select"
+
                               id="category"
                               name="category"
                               aria-label="category"
@@ -357,16 +364,20 @@ const EcommerceNewAddProduct = () => {
 
                         {/* Discounted Price */}
                         <Col sm={4}>
+
                           <div className="mb-3">
                             <label
                               className="form-label"
                               htmlFor="product-price-input"
                             >
+
                               Discounted Price
+
                             </label>
                             <div className="input-group mb-3">
                               <span
                                 className="input-group-text"
+
                                 id="discountePrice"
                               >
                                 ₹
@@ -396,9 +407,11 @@ const EcommerceNewAddProduct = () => {
                                   {productForm.errors.discountePrice}
                                 </FormFeedback>
                               ) : null}
+
                             </div>
                           </div>
                         </Col>
+
 
                         {/* Stocks */}
                         <Col sm={4}>
@@ -439,10 +452,12 @@ const EcommerceNewAddProduct = () => {
 
                       <Row className="align-items-center g-3">
                         {/* Ttile */}
+
                         <Col sm={6}>
                           <div className="mb-3">
                             <label
                               className="form-label"
+
                               htmlFor="product-orders-input"
                             >
                               Product Title
@@ -483,11 +498,13 @@ const EcommerceNewAddProduct = () => {
                               htmlFor="product-orders-input"
                             >
                               SKU
+
                             </label>
                             <div className="input-group mb-3">
                               <Input
                                 type="text"
                                 className="form-control"
+
                                 id="sku"
                                 placeholder="Enter Title"
                                 name="sku"
@@ -667,14 +684,16 @@ const EcommerceNewAddProduct = () => {
                                 );
                               })}
                             </div>
-                          </div>
+             </div>
                         </Col>
                       </Row>
                     </div>
                   </div>
                 </Card>
+
                 <div className="text-center mb-3 me-4">
                   <button type="submit" className="btn btn-primary w-lg">
+
                     Submit
                   </button>
                 </div>
