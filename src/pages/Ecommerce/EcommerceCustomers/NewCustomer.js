@@ -16,10 +16,13 @@ import {
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Grid } from "gridjs";
 import SignContext from "../../../contextAPI/Context/SignContext";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const NewCustomer = () => {
-  const { getCustomers, createCustomer , GetSpecificCustomer } = useContext(SignContext);
+  const { id } = useParams();
+  console.log(id);
+  const { getCustomers, createCustomer, GetSpecificCustomer, UpdateCustomer , deleteCustomer } =
+    useContext(SignContext);
   const [CustomersData, setCustomersData] = useState([]);
   const [CustomerInfo, setCustomerInfo] = useState({
     username: "",
@@ -28,19 +31,16 @@ const NewCustomer = () => {
     confirmPassword: "",
     status: "",
   });
+  const [EditCustomerInfo, setEditCustomerInfo] = useState({
+    username: "",
+    status: "",
+    deleted: false,
+  });
   const [modal, setModal] = useState(false);
   const [EditModal, setEditModal] = useState(false);
+  const [CustomerToDelete, setCustomerToDelete] = useState(null);
   const [deletemodal, setDeleteModal] = useState(false);
 
-  const togglemodal = () => {
-    setModal(!modal);
-  };
-
-  const toggleEditmodal = () => {
-    setEditModal(!modal);
-    // getspecificUser(id);
-    // console.log(id);
-  };
 
   const Getcustomers = async () => {
     const res = await getCustomers();
@@ -53,27 +53,83 @@ const NewCustomer = () => {
     setCustomersData(transformedData);
   };
 
+  const getspecificCustomer = async (id) => {
+    const res = await GetSpecificCustomer(id);
+    console.log(res);
+    if (res.success) {
+      setEditCustomerInfo(res.customer); // Update editUserInfo with fetched data
+    } else {
+      console.log(res.msg);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await createCustomer(CustomerInfo);
     console.log(res);
-    getCustomers();
-    // if (res.success) {
-    //   navigate("/login");
-    // }
+    if (res.success) {
+      Getcustomers();
+    }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerInfo({
-      ...CustomerInfo,
-      [name]: value,
-    });
+    if (EditModal) {
+      const { name, value, type, checked } = e.target;
+      const newValue = type === "checkbox" ? checked : value;
+
+      setEditCustomerInfo({
+        ...EditCustomerInfo,
+        [name]: newValue,
+      });
+    } else {
+      setCustomerInfo({ ...CustomerInfo, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleUpdate = async (EditCustomerInfo,id) => {
+    const resUpdate = await UpdateCustomer(EditCustomerInfo,id);
+    console.log(resUpdate);
+    if (resUpdate.success) {
+      Getcustomers();
+      // setSuccess(resUpdate.msg);
+    }
+  };
+
+  const handleDeleteCustomer = async (customerId) => {
+    const res = await deleteCustomer(customerId);
+    console.log(res);
+    if (res.success) {
+      // Product was successfully deleted
+      // Perform any necessary state updates or notifications
+      // Reset productToDelete and close the modal
+      setCustomerToDelete(null);
+      setDeleteModal(false);
+      // Refresh the product list after deletion
+      Getcustomers();
+    } else {
+      // Handle deletion error, show error message
+      // You might want to display an error notification
+    }
+  };
+
+  const togglemodal = () => {
+    setModal(!modal);
+  };
+
+  const toggledeletemodal = () => {
+    setDeleteModal(!deletemodal);
+  };
+
+  const toggleEditmodal = (id) => {
+    setEditModal(!modal);
+    getspecificCustomer(id);
+    console.log(id);
   };
 
   useEffect(() => {
     Getcustomers();
-  }, []);
+    getspecificCustomer(id);
+  }, [id]);
 
   document.title = "Customers | By Shalin";
   return (
@@ -189,7 +245,9 @@ const NewCustomer = () => {
                               <div className="d-flex gap-2">
                                 <div className="edit">
                                   <Link
-                                    onClick={() => toggleEditmodal(customer._id)}
+                                    onClick={() =>
+                                      toggleEditmodal(customer._id)
+                                    }
                                     className="btn btn-sm btn-success edit-item-btn"
                                   >
                                     Edit
@@ -200,10 +258,10 @@ const NewCustomer = () => {
                                     className="btn btn-sm btn-danger remove-item-btn"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteRecordModal"
-                                    //   onClick={() => {
-                                    //     toggledeletemodal();
-                                    //     setProductToDelete(product);
-                                    //   }}
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setCustomerToDelete(customer);
+                                      }}
                                   >
                                     Remove
                                   </button>
@@ -371,11 +429,7 @@ const NewCustomer = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-          <Form
-          // onSubmit={(e) => handleUpdate(e)}
-          >
-            <div className="mb-3"></div>
-
+          <Form onSubmit={(e) => handleUpdate(e)}>
             <div className="mb-3">
               <Label for="addaddress-Name" className="form-label">
                 Name
@@ -386,56 +440,7 @@ const NewCustomer = () => {
                 id="Name"
                 placeholder="Enter Name"
                 name="username"
-                value={CustomerInfo.username}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-
-            <div className="mb-3">
-              <Label for="Email" className="form-label">
-                Email
-              </Label>
-              <Input
-                type="text"
-                className="form-control"
-                id="Email"
-                placeholder="Enter Email"
-                name="email"
-                value={CustomerInfo.email}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="password" className="form-label">
-                Password
-              </Label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                name="password"
-                placeholder="Password"
-                value={CustomerInfo.password}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="password" className="form-label">
-                Confirm Password
-              </Label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={CustomerInfo.confirmPassword}
+                value={EditCustomerInfo.username}
                 onChange={(e) => {
                   handleChange(e);
                 }}
@@ -449,16 +454,29 @@ const NewCustomer = () => {
                 className="form-select"
                 id="autoSizingSelect"
                 name="status"
-                value={CustomerInfo.status}
+                value={EditCustomerInfo.status}
                 onChange={(e) => {
                   handleChange(e);
                 }}
               >
-                <option value="">select status</option>
                 <option value="active">active</option>
                 <option value="inactive">inactive</option>
               </select>
             </div>
+            <div className="mt-3">
+              <Input
+                type="checkbox"
+                id="deleted"
+                label="deleted"
+                name="deleted"
+                checked={EditCustomerInfo.deleted}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
+              />
+              <label className="me-2">Is Deleted</label>
+            </div>
+
             <ModalFooter>
               <button
                 type="button"
@@ -480,6 +498,59 @@ const NewCustomer = () => {
               </button>
             </ModalFooter>
           </Form>
+        </ModalBody>
+      </Modal>
+
+      {/* modal Delete Address */}
+      <Modal
+        isOpen={deletemodal}
+        role="dialog"
+        autoFocus={true}
+        centered
+        id="removeItemModal"
+        toggle={toggledeletemodal}
+      >
+        <ModalHeader
+          toggle={() => {
+            setDeleteModal(!deletemodal);
+          }}
+        ></ModalHeader>
+        <ModalBody>
+          <div className="mt-2 text-center">
+            <lord-icon
+              src="https://cdn.lordicon.com/gsqxdxog.json"
+              trigger="loop"
+              colors="primary:#f7b84b,secondary:#f06548"
+              style={{ width: "100px", height: "100px" }}
+            ></lord-icon>
+            <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+              <h4>Are you sure ?</h4>
+              <p className="text-muted mx-4 mb-0">
+                Are you Sure You want to Remove this Customer ?
+              </p>
+            </div>
+          </div>
+          <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-danger"
+              onClick={() => {
+                handleDeleteCustomer(CustomerToDelete);
+                setDeleteModal(false);
+              }}
+            >
+              Yes, Delete It!
+            </button>
+          </div>
         </ModalBody>
       </Modal>
     </>

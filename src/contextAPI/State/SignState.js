@@ -338,20 +338,45 @@ export const SignState = (props) => {
       const response = await axios.post(`${url}/customer/register`, customerInfo);
       return response 
     } catch (error) {
-      console.error('Error adding category:', error);
+      console.error('Error', error);
       return { success: false, msg: 'An error occurred while adding the category.' };
     }
   }
 
   // Get Specific Customer
-  const GetSpecificCustomer = async (id) => {
+  const GetSpecificCustomer = async (customerId) => {
     try {
-      const response = await axios.post(`${url}/customer/getSpecificCustomer`, {
-        id: id,
+      const response = await axios.post(`${url}/customer/getSpecificCustomer/${customerId}`, {
       });
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
+    }
+  };
+
+  // Update Customer 
+  const UpdateCustomer = async (customerInfo,CustomerId)=>{
+    try {
+      const response = await axios.post(`${url}/customer/updatecustomer`, {
+        id : CustomerId,
+        customerInfo,
+      });
+      return response 
+    } catch (error) {
+      console.error('Error', error);
+      return { success: false, msg: 'An error occurred' };
+    }
+  }
+
+  // Delete Customer 
+  const deleteCustomer = async (customerId) => {
+    try {
+      const response = await axios.post(`${url}/customer/deletecustomer`, {
+        id : customerId
+      });
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
     }
   };
 
@@ -614,6 +639,8 @@ export const SignState = (props) => {
         getCustomers,
         createCustomer,
         GetSpecificCustomer,
+        UpdateCustomer,
+        deleteCustomer,
         GetContent,
         addContent,
         GetSpecificContent,
