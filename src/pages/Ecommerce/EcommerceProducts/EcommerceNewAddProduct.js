@@ -143,7 +143,9 @@ const EcommerceNewAddProduct = () => {
       formData.append("isProductNew", values.isProductNew);
       formData.append("isActive", values.isActive);
       formData.append("description", values.description);
-      formData.append("imageGallery", values.imageGallery);
+      for (let i = 0; i < values.imageGallery.length; i++) {
+        formData.append("imageGallery", values.imageGallery[i]);
+      }
 
       try {
         await addProduct(formData);
@@ -626,6 +628,7 @@ const EcommerceNewAddProduct = () => {
                                       {...getInputProps()}
                                       accept="image/*"
                                       name="imageGallery"
+                                      multiple
                                     />
                                     <div className="mb-3">
                                       <i className="display-4 text-muted ri-upload-cloud-2-fill" />
