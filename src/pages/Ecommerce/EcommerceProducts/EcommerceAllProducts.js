@@ -21,11 +21,10 @@ import { deleteProduct, getProducts } from "../../../helpers/backend_helper";
 // import ReactPaginate from 'react-paginate';
 
 const EcommerceAllProducts = () => {
-  // const url = `${process.env.REACT_APP_BASE_URL}`;
-  const url = `http://localhost:5000/uploads/products/`;
+  const url = `${process.env.REACT_APP_BASE_URL}`;
   // const params = useParams();
   const [ProductData, setProductData] = useState([]);
-  const [categoryNameMapping, setCategoryNameMapping] = useState({});
+  const [categoryNameMapping, setCategoryNameMapping] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -44,11 +43,7 @@ const EcommerceAllProducts = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-
+  
 
   // Function to handle product deletion
   const handleDeleteProduct = async (ProductId) => {
@@ -65,6 +60,9 @@ const EcommerceAllProducts = () => {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
 
 
   document.title = "Products | By Shalin";
@@ -138,7 +136,7 @@ const EcommerceAllProducts = () => {
                         </thead>
                         <tbody className="list form-check-all">
                           {ProductData ? ProductData.map((product) => (
-                            <tr key={product.id}>
+                            <tr key={product._id}>
                               <th scope="row">
                                 <div className="form-check">
                                   <input
@@ -159,7 +157,7 @@ const EcommerceAllProducts = () => {
                                   }}
                                 >
                                   <img
-                                    src= {url+product.productGallery[-1]}
+                                    src={`${url}/products/${product.imageGallery[0]}`}
                                     alt="productImage"
                                     style={{
                                       width: "100%",
@@ -174,12 +172,12 @@ const EcommerceAllProducts = () => {
                               <td className="category">
                                 {categoryNameMapping[product.category]}
                               </td>
-                              <td className="stock">{product.stock}</td>
+                              <td className="stock">{product.stock.quantity}</td>
                               <td className="original-price">
-                                ₹{product.price}
+                                ₹{product.prices.original}
                               </td>
                               <td className="discounted-price">
-                                ₹{product.discountePrice}
+                                ₹{product.prices.discounted}
                               </td>
                               <td className="status">
                                 {product.status === "active" ? (
@@ -210,7 +208,7 @@ const EcommerceAllProducts = () => {
                                 <div className="d-flex gap-2">
                                   <div className="edit">
                                     <Link
-                                      to={`/updateproduct/${product._id}`}
+                                      to={`/editproduct/${product._id}`}
                                       className="btn btn-sm btn-success edit-item-btn"
                                     >
                                       Edit

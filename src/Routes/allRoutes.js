@@ -174,6 +174,7 @@ import EditGalleryDetails from "../pages/GalleryManagement/EditGalleryDetails";
 // import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
 import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
 
+
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 
 
@@ -181,6 +182,7 @@ const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   { path: "/allproducts", component: <SignState><EcommerceAllProducts/></SignState> },
   { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
+
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
   { path: "/apps-ecommerce-order-details", component: <EcommerceOrderDetail /> },
   { path: "/apps-ecommerce-customers", component: <EcommerceCustomers /> },
