@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useState } from "react";
 
 import {
@@ -55,7 +54,7 @@ const EcommerceNewAddProduct = () => {
   );
 
   function handleAcceptedFiles(files) {
-    productForm.setFieldValue("gallery", files);
+    productForm.setFieldValue("imageGallery", files);
     files.map((file) =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
@@ -104,24 +103,24 @@ const EcommerceNewAddProduct = () => {
 
     initialValues: {
       name: "",
-      price: 0,
-      discountePrice: 0,
+      original: 0,
+      discounted: 0,
       category: "",
       subCategory: "",
-      subSubCategory: null,
+      subSubCategory: "650942ac7975242b34482100",
       stock: 0,
       sku: "",
       isProductPopular: false,
       isProductNew: false,
       isActive: true,
       description: "",
-      productGallery: [],
+      imageGallery: [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("required"),
       // price: Yup.number().required("required"),
       // stock: Yup.number().typeError("Must be a number").required("required"),
-      // discountePrice: Yup.number()
+      // discounted: Yup.number()
       //   .typeError("Must be a number")
       //   .required("required"),
       sku: Yup.string().required("required"),
@@ -130,21 +129,21 @@ const EcommerceNewAddProduct = () => {
       description: Yup.string().required("required"),
     }),
     onSubmit: async (values) => {
+      console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
-      formData.append("price",parseFloat( values.price.replace(/,/g, ''))); 
-      formData.append("discountePrice",parseFloat( values.discountePrice.replace(/,/g, '')) );
+      formData.append("original", values.original);
+      formData.append("discounted", values.discounted);
       formData.append("category", values.category);
       formData.append("subCategory", values.subCategory);
       formData.append("subSubCategory", values.subSubCategory);
-      formData.append("stock",parseFloat( values.stock.replace(/,/g, '')));
+      formData.append("stock", values.stock);
       formData.append("sku", values.sku);
       formData.append("isProductPopular", values.isProductPopular);
       formData.append("isProductNew", values.isProductNew);
       formData.append("isActive", values.isActive);
       formData.append("description", values.description);
-      formData.append("productGallery", values.productGallery);
-
+      formData.append("imageGallery", values.imageGallery);
 
       try {
         await addProduct(formData);
@@ -152,7 +151,9 @@ const EcommerceNewAddProduct = () => {
         fetchData();
         // toggle();
       } catch (error) {
-        console.error("Error submitting the form data:", error);
+        console.log(formData);
+
+        console.log("Error submitting the form data:", error);
       }
     },
   });
@@ -161,7 +162,6 @@ const EcommerceNewAddProduct = () => {
     productForm.setFieldValue("description", content);
   };
 
-
   return (
     <>
       <div className="page-content">
@@ -169,7 +169,6 @@ const EcommerceNewAddProduct = () => {
           <BreadCrumb title="Add Product" pageTitle="Products" />
           <Row>
             <Col lg={12}>
-
               <Form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -177,7 +176,6 @@ const EcommerceNewAddProduct = () => {
                   return false;
                 }}
               >
-
                 <Card>
                   <div className="card-body">
                     <div className="live-preview">
@@ -193,7 +191,6 @@ const EcommerceNewAddProduct = () => {
                             </label>
                             <select
                               className="form-select"
-
                               id="category"
                               name="category"
                               aria-label="category"
@@ -315,149 +312,11 @@ const EcommerceNewAddProduct = () => {
                       </Row>
 
                       <Row className="align-items-center g-3">
-                        {/* Price */}
-                        <Col sm={4}>
-                          <div className="mb-3">
-                            <label
-                              className="form-label"
-                              htmlFor="product-price-input"
-                            >
-                              Price
-                            </label>
-                            <div className="input-group mb-3">
-                              <span
-                                className="input-group-text"
-                                id="product-price-addon"
-                              >
-                                ₹
-                              </span>
-
-                              <Cleave
-                                placeholder="Enter price"
-                                options={{
-                                  numeral: true,
-                                  numeralThousandsGroupStyle: "thousand",
-                                }}
-                                 id="price"
-                                name="price"
-                                className="form-control"
-                                value={productForm.price}
-                                onChange={productForm.handleChange}
-                                onBlur={productForm.handleBlur}
-                                invalid={
-                                  productForm.errors.price &&
-                                  productForm.touched.price
-                                    ? true
-                                    : false
-                                }
-                              />
-                              
-                              {productForm.errors.price &&
-                              productForm.touched.price ? (
-                                <FormFeedback type="invalid">
-                                  {productForm.errors.price}
-                                </FormFeedback>
-                              ) : null}
-                            </div>
-                          </div>
-                        </Col>
-
-                        {/* Discounted Price */}
-                        <Col sm={4}>
-
-                          <div className="mb-3">
-                            <label
-                              className="form-label"
-                              htmlFor="product-price-input"
-                            >
-
-                              Discounted Price
-
-                            </label>
-                            <div className="input-group mb-3">
-                              <span
-                                className="input-group-text"
-
-                                id="discountePrice"
-                              >
-                                ₹
-                              </span>
-                               <Cleave
-                              placeholder="Enter price"
-                              options={{
-                                numeral: true,
-                                numeralThousandsGroupStyle: "thousand",
-                              }}
-                               id="price"
-                              name="discountePrice"
-                              className="form-control"
-                              value={productForm.discountePrice}
-                              onChange={productForm.handleChange}
-                              onBlur={productForm.handleBlur}
-                              invalid={
-                                productForm.errors.discountePrice &&
-                                productForm.touched.discountePrice
-                                  ? true
-                                  : false
-                              }
-                            />
-                              {productForm.errors.discountePrice &&
-                              productForm.touched.discountePrice ? (
-                                <FormFeedback type="invalid">
-                                  {productForm.errors.discountePrice}
-                                </FormFeedback>
-                              ) : null}
-
-                            </div>
-                          </div>
-                        </Col>
-
-
-                        {/* Stocks */}
-                        <Col sm={4}>
-                          <div className="mb-3">
-                            <label className="form-label" htmlFor="stock">
-                              Stocks
-                            </label>
-                            <div className="input-group mb-3">
-                            <Cleave
-                              placeholder="enter stock"
-                              options={{
-                                numeral: true,
-                                numeralThousandsGroupStyle: "thousand",
-                              }}
-                               id="stock"
-                              name="stock"
-                              className="form-control"
-                              value={productForm.stock}
-                              onChange={productForm.handleChange}
-                              onBlur={productForm.handleBlur}
-                              invalid={
-                                productForm.errors.stock &&
-                                productForm.touched.stock
-                                  ? true
-                                  : false
-                              }
-                            />
-                              {productForm.errors.stock &&
-                              productForm.touched.stock ? (
-                                <FormFeedback type="invalid">
-                                  {productForm.errors.stock}
-                                </FormFeedback>
-                              ) : null}
-                            </div>
-                          </div>
-                        </Col>
-                      </Row>
-
-                      <Row className="align-items-center g-3">
                         {/* Ttile */}
-
                         <Col sm={6}>
                           <div className="mb-3">
                             <label
                               className="form-label"
-
                               htmlFor="product-orders-input"
                             >
                               Product Title
@@ -465,12 +324,10 @@ const EcommerceNewAddProduct = () => {
                             <div className="input-group mb-3">
                               <Input
                                 type="text"
-                               
                                 id="name"
                                 placeholder="Enter Title"
                                 name="name"
                                 aria-label="name"
-                               
                                 value={productForm.name}
                                 onChange={productForm.handleChange}
                                 onBlur={productForm.handleBlur}
@@ -490,46 +347,176 @@ const EcommerceNewAddProduct = () => {
                             </div>
                           </div>
                         </Col>
-                        {/* SKU */}
-                        <Col sm={6}>
-                          <div className="mb-3">
-                            <label
-                              className="form-label"
-                              htmlFor="product-orders-input"
-                            >
-                              SKU
 
-                            </label>
-                            <div className="input-group mb-3">
-                              <Input
-                                type="text"
-                                className="form-control"
+                        <Row className="align-items-center g-1 mx-2">
+                          {/* Price */}
+                          <Col sm={6}>
+                            <div className="mb-3">
+                              <label
+                                className="form-label"
+                                htmlFor="product-price-input"
+                              >
+                                Price
+                              </label>
+                              <div className="input-group mb-3">
+                                <span
+                                  className="input-group-text"
+                                  id="product-price-addon"
+                                >
+                                  ₹
+                                </span>
 
-                                id="sku"
-                                placeholder="Enter Title"
-                                name="sku"
-                                aria-label="sku"
-                                aria-describedby="product-orders-addon"
-                                value={productForm.sku}
-                                onChange={productForm.handleChange}
-                                onBlur={productForm.handleBlur}
-                                invalid={
-                                  productForm.errors.sku &&
-                                  productForm.touched.sku
-                                    ? true
-                                    : false
-                                }
-                              />
-                              {productForm.errors.sku &&
-                              productForm.touched.sku ? (
-                                <FormFeedback type="invalid">
-                                  {productForm.errors.sku}
-                                </FormFeedback>
-                              ) : null}
+                                <Cleave
+                                  placeholder="Enter price"
+                                  options={{
+                                    numeral: true,
+                                    numeralThousandsGroupStyle: "thousand",
+                                  }}
+                                  id="price"
+                                  name="original"
+                                  className="form-control"
+                                  value={productForm.original}
+                                  onChange={productForm.handleChange}
+                                  onBlur={productForm.handleBlur}
+                                  invalid={
+                                    productForm.errors.original &&
+                                    productForm.touched.original
+                                      ? true
+                                      : false
+                                  }
+                                />
+
+                                {productForm.errors.original &&
+                                productForm.touched.original ? (
+                                  <FormFeedback type="invalid">
+                                    {productForm.errors.original}
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
                             </div>
-                          </div>
-                        </Col>
+                          </Col>
 
+                          {/* Discounted Price */}
+                          <Col sm={6}>
+                            <div className="mb-3">
+                              <label
+                                className="form-label"
+                                htmlFor="product-price-input"
+                              >
+                                Discounted Price
+                              </label>
+                              <div className="input-group mb-3">
+                                <span
+                                  className="input-group-text"
+                                  id="discounted"
+                                >
+                                  ₹
+                                </span>
+                                <Cleave
+                                  placeholder="Enter price"
+                                  options={{
+                                    numeral: true,
+                                    numeralThousandsGroupStyle: "thousand",
+                                  }}
+                                  id="price"
+                                  name="discounted"
+                                  className="form-control"
+                                  value={productForm.discounted}
+                                  onChange={productForm.handleChange}
+                                  onBlur={productForm.handleBlur}
+                                  invalid={
+                                    productForm.errors.discounted &&
+                                    productForm.touched.discounted
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {productForm.errors.discounted &&
+                                productForm.touched.discounted ? (
+                                  <FormFeedback type="invalid">
+                                    {productForm.errors.discounted}
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+                            </div>
+                          </Col>
+
+                          {/* Stocks */}
+                          <Col sm={6}>
+                            <div className="mb-3">
+                              <label className="form-label" htmlFor="stock">
+                                Stocks
+                              </label>
+                              <div className="input-group mb-3">
+                                <Cleave
+                                  placeholder="enter stock"
+                                  options={{
+                                    numeral: true,
+                                    numeralThousandsGroupStyle: "thousand",
+                                  }}
+                                  id="stock"
+                                  name="stock"
+                                  className="form-control"
+                                  value={productForm.stock}
+                                  onChange={productForm.handleChange}
+                                  onBlur={productForm.handleBlur}
+                                  invalid={
+                                    productForm.errors.stock &&
+                                    productForm.touched.stock
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {productForm.errors.stock &&
+                                productForm.touched.stock ? (
+                                  <FormFeedback type="invalid">
+                                    {productForm.errors.stock}
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+                            </div>
+                          </Col>
+
+                          {/* SKU */}
+                          <Col sm={6}>
+                            <div className="mb-3">
+                              <label
+                                className="form-label"
+                                htmlFor="product-orders-input"
+                              >
+                                SKU
+                              </label>
+                              <div className="input-group mb-3">
+                                <Input
+                                  type="text"
+                                  className="form-control"
+                                  id="sku"
+                                  placeholder="Enter Title"
+                                  name="sku"
+                                  aria-label="sku"
+                                  aria-describedby="product-orders-addon"
+                                  value={productForm.sku}
+                                  onChange={productForm.handleChange}
+                                  onBlur={productForm.handleBlur}
+                                  invalid={
+                                    productForm.errors.sku &&
+                                    productForm.touched.sku
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                {productForm.errors.sku &&
+                                productForm.touched.sku ? (
+                                  <FormFeedback type="invalid">
+                                    {productForm.errors.sku}
+                                  </FormFeedback>
+                                ) : null}
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+
+                        {/* Attributes checkboxes */}
                         <Row className="align-items-center">
                           <Col sm={2}>
                             <div className="mb-3 form-check">
@@ -615,6 +602,7 @@ const EcommerceNewAddProduct = () => {
                           </div>
                         </Col>
                       </Row>
+
                       <Row className="align-items-center g-3">
                         <Col sm={12}>
                           <div>
@@ -637,6 +625,7 @@ const EcommerceNewAddProduct = () => {
                                     <input
                                       {...getInputProps()}
                                       accept="image/*"
+                                      name="imageGallery"
                                     />
                                     <div className="mb-3">
                                       <i className="display-4 text-muted ri-upload-cloud-2-fill" />
@@ -684,7 +673,7 @@ const EcommerceNewAddProduct = () => {
                                 );
                               })}
                             </div>
-             </div>
+                          </div>
                         </Col>
                       </Row>
                     </div>
@@ -693,7 +682,6 @@ const EcommerceNewAddProduct = () => {
 
                 <div className="text-center mb-3 me-4">
                   <button type="submit" className="btn btn-primary w-lg">
-
                     Submit
                   </button>
                 </div>
