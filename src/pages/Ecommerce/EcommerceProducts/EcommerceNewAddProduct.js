@@ -33,9 +33,9 @@ const EcommerceNewAddProduct = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
+  const [subCatDropbind, setSubCatDropbind] = useState([]);
   const [subSubCategoryData, setSubSubCategoryData] = useState([]);
   const [subSubCatDropbind, setSubSubCatDropbind] = useState([]);
-  const [subCatDropbind, setSubCatDropbind] = useState([]);
   const [recordForSubmit, setrecordForSubmit] = useState(null);
   const [errorBanner, setErrorBanner] = useState("");
   const [successBanner, setSuccessBanner] = useState("");
@@ -87,8 +87,10 @@ const EcommerceNewAddProduct = () => {
   };
 
   const handelSubCategorySelect = (event) => {
+    console.log(subSubCategoryData);
+
     const data = subSubCategoryData.filter(
-      (item) => item.subCategory === event.target.value
+      (item) => item.SubCategory === event.target.value
     );
     setSubSubCatDropbind(data);
     console.log(subSubCatDropbind);
@@ -283,7 +285,7 @@ const EcommerceNewAddProduct = () => {
                               value={productForm.values.subSubCategory || ""}
                               onChange={(e) => {
                                 productForm.handleChange(e);
-                                handelCategorySelect(e);
+                               
                               }}
                               invalid={
                                 productForm.errors.subSubCategory &&
