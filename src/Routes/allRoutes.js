@@ -173,6 +173,7 @@ import EditGalleryDetails from "../pages/GalleryManagement/EditGalleryDetails";
 // import SubCategoryMaster from "../pages/manageCategory/subCategory";
 // import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
 import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
+import Stocks from "../pages/Stocks Management/Stocks";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -212,6 +213,9 @@ const authProtectedRoutes = [
   { path: "/editgallerycat/:id", component: <SignState><EditGalleryCat/></SignState> },
   { path: "/creategallerydet", component: <SignState><AddGalleryDetails/></SignState> },
   { path: "/editgallerydet/:id", component: <SignState><EditGalleryDetails/></SignState> },
+
+  // Stocks
+  { path: "/stocks", component: <SignState><Stocks/></SignState> },
 
   //Chat
   { path: "/apps-chat", component: <Chat /> },

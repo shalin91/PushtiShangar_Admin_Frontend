@@ -610,6 +610,17 @@ export const SignState = (props) => {
     }
   } 
 
+  // Get Stocks
+  const GetStocks =  async () => {
+    try {
+      const response = await axios.post(`${url}/stocks/getstocks`);
+      return response;
+    
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
 
 
 
@@ -656,6 +667,7 @@ export const SignState = (props) => {
         GetSpecificGalleryDetails,
         updateGalleryDetails,
         DeleteGalleryDetails,
+        GetStocks,
       }}
     >
       {props.children}

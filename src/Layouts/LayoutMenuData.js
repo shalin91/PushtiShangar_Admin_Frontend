@@ -16,7 +16,7 @@ const Navdata = () => {
   const [isIcons, setIsIcons] = useState(false);
   const [isMaps, setIsMaps] = useState(false);
   const [isMultiLevel, setIsMultiLevel] = useState(false);
-  const [isCategory,setCategory] = useState(false)
+  const [isCategory, setCategory] = useState(false);
 
   // Apps
   const [isEmail, setEmail] = useState(false);
@@ -274,21 +274,25 @@ const Navdata = () => {
           parentId: "apps",
           stateVariables: isEcommerce,
           childItems: [
-            
             {
               id: 4,
               label: "All Products",
               link: "/allproducts",
               parentId: "apps",
             },
-            
+
             {
               id: 3,
               label: "Create Product New",
               link: "/addproduct",
               parentId: "apps",
             },
-            { id: 4, label: "Orders", link: "/apps-ecommerce-orders", parentId: "apps" }           
+            {
+              id: 4,
+              label: "Orders",
+              link: "/apps-ecommerce-orders",
+              parentId: "apps",
+            },
           ],
         },
         {
@@ -319,21 +323,36 @@ const Navdata = () => {
           ],
         },
         {
-            id: "appsprojects",
-            label: "manage category",
-            link: "/#",
-            isChildItem: true,
-            click: function (e) {
-                e.preventDefault();
-                setCategory(!isCategory);
+          id: "appsprojects",
+          label: "manage category",
+          link: "/#",
+          isChildItem: true,
+          click: function (e) {
+            e.preventDefault();
+            setCategory(!isCategory);
+          },
+          parentId: "apps",
+          stateVariables: isCategory,
+          childItems: [
+            {
+              id: 1,
+              label: "category",
+              link: "/category-master",
+              parentId: "apps",
             },
-            parentId: "apps",
-            stateVariables: isCategory,
-            childItems: [
-                { id: 1, label: "category", link: "/category-master", parentId: "apps" },
-                { id: 2, label: "sub category", link: "/sub-category-master", parentId: "apps" },
-                { id: 3, label: "sub sub category", link: "/sub-sub-category-master", parentId: "apps" },
-            ]
+            {
+              id: 2,
+              label: "sub category",
+              link: "/sub-category-master",
+              parentId: "apps",
+            },
+            {
+              id: 3,
+              label: "sub sub category",
+              link: "/sub-sub-category-master",
+              parentId: "apps",
+            },
+          ],
         },
         {
           id: "tasks",
@@ -382,41 +401,39 @@ const Navdata = () => {
           childItems: [{ id: 1, label: "Content", link: "/contentmanage" }],
         },
         {
-                id: "NFTMarketplace",
-                label: "Gallery",
-                link: "/#",
-                isChildItem: true,
-                click: function (e) {
-                    e.preventDefault();
-                    setIsNFTMarketplace(!isNFTMarketplace);
-                },
-                parentId: "apps",
-                stateVariables: isNFTMarketplace,
-                childItems: [
-                  { id: 1, label: "Gallery-Category", link: "/gallerycatcontent" },
-                  { id: 1, label: "Gallery-Details", link: "/gallerycontent" },
-                ]
-            },
-
-        // { id: "team", label: "Team", link: "/pages-team", parentId: "pages" },
-        // {
-        //     id: "appscrm",
-        //     label: "CRM",
-        //     link: "/#",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setIsCRM(!isCRM);
-        //     },
-        //     parentId: "apps",
-        //     stateVariables: isCRM,
-        //     childItems: [
-        //         { id: 1, label: "Contacts", link: "/apps-crm-contacts" },
-        //         { id: 2, label: "Companies", link: "/apps-crm-companies" },
-        //         { id: 3, label: "Deals", link: "/apps-crm-deals" },
-        //         { id: 4, label: "Leads", link: "/apps-crm-leads" },
-        //     ]
-        // },
+          id: "NFTMarketplace",
+          label: "Gallery",
+          link: "/#",
+          isChildItem: true,
+          click: function (e) {
+            e.preventDefault();
+            setIsNFTMarketplace(!isNFTMarketplace);
+          },
+          parentId: "apps",
+          stateVariables: isNFTMarketplace,
+          childItems: [
+            { id: 1, label: "Gallery-Category", link: "/gallerycatcontent" },
+            { id: 1, label: "Gallery-Details", link: "/gallerycontent" },
+          ],
+        },
+        {
+          id: "appscrypto",
+          label: "Inventory",
+          link: "/#",
+          isChildItem: true,
+          click: function (e) {
+            e.preventDefault();
+            setIsCrypto(!isCrypto);
+          },
+          parentId: "apps",
+          stateVariables: isCrypto,
+          childItems: [
+            { id: 1, label: "Stocks", link: "/stocks" },
+            // { id: 2, label: "Companies", link: "/apps-crm-companies" },
+            // { id: 3, label: "Deals", link: "/apps-crm-deals" },
+            // { id: 4, label: "Leads", link: "/apps-crm-leads" },
+          ],
+        },
         // {
         //     id: "appscrypto",
         //     label: "Crypto",
