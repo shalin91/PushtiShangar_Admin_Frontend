@@ -105,26 +105,26 @@ const EcommerceNewAddProduct = () => {
 
     initialValues: {
       name: "",
-      original: 0,
-      discounted: 0,
+      original: "",
+      discounted: "",
       category: "",
       subCategory: "",
-      subSubCategory: "650942ac7975242b34482100",
-      stock: 0,
+      subSubCategory: "",
+      stock: "",
       sku: "",
-      isProductPopular: false,
-      isProductNew: false,
+      isProductPopular: true,
+      isProductNew: true,
       isActive: true,
       description: "",
       imageGallery: [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("required"),
-      // price: Yup.number().required("required"),
-      // stock: Yup.number().typeError("Must be a number").required("required"),
-      // discounted: Yup.number()
-      //   .typeError("Must be a number")
-      //   .required("required"),
+      original: Yup.number().typeError("Must be a number").required("required"),
+      stock: Yup.number().typeError("Must be a number").required("required"),
+      discounted: Yup.number()
+        .typeError("Must be a number")
+        .required("required"),
       sku: Yup.string().required("required"),
       category: Yup.string().required("required"),
       subCategory: Yup.string().required("required"),
@@ -370,7 +370,7 @@ const EcommerceNewAddProduct = () => {
                                   ₹
                                 </span>
 
-                                <Cleave
+                                <Input
                                   placeholder="Enter price"
                                   options={{
                                     numeral: true,
@@ -416,7 +416,7 @@ const EcommerceNewAddProduct = () => {
                                 >
                                   ₹
                                 </span>
-                                <Cleave
+                                <Input
                                   placeholder="Enter price"
                                   options={{
                                     numeral: true,

@@ -259,7 +259,7 @@ export const SignState = (props) => {
   // Get Products  
   const getProducts = async () => {
     try {
-      const response = await axios.post(`${url}/api/getallproducts`);
+      const response = await axios.post(`${url}/product/getallproducts`);
       return response;
     
     } catch (error) {
@@ -621,6 +621,72 @@ export const SignState = (props) => {
     }
   };
 
+  // Create Stocks 
+  const AddStocks = async (stocksData) => {
+    try {
+      const response = await axios.post(`${url}/stocks/createstock`, stocksData);
+      return response 
+    } catch (error) {
+      console.error('Error adding content:', error);
+      return { success: false, msg: 'An error occurred while adding the category.' };
+    }
+  } 
+
+  // Update Stocks
+  const UpdateStocks = async (stocksData , id) => {
+    try {
+      const response = await axios.post(`${url}/stocks/updatestock/${id}`, stocksData);
+      return response 
+    } catch (error) {
+      console.error('Error adding content:', error);
+      return { success: false, msg: 'An error occurred while adding the category.' };
+    }
+  } 
+
+
+  // Get Specific Stocks by Id
+  const GetSpecificStocks = async (id) => {
+    try {
+      const response = await axios.post(`${url}/stocks/getspecificstock/${id}`, {
+      });
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // Delete Stocks by Id
+  const DeleteStocks = async (id) =>{
+    try {
+      const response = await axios.post(`${url}/stocks/deletestocks/${id}`, {
+      });
+      return response;
+    } catch (error) {
+      return ({ success: false, msg: "server Error" })
+    }
+  }
+
+  // Add Coupons 
+  const CreateCoupon = async (couponData) => {
+    try {
+      const response = await axios.post(`${url}/coupons/createcoupon`, couponData);
+      return response 
+    } catch (error) {
+      console.error('Error adding content:', error);
+      return { success: false, msg: 'An error occurred while adding the category.' };
+    }
+  } 
+
+  // Get All Coupons
+  const GetCoupons  = async () => {
+    try {
+      const response = await axios.post(`${url}/coupons/getcoupons`);
+      return response;
+    
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
 
 
 
@@ -668,6 +734,12 @@ export const SignState = (props) => {
         updateGalleryDetails,
         DeleteGalleryDetails,
         GetStocks,
+        AddStocks,
+        UpdateStocks,
+        GetSpecificStocks,
+        DeleteStocks,
+        CreateCoupon,
+        GetCoupons,
       }}
     >
       {props.children}

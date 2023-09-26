@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
-import BreadCrumb from "../../Components/Common/BreadCrumb";
-import { Link } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
+import { Link } from "react-router-dom";
+import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 
-function Stocks() {
-  const { GetStocks , DeleteStocks  } = useContext(SignContext);
-  const [ContentData, setContentData] = useState([]);
+const Coupons = () => {
+  const { GetCoupons } = useContext(SignContext);
+  const [CouponData, setCouponData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
 
@@ -14,51 +14,33 @@ function Stocks() {
     setDeleteModal(!deletemodal);
   };
 
-  const Getstocks = async () => {
-    const res = await GetStocks();
+  const Getcoupons = async () => {
+    const res = await GetCoupons();
     console.log(res);
 
-    const transformedData = res.stocks.map((content, index) => ({
-      ...content,
+    const transformedData = res.coupons.map((coupons, index) => ({
+      ...coupons,
       id: index + 1,
     }));
-    setContentData(transformedData);
-  }
-
-  const handleDeleteStocks = async (id) => {
-    const res = await DeleteStocks(id);
-    console.log(res);
-    if (res.success) {
-      // Product was successfully deleted
-      // Perform any necessary state updates or notifications
-      // Reset productToDelete and close the modal
-      setContentToDelete(null);
-      setDeleteModal(false);
-      // Refresh the product list after deletion
-      Getstocks();
-    } else {
-      // Handle deletion error, show error message
-      // You might want to display an error notification
-    }
+    setCouponData(transformedData);
   };
 
-
-
   useEffect(() => {
-    Getstocks();
+    Getcoupons();
   }, []);
 
-  document.title = "Stocks | By Shalin";
+  document.title = "Coupons | By Shalin";
+
   return (
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Stocks" pageTitle="Stocks" />
+          <BreadCrumb title="All Contents" pageTitle="Content" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Stock Manage Of Products</h4>
+                  <h4 className="card-title mb-0">Contents</h4>
                 </CardHeader>
                 <CardBody>
                   <div id="contentList">
@@ -78,7 +60,7 @@ function Stocks() {
                       <Col className="col-sm-auto">
                         <div>
                           <Link
-                            to="/addstocks"
+                            to="/addcoupon"
                             className="btn btn-success add-btn me-1"
                             id="create-btn"
                           >
@@ -105,16 +87,18 @@ function Stocks() {
                                 />
                               </div>
                             </th>
-                            <th className="name">Product-Name</th>
-                            <th className="name">quantity</th>
-                            <th className="name">Price</th>
+                            <th className="name">Name</th>
+                            <th className="name">Discount</th>
+                            <th className="name">Type</th>
+                            <th className="name">Expiry</th>
+                            <th className="name">Status</th>
                             <th className="action">Action</th>
                           </tr>
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {ContentData.map((content) => (
-                            <tr key={content.id}>
+                          {CouponData.map((coupon) => (
+                            <tr key={coupon.id}>
                               <th scope="row">
                                 <div className="form-check">
                                   <input
@@ -125,26 +109,51 @@ function Stocks() {
                                   />
                                 </div>
                               </th>
+                              <td className="product-name">{coupon.name}</td>
+                              <td className="product-name">
+                                {coupon.discount}
+                              </td>
+                              <td className="product-name">{coupon.type}</td>
+                              <td className="product-name">
+                                {new Date(coupon.expiry).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  }
+                                )}
+                              </td>
+                              <td className="status">
+                                {coupon.active === true ? (
+                                  <span
+                                    className="badge badge-soft"
+                                    style={{
+                                      backgroundColor: "#28a745",
+                                      color: "white",
+                                    }}
+                                  >
+                                    Active
+                                  </span>
+                                ) : (
+                                  <span
+                                    className="badge badge-soft"
+                                    style={{
+                                      backgroundColor: "#dc3545",
+                                      color: "white",
+                                    }}
+                                  >
+                                    Inactive
+                                  </span>
+                                )}
+                              </td>
 
-                              <td className="product-name">
-                                {content.name}
-                              </td>
-                              <td className="product-name">
-                                {content.quantity}
-                              </td>
-                              <td className="product-name">
-                                {content.currentPricePerUnit}
-                              </td>
-                              {/* <td className="product-name">
-                                {content.contentType}
-                              </td> */}
-                            
                               {/* Add other columns here as needed */}
                               <td>
                                 <div className="d-flex gap-2">
                                   <div className="edit">
                                     <Link
-                                      to={`/editstocks/${content._id}`}
+                                      to={`/editcoupon/${coupon._id}`}
                                       className="btn btn-sm btn-success edit-item-btn"
                                     >
                                       Edit
@@ -155,10 +164,10 @@ function Stocks() {
                                       className="btn btn-sm btn-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
-                                        onClick={() => {
-                                          toggledeletemodal();
-                                          setContentToDelete(content);
-                                        }}
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setContentToDelete(coupon);
+                                      }}
                                     >
                                       Remove
                                     </button>
@@ -177,61 +186,8 @@ function Stocks() {
           </Row>
         </Container>
       </div>
-
-      {/* modal Delete Content */}
-      <Modal
-        isOpen={deletemodal}
-        role="dialog"
-        autoFocus={true}
-        centered
-        id="removeItemModal"
-        toggle={toggledeletemodal}
-      >
-        <ModalHeader
-          toggle={() => {
-            setDeleteModal(!deletemodal);
-          }}
-        ></ModalHeader>
-        <ModalBody>
-          <div className="mt-2 text-center">
-            <lord-icon
-              src="https://cdn.lordicon.com/gsqxdxog.json"
-              trigger="loop"
-              colors="primary:#f7b84b,secondary:#f06548"
-              style={{ width: "100px", height: "100px" }}
-            ></lord-icon>
-            <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-              <h4>Are you sure ?</h4>
-              <p className="text-muted mx-4 mb-0">
-                Are you Sure You want to Remove this Stocks ?
-              </p>
-            </div>
-          </div>
-          <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-            <button
-              type="button"
-              className="btn w-sm btn-light"
-              onClick={() => {
-                setDeleteModal(!deletemodal);
-              }}
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              className="btn w-sm btn-danger"
-              onClick={() => {
-                handleDeleteStocks(ContentToDelete._id);
-                setDeleteModal(false);
-              }}
-            >
-              Yes, Delete It!
-            </button>
-          </div>
-        </ModalBody>
-      </Modal>
     </>
   );
-}
+};
 
-export default Stocks;
+export default Coupons;

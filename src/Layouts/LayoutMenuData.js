@@ -366,25 +366,25 @@ const Navdata = () => {
           parentId: "apps",
           stateVariables: isTasks,
           childItems: [
-            {
-              id: 1,
-              label: "OldCustomers",
-              link: "/apps-ecommerce-customers",
-              parentId: "apps",
-            },
+            // {
+            //   id: 1,
+            //   label: "OldCustomers",
+            //   link: "/apps-ecommerce-customers",
+            //   parentId: "apps",
+            // },
             { id: 2, label: "Customers", link: "/customers", parentId: "apps" },
-            {
-              id: 3,
-              label: "Shopping Cart",
-              link: "/apps-ecommerce-cart",
-              parentId: "apps",
-            },
-            {
-              id: 4,
-              label: "Checkout",
-              link: "/apps-ecommerce-checkout",
-              parentId: "apps",
-            },
+            // {
+            //   id: 3,
+            //   label: "Shopping Cart",
+            //   link: "/apps-ecommerce-cart",
+            //   parentId: "apps",
+            // },
+            // {
+            //   id: 4,
+            //   label: "Checkout",
+            //   link: "/apps-ecommerce-checkout",
+            //   parentId: "apps",
+            // },
           ],
         },
         {
@@ -434,43 +434,23 @@ const Navdata = () => {
             // { id: 4, label: "Leads", link: "/apps-crm-leads" },
           ],
         },
-        // {
-        //     id: "appscrypto",
-        //     label: "Crypto",
-        //     link: "/#",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setIsCrypto(!isCrypto);
-        //     },
-        //     parentId: "apps",
-        //     stateVariables: isCrypto,
-        //     childItems: [
-        //         { id: 1, label: "Transactions", link: "/apps-crypto-transactions" },
-        //         { id: 2, label: "Buy & Sell", link: "/apps-crypto-buy-sell" },
-        //         { id: 3, label: "Orders", link: "/apps-crypto-orders" },
-        //         { id: 4, label: "My Wallet", link: "/apps-crypto-wallet" },
-        //         { id: 5, label: "ICO List", link: "/apps-crypto-ico" },
-        //         { id: 6, label: "KYC Application", link: "/apps-crypto-kyc" },
-        //     ]
-        // },
-        // {
-        //     id: "invoices",
-        //     label: "Invoices",
-        //     link: "/#",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setIsInvoices(!isInvoices);
-        //     },
-        //     parentId: "apps",
-        //     stateVariables: isInvoices,
-        //     childItems: [
-        //         { id: 1, label: "List View", link: "/apps-invoices-list" },
-        //         { id: 2, label: "Details", link: "/apps-invoices-details" },
-        //         { id: 3, label: "Create Invoice", link: "/apps-invoices-create" },
-        //     ]
-        // },
+        {
+            id: "invoices",
+            label: "Coupons",
+            link: "/#",
+            isChildItem: true,
+            click: function (e) {
+                e.preventDefault();
+                setIsInvoices(!isInvoices);
+            },
+            parentId: "apps",
+            stateVariables: isInvoices,
+            childItems: [
+                { id: 1, label: "Coupons", link: "/coupons" },
+                // { id: 2, label: "Details", link: "/apps-invoices-details" },
+                // { id: 3, label: "Create Invoice", link: "/apps-invoices-create" },
+            ]
+        },
         // {
         //     id: "supportTickets",
         //     label: "Support Tickets",
@@ -680,12 +660,6 @@ const Navdata = () => {
           id: "1",
           label: "View Profile",
           link: "/pages-profile",
-          parentId: "pages",
-        },
-        {
-          id: "2",
-          label: "Edit Profile",
-          link: "/pages-profile-settings/:id",
           parentId: "pages",
         },
         { id: "newteam", label: "Team", link: "/newteam", parentId: "team" },

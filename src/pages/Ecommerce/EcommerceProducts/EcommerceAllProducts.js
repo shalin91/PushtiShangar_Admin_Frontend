@@ -98,7 +98,7 @@ const EcommerceAllProducts = () => {
                       <Col className="col-sm-auto">
                         <div>
                           <Link
-                            to="/apps-ecommerce-add-product"
+                            to="/addproduct"
                             className="btn btn-success add-btn me-1"
                             id="create-btn"
                           >

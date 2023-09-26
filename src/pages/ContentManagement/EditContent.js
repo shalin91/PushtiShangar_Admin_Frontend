@@ -15,6 +15,7 @@ const EditContent = () => {
     active: true,
   });
   const [editorContent, setEditorContent] = useState("");
+  
   const getspecificContent = async (id) => {
     const res = await GetSpecificContent(id);
     console.log(res);

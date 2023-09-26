@@ -62,6 +62,7 @@ const SimplePage = () => {
 
   const getloggedinUser = async (token) => {
     const res = await getLoggedInUser(token);
+    console.log(res)
     if (res.success) {
       setUserInfo(res);
     } else {
@@ -101,16 +102,16 @@ const SimplePage = () => {
               <Col>
                 <div className="p-2">
                   <h3 className="text-white mb-1">{UserInfo.name}</h3>
-                  <p className="text-white-75">Owner & Founder</p>
+                  <p className="text-white-75">{UserInfo.roles}</p>
                   <div className="hstack text-white-50 gap-1">
-                    <div className="me-2">
+                    {/* <div className="me-2">
                       <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
                       California, United States
                     </div>
                     <div>
                       <i className="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>
                       Themesbrand
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </Col>

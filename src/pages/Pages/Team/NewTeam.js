@@ -5,7 +5,6 @@ import {
   CardHeader,
   Col,
   Container,
-  Form,
   Input,
   Label,
   Modal,
@@ -16,6 +15,8 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Link, useParams } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const NewTeam = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -55,6 +56,19 @@ const NewTeam = () => {
   const [Success, setSuccess] = useState("");
   const roles = JSON.parse(localStorage.getItem("rights")).role;
   console.log(roles);
+
+  const addUserValidationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
+    roles: Yup.string().required("Roles are required"),
+    status: Yup.string().required("Status is required"),
+  });
 
   const getusers = async () => {
     const res = await getUsers();
@@ -96,18 +110,18 @@ const NewTeam = () => {
     setProfilePhoto(file);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values, { setSubmitting }) => {
     const res = await registerUser(UserInfo, profilePhoto);
     console.log(res);
     // if (res.success) {
     //   navigate("/login");
     // }
+    setSubmitting(false);
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const resUpdate = await updateUser(editUserInfo,profilePhoto);
+    const resUpdate = await updateUser(editUserInfo, profilePhoto);
     console.log(resUpdate);
     if (resUpdate.success) {
       getusers();
@@ -333,150 +347,179 @@ const NewTeam = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-          <Form onSubmit={(e) => handleSubmit(e)}>
-            <div className="mb-3">
-              <Label for="profile-photo" className="form-label">
-                Profile Photo
-              </Label>
-              <input
-                type="file"
-                className="form-control"
-                id="profile-photo"
-                accept=".jpg, .jpeg, .png" // Add accepted image formats
-                onChange={handlePhotoChange} // Call a function to handle the file upload
-              />
-            </div>
+          <Formik
+            initialValues={{
+              name: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+              roles: "",
+              status: "",
+            }}
+            validationSchema={addUserValidationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <div className="mb-3">
+                  <Label for="profile-photo" className="form-label">
+                    Profile Photo
+                  </Label>
+                  <Field
+                    type="file"
+                    className="form-control"
+                    id="profile-photo"
+                    name="photo"
+                    accept=".jpg, .jpeg, .png"
+                    onChange={handlePhotoChange}
+                  />
+                  <ErrorMessage
+                    name="photo"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
 
-            <div className="mb-3">
-              <Label for="addaddress-Name" className="form-label">
-                Name
-              </Label>
-              <Input
-                type="text"
-                className="form-control"
-                id="Name"
-                placeholder="Enter Name"
-                name="name"
-                value={UserInfo.name}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
+                <div className="mb-3">
+                  <Label for="addaddress-Name" className="form-label">
+                    Name
+                  </Label>
+                  <Field
+                    type="text"
+                    className="form-control"
+                    id="Name"
+                    name="name"
+                  />
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
 
-            <div className="mb-3">
-              <Label for="Email" className="form-label">
-                Email
-              </Label>
-              <Input
-                type="text"
-                className="form-control"
-                id="Email"
-                placeholder="Enter Email"
-                name="email"
-                value={UserInfo.email}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="password" className="form-label">
-                Password
-              </Label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                name="password"
-                placeholder="Password"
-                value={UserInfo.password}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="password" className="form-label">
-                Confirm Password
-              </Label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={UserInfo.confirmPassword}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="state" className="form-label">
-                Roles
-              </Label>
-              <select
-                className="form-select"
-                id="state"
-                name="roles"
-                value={UserInfo.roles}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              >
-                {Roles.map((role) => {
-                  return (
-                    <option key={role.role} value={role.role}>
-                      {role.role}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className="mb-3">
-              <Label for="state" className="form-label">
-                Status
-              </Label>
-              <select
-                className="form-select"
-                id="autoSizingSelect"
-                name="status"
-                value={UserInfo.status}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              >
-                <option value="">select status</option>
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
-              </select>
-            </div>
+                <div className="mb-3">
+                  <Label for="Email" className="form-label">
+                    Email
+                  </Label>
+                  <Field
+                    type="text"
+                    className="form-control"
+                    id="Email"
+                    name="email"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
+                <div className="mb-3">
+                  <Label for="password" className="form-label">
+                    Password
+                  </Label>
+                  <Field
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
+                <div className="mb-3">
+                  <Label for="confirmPassword" className="form-label">
+                    Confirm Password
+                  </Label>
+                  <Field
+                    type="password"
+                    className="form-control"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                  />
+                  <ErrorMessage
+                    name="confirmPassword"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
+                <div className="mb-3">
+                  <Label for="state" className="form-label">
+                    Roles
+                  </Label>
+                  <Field
+                    as="select"
+                    className="form-select"
+                    id="state"
+                    name="roles"
+                  >
+                    <option value="">Select a role</option>
+                    {Roles.map((role) => (
+                      <option key={role.role} value={role.role}>
+                        {role.role}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="roles"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
+                <div className="mb-3">
+                  <Label for="status" className="form-label">
+                    Status
+                  </Label>
+                  <div>
+                    <div className="form-check form-check-inline">
+                      <Field
+                        type="radio"
+                        className="form-check-input"
+                        id="activeStatus"
+                        name="status"
+                        value="active"
+                      />
+                      <Label
+                        className="form-check-label"
+                        htmlFor="activeStatus"
+                      >
+                        Active
+                      </Label>
+                    </div>
+                  </div>
+                  <ErrorMessage
+                    name="status"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
 
-            <ModalFooter>
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={() => {
-                  setModal(!modal);
-                }}
-              >
-                Close
-              </button>
-              <button
-                type="submit"
-                className="btn btn-success"
-                onClick={() => {
-                  setModal(!modal);
-                }}
-              >
-                Save
-              </button>
-            </ModalFooter>
-          </Form>
+                <ModalFooter>
+                  <button
+                    type="button"
+                    className="btn btn-light"
+                    onClick={() => {
+                      setModal(!modal);
+                    }}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={isSubmitting}
+                  >
+                    Save
+                  </button>
+                </ModalFooter>
+              </Form>
+            )}
+          </Formik>
         </ModalBody>
       </Modal>
-      
+
       {/* Modal Edit Address */}
       <Modal
         isOpen={EditModal}
@@ -496,7 +539,7 @@ const NewTeam = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-        <Form onSubmit={(e) => handleUpdate(e)}>
+          <Form onSubmit={(e) => handleUpdate(e)}>
             <div className="mb-3">
               <Label for="profile-photo" className="form-label">
                 Profile Photo
@@ -569,27 +612,27 @@ const NewTeam = () => {
                 <option value="inactive">inactive</option>
               </select>
             </div>
-        <ModalFooter>
-          <button
-            type="button"
-            className="btn btn-light"
-            onClick={() => {
-              setEditModal(!EditModal);
-            }}
-          >
-            Close
-          </button>
-          <button
-            type="submit"
-            className="btn btn-success"
-            onClick={() => {
-              setEditModal(!EditModal);
-            }}
-          >
-            Save
-          </button>
-        </ModalFooter>
-        </Form>
+            <ModalFooter>
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => {
+                  setEditModal(!EditModal);
+                }}
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                className="btn btn-success"
+                onClick={() => {
+                  setEditModal(!EditModal);
+                }}
+              >
+                Save
+              </button>
+            </ModalFooter>
+          </Form>
         </ModalBody>
       </Modal>
 

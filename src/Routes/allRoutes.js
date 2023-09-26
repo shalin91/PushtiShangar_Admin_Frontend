@@ -168,12 +168,16 @@ import AddGalleryCat from "../pages/GalleryManagement/AddGalleryCat";
 import EditGalleryCat from "../pages/GalleryManagement/EditGalleryCat";
 import AddGalleryDetails from "../pages/GalleryManagement/AddGalleryDetails";
 import EditGalleryDetails from "../pages/GalleryManagement/EditGalleryDetails";
-// import CategoryMaster from "../pages/manageCategory/category";
-
-// import SubCategoryMaster from "../pages/manageCategory/subCategory";
-// import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
+import CategoryMaster from "../pages/manageCategory/Category";
+import SubCategoryMaster from "../pages/manageCategory/subCategory";
+import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
 import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
 import Stocks from "../pages/Stocks Management/Stocks";
+import AddStocks from "../pages/Stocks Management/AddStocks";
+import EditStocks from "../pages/Stocks Management/EditStocks";
+import Coupons from "../pages/Coupon Management/Coupons";
+import AddCoupons from "../pages/Coupon Management/AddCoupons";
+import EditCoupons from "../pages/Coupon Management/EditCoupons";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -192,10 +196,11 @@ const authProtectedRoutes = [
   { path: "/apps-ecommerce-checkout", component: <EcommerceCheckout /> },
   { path: "/apps-todo", component: <ToDoList /> },
 
-//category Master
-  // { path: "/category-master", component: <CategoryMaster /> },
-  // { path: "/sub-category-master", component: <SubCategoryMaster/> },
-  // { path: "/sub-sub-category-master", component: <SubSubCategoryMaster/> },
+  // category Master
+
+  { path: "/category-master", component: <CategoryMaster /> },
+  { path: "/sub-category-master", component: <SubCategoryMaster/> },
+  { path: "/sub-sub-category-master", component: <SubSubCategoryMaster/> },
 
 
   
@@ -216,6 +221,13 @@ const authProtectedRoutes = [
 
   // Stocks
   { path: "/stocks", component: <SignState><Stocks/></SignState> },
+  { path: "/addstocks", component: <SignState><AddStocks/></SignState> },
+  { path: "/editstocks/:id", component: <SignState><EditStocks/></SignState> },
+
+  // Coupons
+  { path: "/coupons", component: <SignState><Coupons/></SignState> },
+  { path: "/addcoupon", component: <SignState><AddCoupons/></SignState> },
+  { path: "/editcoupon/:id", component: <SignState><EditCoupons/></SignState> },
 
   //Chat
   { path: "/apps-chat", component: <Chat /> },
@@ -335,9 +347,9 @@ const authProtectedRoutes = [
 
 const publicRoutes = [
   // Authentication Page
-  { path: "/logout", component: <Logout /> },
+  { path: "/logout", component: <SignState><Logout /></SignState> },
   { path: "/", component: <SignState><Login /></SignState> },
-  { path: "/forgot-password", component: <ForgetPasswordPage /> },
+  { path: "/forgot-password", component: <SignState><ForgetPasswordPage /></SignState> },
   // { path: "/register", component: <Register /> },
 
   //AuthenticationInner pages

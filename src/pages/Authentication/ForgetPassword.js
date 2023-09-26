@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   Row,
   Col,
@@ -31,29 +31,41 @@ import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
 import withRouter from "../../Components/Common/withRouter";
+import SignContext from "../../contextAPI/Context/SignContext";
 
 const ForgetPasswordPage = (props) => {
-  const dispatch = useDispatch();
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      email: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-    }),
-    onSubmit: (values) => {
-      dispatch(userForgetPassword(values, props.history));
-    },
+  const { forgotPassword } = useContext(SignContext);
+  const [UserInfo, setUserInfo] = useState({
+    email: "",
   });
+  const [Error, setError] = useState("");
+  const [Success, setSuccess] = useState("");
 
-  const { forgetError, forgetSuccessMsg } = useSelector((state) => ({
-    forgetError: state.ForgetPassword.forgetError,
-    forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
-  }));
+  const handleChange = (e) => {
+    setUserInfo({ ...UserInfo, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await forgotPassword(UserInfo);
+    if (res.success) {
+      setSuccess(res.msg);
+      setTimeout(() => {
+        setSuccess("");
+      }, 1000);
+    } else {
+      setError(res.msg);
+      setTimeout(() => {
+        setError("");
+      }, 1000);
+    }
+  };
+
+
+
+  
+
+  
 
   document.title = "Reset Password | By Shalin";
   return (
@@ -69,7 +81,7 @@ const ForgetPasswordPage = (props) => {
                     className="d-inline-block auth-logo"
                     style={{ fontSize: "20px", color: "white" }}
                   >
-                    Shalin
+                    {/* Shalin */}
                   </Link>
                 </div>
                 {/* <p className="mt-3 fs-15 fw-medium">
@@ -79,7 +91,7 @@ const ForgetPasswordPage = (props) => {
             </Col>
           </Row>
 
-          <Row className="justify-content-center">
+          <Row className="justify-content-center mainRowAdmin">
             <Col md={8} lg={6} xl={5}>
               <Card className="mt-4">
                 <CardBody className="p-4">
@@ -87,13 +99,6 @@ const ForgetPasswordPage = (props) => {
                     <h5 className="text-primary">Forgot Password?</h5>
                     <p className="text-muted">Reset password</p>
 
-                    <lord-icon
-                      src="https://cdn.lordicon.com/rhvddzym.json"
-                      trigger="loop"
-                      colors="primary:#0ab39c"
-                      className="avatar-xl"
-                      style={{ width: "120px", height: "120px" }}
-                    ></lord-icon>
                   </div>
 
                   <Alert
@@ -103,44 +108,20 @@ const ForgetPasswordPage = (props) => {
                     Enter your email and instructions will be sent to you!
                   </Alert>
                   <div className="p-2">
-                    {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: "13px" }}>
-                        {forgetError}
-                      </Alert>
-                    ) : null}
-                    {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: "13px" }}>
-                        {forgetSuccessMsg}
-                      </Alert>
-                    ) : null}
-                    <Form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
-                      }}
+                   
+                   
+                    <Form 
                     >
                       <div className="mb-4">
                         <Label className="form-label">Email</Label>
                         <Input
-                          name="email"
                           className="form-control"
                           placeholder="Enter email"
                           type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
-                          invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
-                          }
+                          name="email"
+
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            <div>{validation.errors.email}</div>
-                          </FormFeedback>
-                        ) : null}
+                
                       </div>
 
                       <div className="text-center mt-4">
