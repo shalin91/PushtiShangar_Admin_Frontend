@@ -178,6 +178,7 @@ import EditStocks from "../pages/Stocks Management/EditStocks";
 import Coupons from "../pages/Coupon Management/Coupons";
 import AddCoupons from "../pages/Coupon Management/AddCoupons";
 import EditCoupons from "../pages/Coupon Management/EditCoupons";
+import AddUser from "../pages/Pages/Team/AddUser";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -322,8 +323,9 @@ const authProtectedRoutes = [
   { path: "/pages-starter", component: <Starter /> },
   { path: "/pages-profile", component: <SignState> <SimplePage /> </SignState> },
   { path: "/pages-profile-settings/:id", component: <SignState> <Settings /> </SignState> },
-  { path: "/pages-team", component: <SignState><Team /></SignState> },
+  // { path: "/pages-team", component: <SignState><Team /></SignState> },
   { path: "/newteam", component: <SignState><NewTeam/></SignState> },
+  { path: "/adduser", component: <SignState><AddUser/></SignState> },
   { path: "/pages-timeline", component: <Timeline /> },
   { path: "/pages-faqs", component: <Faqs /> },
   { path: "/pages-gallery", component: <Gallery /> },

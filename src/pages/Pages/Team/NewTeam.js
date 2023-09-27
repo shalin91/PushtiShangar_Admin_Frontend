@@ -17,6 +17,7 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Link, useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 const NewTeam = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -30,24 +31,15 @@ const NewTeam = () => {
     GetRoles,
   } = useContext(SignContext);
   const [usersData, setUsersData] = useState([]);
-  const [UserInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    photo: "",
-    roles: "",
-    status: "",
-  });
   const [editUserInfo, setEditUserInfo] = useState({
     name: "",
     email: "",
     photo: "",
     roles: "",
-    status: "",
+    active: "",
   });
   const [Roles, setRoles] = useState([]);
-  const [profilePhoto, setProfilePhoto] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const [modal, setModal] = useState(false);
   const [EditModal, setEditModal] = useState(false);
   const [deletemodal, setDeleteModal] = useState(false);
@@ -66,8 +58,23 @@ const NewTeam = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
-    roles: Yup.string().required("Roles are required"),
-    status: Yup.string().required("Status is required"),
+    roles: Yup.string().required("Role is required"),
+    photo: Yup.mixed()
+      .test("fileSize", "File size is too large", (value) => {
+        if (!value) return true; // No file is selected, so it's valid
+        return value.size <= 5242880; // 5MB maximum file size
+      })
+      .test("fileType", "Invalid file type", (value) => {
+        if (!value) return true; // No file is selected, so it's valid
+        return (
+          ["image/jpeg", "image/jpg", "image/png"].includes(value.type) ||
+          value.photo.endsWith(".jpeg") ||
+          value.photo.endsWith(".jpg") ||
+          value.photo.endsWith(".png")
+        );
+      })
+      .required("Photo is required"),
+    // status: Yup.string().required("Status is required"),
   });
 
   const getusers = async () => {
@@ -98,9 +105,13 @@ const NewTeam = () => {
 
   const handleChange = (e) => {
     if (EditModal) {
-      setEditUserInfo({ ...editUserInfo, [e.target.name]: e.target.value });
-    } else {
-      setUserInfo({ ...UserInfo, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
+    setEditUserInfo({
+      ...editUserInfo,
+      [name]: newValue,
+    });
     }
   };
 
@@ -110,18 +121,17 @@ const NewTeam = () => {
     setProfilePhoto(file);
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    const res = await registerUser(UserInfo, profilePhoto);
+  const handleSaveUserData = async (Values) => {
+    const res = await registerUser(Values);
     console.log(res);
-    // if (res.success) {
-    //   navigate("/login");
-    // }
-    setSubmitting(false);
+    if (res.success) {
+      getusers();
+    }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const resUpdate = await updateUser(editUserInfo, profilePhoto);
+    const resUpdate = await updateUser(editUserInfo , profilePhoto);
     console.log(resUpdate);
     if (resUpdate.success) {
       getusers();
@@ -204,6 +214,7 @@ const NewTeam = () => {
                           className="btn btn-success add-btn me-1"
                           id="create-btn"
                           onClick={togglemodal}
+                          // to="/adduser"
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
                         </Link>
@@ -219,12 +230,7 @@ const NewTeam = () => {
                         <tr>
                           <th scope="col" style={{ width: "40px" }}>
                             <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="checkAll"
-                                value="option"
-                              />
+                            <th className="name">Index</th>
                             </div>
                           </th>
                           <th className="name">Name</th>
@@ -238,16 +244,11 @@ const NewTeam = () => {
                         </tr>
                       </thead>
                       <tbody className="list form-check-all">
-                        {usersData.map((user) => (
+                        {usersData.map((user , key) => (
                           <tr key={user._id}>
                             <th scope="row">
                               <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name="chk_child"
-                                  value="option1"
-                                />
+                              <td className="name">{key+1}</td>
                               </div>
                             </th>
                             <td className="name">{user.name}</td>
@@ -275,7 +276,7 @@ const NewTeam = () => {
                             </td>
                             <td className="roles">{user.roles}</td>
                             <td className="status">
-                              {user.status === "active" ? (
+                              {user.active === true ? (
                                 <span
                                   className="badge badge-soft"
                                   style={{
@@ -349,111 +350,150 @@ const NewTeam = () => {
         <ModalBody>
           <Formik
             initialValues={{
+              photo: "",
               name: "",
               email: "",
               password: "",
               confirmPassword: "",
               roles: "",
-              status: "",
+              active: true,
             }}
             validationSchema={addUserValidationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={async (values, { resetForm }) => {
+              await handleSaveUserData(values);
+              resetForm();
+              togglemodal();
+              toast.success("User Added Successfully", { autoClose: 3000 });
+            }}
           >
-            {({ isSubmitting }) => (
-              <Form>
+            {({
+              isSubmitting,
+              handleChange,
+              handleSubmit,
+              errors,
+              touched,
+              values,
+              handleBlur,
+              setFieldValue,
+            }) => (
+              <Form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <Label for="profile-photo" className="form-label">
                     Profile Photo
                   </Label>
-                  <Field
+                  <input
                     type="file"
                     className="form-control"
                     id="profile-photo"
                     name="photo"
                     accept=".jpg, .jpeg, .png"
-                    onChange={handlePhotoChange}
+                    onChange={(event) => {
+                      setFieldValue("photo", event.currentTarget.files[0]);
+                    }}
+                    onBlur={handleBlur}
+                    // value={values.photo}
                   />
-                  <ErrorMessage
-                    name="photo"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.photo && touched.photo && errors.photo}
+                  </p>
                 </div>
+                {profilePhoto && (
+                  <div>
+                    <img
+                      src={URL.createObjectURL(profilePhoto)}
+                      alt="Selected Profile Photo"
+                      style={{
+                        maxWidth: "100px",
+                        maxHeight: "100px",
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                )}
 
                 <div className="mb-3">
                   <Label for="addaddress-Name" className="form-label">
-                    Name
+                    Name*
                   </Label>
                   <Field
                     type="text"
                     className="form-control"
                     id="Name"
                     name="name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
                   />
-                  <ErrorMessage
-                    name="name"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.name && touched.name && errors.name}
+                  </p>
                 </div>
 
                 <div className="mb-3">
                   <Label for="Email" className="form-label">
-                    Email
+                    Email*
                   </Label>
                   <Field
-                    type="text"
+                    type="email"
                     className="form-control"
                     id="Email"
                     name="email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
                   />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.email && touched.email && errors.email}
+                  </p>
                 </div>
                 <div className="mb-3">
                   <Label for="password" className="form-label">
-                    Password
+                    Password*
                   </Label>
                   <Field
                     type="password"
                     className="form-control"
                     id="password"
                     name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
                   />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.password && touched.password && errors.password}
+                  </p>
                 </div>
                 <div className="mb-3">
                   <Label for="confirmPassword" className="form-label">
-                    Confirm Password
+                    Confirm Password*
                   </Label>
                   <Field
                     type="password"
                     className="form-control"
                     id="confirmPassword"
                     name="confirmPassword"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.confirmPassword}
                   />
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.confirmPassword &&
+                      touched.confirmPassword &&
+                      errors.confirmPassword}
+                  </p>
                 </div>
                 <div className="mb-3">
                   <Label for="state" className="form-label">
-                    Roles
+                    Roles*
                   </Label>
                   <Field
                     as="select"
                     className="form-select"
                     id="state"
                     name="roles"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.roles}
                   >
                     <option value="">Select a role</option>
                     {Roles.map((role) => (
@@ -462,11 +502,9 @@ const NewTeam = () => {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage
-                    name="roles"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.roles && touched.roles && errors.roles}
+                  </p>
                 </div>
                 <div className="mb-3">
                   <Label for="status" className="form-label">
@@ -478,8 +516,10 @@ const NewTeam = () => {
                         type="radio"
                         className="form-check-input"
                         id="activeStatus"
-                        name="status"
-                        value="active"
+                        name="active"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.active}
                       />
                       <Label
                         className="form-check-label"
@@ -489,11 +529,9 @@ const NewTeam = () => {
                       </Label>
                     </div>
                   </div>
-                  <ErrorMessage
-                    name="status"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <p className="error">
+                    {errors.active && touched.active && errors.active}
+                  </p>
                 </div>
 
                 <ModalFooter>
@@ -539,7 +577,7 @@ const NewTeam = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-          <Form onSubmit={(e) => handleUpdate(e)}>
+          <form onSubmit={(e) => handleUpdate(e)}>
             <div className="mb-3">
               <Label for="profile-photo" className="form-label">
                 Profile Photo
@@ -593,25 +631,30 @@ const NewTeam = () => {
                 })}
               </select>
             </div>
-
             <div className="mb-3">
-              <Label for="state" className="form-label">
-                Status
-              </Label>
-              <select
-                className="form-select"
-                id="autoSizingSelect"
-                name="status"
-                value={editUserInfo.status}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              >
-                <option value="">select status</option>
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
-              </select>
-            </div>
+                  <Label for="status" className="form-label">
+                    Status
+                  </Label>
+                  <div>
+                    <div className="form-check form-check-inline">
+                      <Input
+                        type="radio"
+                        className="form-check-input"
+                        id="activeStatus"
+                        name="active"
+                        onChange={handleChange}
+                        value={editUserInfo.active}
+                      />
+                      <Label
+                        className="form-check-label"
+                        htmlFor="activeStatus"
+                      >
+                        Active
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+            
             <ModalFooter>
               <button
                 type="button"
@@ -632,7 +675,7 @@ const NewTeam = () => {
                 Save
               </button>
             </ModalFooter>
-          </Form>
+          </form>
         </ModalBody>
       </Modal>
 

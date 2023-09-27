@@ -114,16 +114,7 @@ const ManageGalleryCat = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            <th scope="col" style={{ width: "30px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="checkAll"
-                                  value="option"
-                                />
-                              </div>
-                            </th>
+                            <th className="name">Index</th>
                             <th className="name">Category-Image</th>
                             <th className="name">Category-Title</th>
                             <th className="name">Status</th>
@@ -131,17 +122,12 @@ const ManageGalleryCat = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {GalleryData.map((gallery) => (
+                          {GalleryData.map((gallery , key) => (
                             <tr key={gallery.id}>
                               <th scope="row">
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="chk_child"
-                                    value="option1"
-                                  />
-                                </div>
+                              <td className="product-name">
+                                {key+1}
+                              </td>
                               </th>
                               <td className="Gallery-image">
                                 <div

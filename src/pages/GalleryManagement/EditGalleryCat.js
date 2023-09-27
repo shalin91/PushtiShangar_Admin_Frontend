@@ -1,13 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import SignContext from '../../contextAPI/Context/SignContext';
-import { Card, Col, Container, Form, Input, Row } from 'reactstrap';
-import BreadCrumb from '../../Components/Common/BreadCrumb';
-import UiContent from '../../Components/Common/UiContent';
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import SignContext from "../../contextAPI/Context/SignContext";
+import { Card, Col, Container, Form, Input, Row } from "reactstrap";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
+import UiContent from "../../Components/Common/UiContent";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const EditGalleryCat = () => {
   const { id } = useParams();
-  const { GetSpecificGalleryCatbyId, UpdateGalleryCat } = useContext(SignContext);
+  const navigate = useNavigate();
+  const { GetSpecificGalleryCatbyId, UpdateGalleryCat } =
+    useContext(SignContext);
   const [GalleryData, setGalleryData] = useState({
     gallaryCategoryTitle: "",
     description: "",
@@ -15,7 +19,6 @@ const EditGalleryCat = () => {
     active: true,
   });
   const [ImagePath, setImagePath] = useState("");
-
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,19 +32,23 @@ const EditGalleryCat = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await UpdateGalleryCat(GalleryData , ImagePath , id);
+    const res = await UpdateGalleryCat(GalleryData, ImagePath, id);
     console.log(id);
 
     console.log(res);
     if (res.success) {
       // Handle success
       // For example, display a success message and reset the form
+      navigate("/gallerycatcontent");
       console.log("Content updated successfully");
       setGalleryData({
         gallaryCategoryTitle: "",
-    description: "",
-    imagePath: "",
-    active: true,
+        description: "",
+        imagePath: "",
+        active: true,
+      });
+      toast.success("Category Updated Successfully", {
+        autoClose: 3000,
       });
     } else {
       // Handle error
@@ -63,7 +70,6 @@ const EditGalleryCat = () => {
     }
   };
 
-
   useEffect(() => {
     getspecificgalleryCatbyId(id);
   }, [id]);
@@ -71,9 +77,9 @@ const EditGalleryCat = () => {
   document.title = "Update Gallery-Category | Gallery";
 
   return (
-    
     <>
       <UiContent />
+      <ToastContainer/>
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Edit Gallery-Category" pageTitle="Gallery" />
@@ -152,7 +158,7 @@ const EditGalleryCat = () => {
                           </div>
                         </Col>
                         <Col sm={6}>
-                        <div className="mt-3">
+                          <div className="mt-3">
                             <Input
                               type="checkbox"
                               id="isActive"
@@ -183,7 +189,7 @@ const EditGalleryCat = () => {
         </Container>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default EditGalleryCat
+export default EditGalleryCat;

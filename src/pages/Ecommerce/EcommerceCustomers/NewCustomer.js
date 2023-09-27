@@ -29,11 +29,11 @@ const NewCustomer = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    status: "",
+    active: true,
   });
   const [EditCustomerInfo, setEditCustomerInfo] = useState({
     username: "",
-    status: "",
+    active: true,
     deleted: false,
   });
   const [modal, setModal] = useState(false);
@@ -86,12 +86,15 @@ const NewCustomer = () => {
     }
   };
 
-  const handleUpdate = async (EditCustomerInfo,id) => {
-    const resUpdate = await UpdateCustomer(EditCustomerInfo,id);
+  const handleUpdate = async (EditCustomerInfo) => {
+    const resUpdate = await UpdateCustomer(EditCustomerInfo , id);
     console.log(resUpdate);
     if (resUpdate.success) {
       Getcustomers();
       // setSuccess(resUpdate.msg);
+    }
+    else{
+      console.log(resUpdate.msg);
     }
   };
 

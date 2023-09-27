@@ -7,18 +7,18 @@ export const SignState = (props) => {
   // const url = `${process.env.REACT_APP_BASE_URL}`;
 
   //Register User
-  const registerUser = async (UserInfo , profilePhoto ) => {
+  const registerUser = async (UserInfo) => {
     const formData = new FormData();
     try{
+    console.log(formData)
     formData.append("name" , UserInfo.name);
     formData.append("email" , UserInfo.email);
     formData.append("password" , UserInfo.password);
     formData.append("confirmPassword" , UserInfo.confirmPassword);
     formData.append("roles" , UserInfo.roles);
-    formData.append("status" , UserInfo.status);
-    if (profilePhoto) {
-      formData.append("profilePhoto", profilePhoto);
-    }
+    formData.append("active" , UserInfo.active);
+    formData.append("photo" , UserInfo.photo);
+   
     const response = await axios.post(`${url}/api/register`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -134,15 +134,15 @@ export const SignState = (props) => {
 
 
   // Update User
-  const updateUser = async (userInfo,profilePhoto) => {
+  const updateUser = async (userInfo , photo) => {
     try {
       const formData = new FormData();
       formData.append("name", userInfo.name);
       formData.append("roles", userInfo.roles);
-      formData.append("status", userInfo.status);
+      formData.append("active", userInfo.active);
       formData.append("id", userInfo._id);
-      if (profilePhoto) {
-        formData.append("profilePhoto", profilePhoto);
+      if (photo) {
+        formData.append("photo", photo);
       }
 
       const response = await axios.post(`${url}/api/updateuser`, formData, {
@@ -447,16 +447,15 @@ export const SignState = (props) => {
   };
 
   // create GalleryCat
-  const createGalleryCat = async (GalleryData ,imagePath) => {
+  const createGalleryCat = async (GalleryData) => {
     try {
       const formData = new FormData();
       formData.append("gallaryCategoryTitle", GalleryData.gallaryCategoryTitle);
       formData.append("description", GalleryData.description);
       formData.append("active", GalleryData.active);
       formData.append("deleted", GalleryData.deleted);
-      if (imagePath) {
-        formData.append("imagePath", imagePath);
-      }
+      formData.append("imagePath", GalleryData.imagePath);
+
       const response = await axios.post(
         `${url}/gallery/creategallery`,
         formData,
@@ -533,7 +532,7 @@ export const SignState = (props) => {
   };
 
   // create galleryDetails
-  const createGalleryDetails = async (GalleryDetailsData ,imagePath) => {
+  const createGalleryDetails = async (GalleryDetailsData) => {
     try {
       const formData = new FormData();
       formData.append("imageTitle", GalleryDetailsData.imageTitle);
@@ -541,9 +540,8 @@ export const SignState = (props) => {
       formData.append("galleryCategory", GalleryDetailsData.galleryCategory);
       formData.append("active", GalleryDetailsData.active);
       formData.append("deleted", GalleryDetailsData.deleted);
-      if (imagePath) {
-        formData.append("imagePath", imagePath);
-      }
+      formData.append("imagePath", GalleryDetailsData.imagePath);
+  
       const response = await axios.post(
         `${url}/gallerydetails/creategalleryitem`,
         formData,
@@ -688,6 +686,39 @@ export const SignState = (props) => {
     }
   };
 
+  // Coupon by Id
+  const GetSpecificCouponbyId = async (id) => {
+    try {
+      const response = await axios.post(`${url}/coupons/getspecificcoupon/${id}`, {
+      });
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // UpdateCoupon by Id
+  const UpdateCoupon = async (couponData , id) => {
+    try {
+      const response = await axios.post(`${url}/coupons/updatecoupon/${id}`, couponData);
+      return response 
+    } catch (error) {
+      console.error('Error adding content:', error);
+      return { success: false, msg: 'An error occurred while adding the category.' };
+    }
+  } 
+
+  // delete Coupon by Id 
+  const DeleteCoupon  = async (id) =>{
+    try {
+      const response = await axios.post(`${url}/coupons/deletecoupon/${id}`, {
+      });
+      return response;
+    } catch (error) {
+      return ({ success: false, msg: "server Error" })
+    }
+  }
+
 
 
   return (
@@ -740,6 +771,9 @@ export const SignState = (props) => {
         DeleteStocks,
         CreateCoupon,
         GetCoupons,
+        UpdateCoupon,
+        GetSpecificCouponbyId,
+        DeleteCoupon,
       }}
     >
       {props.children}

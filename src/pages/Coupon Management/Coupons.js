@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import { Link } from "react-router-dom";
-import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 
 const Coupons = () => {
-  const { GetCoupons } = useContext(SignContext);
+  const { GetCoupons , DeleteCoupon } = useContext(SignContext);
   const [CouponData, setCouponData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
@@ -25,6 +25,23 @@ const Coupons = () => {
     setCouponData(transformedData);
   };
 
+  const handleDeleteCoupon = async (id) => {
+    const res = await DeleteCoupon(id);
+    console.log(res);
+    if (res.success) {
+      // Product was successfully deleted
+      // Perform any necessary state updates or notifications
+      // Reset productToDelete and close the modal
+      setContentToDelete(null);
+      setDeleteModal(false);
+      // Refresh the product list after deletion
+      Getcoupons();
+    } else {
+      // Handle deletion error, show error message
+      // You might want to display an error notification
+    }
+  };
+
   useEffect(() => {
     Getcoupons();
   }, []);
@@ -40,7 +57,7 @@ const Coupons = () => {
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Contents</h4>
+                  <h4 className="card-title mb-0">Coupons</h4>
                 </CardHeader>
                 <CardBody>
                   <div id="contentList">
@@ -77,19 +94,11 @@ const Coupons = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            <th scope="col" style={{ width: "50px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="checkAll"
-                                  value="option"
-                                />
-                              </div>
-                            </th>
+                            <th className="name">Index</th>
                             <th className="name">Name</th>
                             <th className="name">Discount</th>
                             <th className="name">Type</th>
+                            <th className="name">Start</th>
                             <th className="name">Expiry</th>
                             <th className="name">Status</th>
                             <th className="action">Action</th>
@@ -97,16 +106,11 @@ const Coupons = () => {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {CouponData.map((coupon) => (
+                          {CouponData.map((coupon , key) => (
                             <tr key={coupon.id}>
                               <th scope="row">
                                 <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="chk_child"
-                                    value="option1"
-                                  />
+                                <td className="product-name">{key+1}</td>
                                 </div>
                               </th>
                               <td className="product-name">{coupon.name}</td>
@@ -114,6 +118,16 @@ const Coupons = () => {
                                 {coupon.discount}
                               </td>
                               <td className="product-name">{coupon.type}</td>
+                              <td className="product-name">
+                                {new Date(coupon.start).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  }
+                                )}
+                              </td>
                               <td className="product-name">
                                 {new Date(coupon.expiry).toLocaleDateString(
                                   "en-US",
@@ -186,6 +200,60 @@ const Coupons = () => {
           </Row>
         </Container>
       </div>
+
+       {/* modal Delete Content */}
+       <Modal
+        isOpen={deletemodal}
+        role="dialog"
+        autoFocus={true}
+        centered
+        id="removeItemModal"
+        toggle={toggledeletemodal}
+      >
+        <ModalHeader
+          toggle={() => {
+            setDeleteModal(!deletemodal);
+          }}
+        ></ModalHeader>
+        <ModalBody>
+          <div className="mt-2 text-center">
+            <lord-icon
+              src="https://cdn.lordicon.com/gsqxdxog.json"
+              trigger="loop"
+              colors="primary:#f7b84b,secondary:#f06548"
+              style={{ width: "100px", height: "100px" }}
+            ></lord-icon>
+            <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+              <h4>Are you sure ?</h4>
+              <p className="text-muted mx-4 mb-0">
+                Are you Sure You want to Remove this Coupon ?
+              </p>
+            </div>
+          </div>
+          <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-danger"
+              onClick={() => {
+                handleDeleteCoupon(ContentToDelete._id);
+                setDeleteModal(false);
+              }}
+            >
+              Yes, Delete It!
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
+                                     
     </>
   );
 };
