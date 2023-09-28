@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHead
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
+import AddStocks from "./AddStocks";
 
 function Stocks() {
   const { GetStocks , DeleteStocks  } = useContext(SignContext);
@@ -56,6 +57,7 @@ function Stocks() {
           <BreadCrumb title="All Stocks" pageTitle="Stocks" />
           <Row>
             <Col lg={12}>
+            <AddStocks refreshTable={Getstocks} />
               <Card>
                 <CardHeader>
                   <h4 className="card-title mb-0">Stock Manage Of Products</h4>
@@ -75,7 +77,7 @@ function Stocks() {
                           </div>
                         </div>
                       </Col>
-                      <Col className="col-sm-auto">
+                      {/* <Col className="col-sm-auto">
                         <div>
                           <Link
                             to="/addstocks"
@@ -86,7 +88,7 @@ function Stocks() {
                             Add
                           </Link>
                         </div>
-                      </Col>
+                      </Col> */}
                     </Row>
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
@@ -95,37 +97,26 @@ function Stocks() {
                       >
                         <thead className="table-light">
                           <tr>
-                            <th scope="col" style={{ width: "50px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="checkAll"
-                                  value="option"
-                                />
-                              </div>
-                            </th>
+                            
+                            <th className="name">Index</th>
                             <th className="name">Product-Name</th>
-                            <th className="name">quantity</th>
+                            <th className="name">Quantity</th>
                             <th className="name">Price</th>
                             <th className="action">Action</th>
                           </tr>
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {ContentData.map((content) => (
+                          {ContentData.map((content , key) => (
                             <tr key={content.id}>
-                              <th scope="row">
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="chk_child"
-                                    value="option1"
-                                  />
-                                </div>
-                              </th>
+                              
 
+                              <td className="product-name">
+                                {key+1}
+                              </td>
+                              <td className="product-name">
+                                {content.name}
+                              </td>
                               <td className="product-name">
                                 {content.name}
                               </td>

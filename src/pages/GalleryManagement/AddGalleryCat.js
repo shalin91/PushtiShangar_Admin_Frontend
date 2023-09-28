@@ -199,7 +199,7 @@ const AddGalleryCat = () => {
                                   id="isActive"
                                   label="Is Active"
                                   name="active"
-                                  checked={GalleryData.active}
+                                  checked={values.active}
                                   onChange={handleChange}
                                 />
                                 <label className="me-2">Is Active</label>

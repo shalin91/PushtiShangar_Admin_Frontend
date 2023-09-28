@@ -4,7 +4,6 @@ import {
   CardHeader,
   Col,
   Container,
-  Form,
   Input,
   Label,
   Modal,
@@ -17,12 +16,20 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Grid } from "gridjs";
 import SignContext from "../../../contextAPI/Context/SignContext";
 import { Link, useParams } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 const NewCustomer = () => {
   const { id } = useParams();
   console.log(id);
-  const { getCustomers, createCustomer, GetSpecificCustomer, UpdateCustomer , deleteCustomer } =
-    useContext(SignContext);
+  const {
+    getCustomers,
+    createCustomer,
+    GetSpecificCustomer,
+    UpdateCustomer,
+    deleteCustomer,
+  } = useContext(SignContext);
   const [CustomersData, setCustomersData] = useState([]);
   const [CustomerInfo, setCustomerInfo] = useState({
     username: "",
@@ -41,6 +48,15 @@ const NewCustomer = () => {
   const [CustomerToDelete, setCustomerToDelete] = useState(null);
   const [deletemodal, setDeleteModal] = useState(false);
 
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string().required("Password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
+    // active: Yup.string().required("Status is required"),
+  });
 
   const Getcustomers = async () => {
     const res = await getCustomers();
@@ -63,9 +79,8 @@ const NewCustomer = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const res = await createCustomer(CustomerInfo);
+  const handleSaveCustomer = async (Values) => {
+    const res = await createCustomer(Values);
     console.log(res);
     if (res.success) {
       Getcustomers();
@@ -81,19 +96,17 @@ const NewCustomer = () => {
         ...EditCustomerInfo,
         [name]: newValue,
       });
-    } else {
-      setCustomerInfo({ ...CustomerInfo, [e.target.name]: e.target.value });
     }
   };
 
-  const handleUpdate = async (EditCustomerInfo) => {
-    const resUpdate = await UpdateCustomer(EditCustomerInfo , id);
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const resUpdate = await UpdateCustomer(EditCustomerInfo, id);
     console.log(resUpdate);
     if (resUpdate.success) {
       Getcustomers();
       // setSuccess(resUpdate.msg);
-    }
-    else{
+    } else {
       console.log(resUpdate.msg);
     }
   };
@@ -152,12 +165,6 @@ const NewCustomer = () => {
                     </div>
                     <div className="col-sm-auto">
                       <div>
-                        {/* <button
-                          className="btn btn-soft-danger me-1"
-                          onClick={() => setDeleteModalMulti(true)}
-                        >
-                          <i className="ri-delete-bin-2-line"></i>
-                        </button> */}
                         <button
                           type="button"
                           className="btn btn-success add-btn"
@@ -186,16 +193,8 @@ const NewCustomer = () => {
                     >
                       <thead className="table-light">
                         <tr>
-                          <th scope="col">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="checkAll"
-                                value="option"
-                              />
-                            </div>
-                          </th>
+                          
+                          <th className="name">Index</th>
                           <th className="name">Name</th>
                           <th className="price">email</th>
                           <th className="status">Status</th>
@@ -203,24 +202,19 @@ const NewCustomer = () => {
                         </tr>
                       </thead>
                       <tbody className="list form-check-all">
-                        {CustomersData.map((customer) => (
+                        {CustomersData.map((customer, key) => (
                           <tr key={customer.id}>
                             <th scope="row">
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name="chk_child"
-                                  value="option1"
-                                />
-                              </div>
+                            <td className="product-name">
+                              {key+1}
+                            </td>
                             </th>
                             <td className="product-name">
                               {customer.username}
                             </td>
                             <td className="stock">{customer.email}</td>
                             <td className="status">
-                              {customer.status === "active" ? (
+                              {customer.active === true ? (
                                 <span
                                   className="badge badge-soft"
                                   style={{
@@ -261,10 +255,10 @@ const NewCustomer = () => {
                                     className="btn btn-sm btn-danger remove-item-btn"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteRecordModal"
-                                      onClick={() => {
-                                        toggledeletemodal();
-                                        setCustomerToDelete(customer);
-                                      }}
+                                    onClick={() => {
+                                      toggledeletemodal();
+                                      setCustomerToDelete(customer);
+                                    }}
                                   >
                                     Remove
                                   </button>
@@ -302,114 +296,157 @@ const NewCustomer = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-          <Form onSubmit={(e) => handleSubmit(e)}>
-            <div className="mb-3"></div>
+          <Formik
+            initialValues={{
+              username: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+              active: true,
+            }}
+            validationSchema={validationSchema}
+            onSubmit={async (values, { resetForm }) => {
+              await handleSaveCustomer(values);
+              resetForm();
+              togglemodal();
+              toast.success("User Added Successfully", { autoClose: 3000 });
+            }}
+          >
+            {({
+              isSubmitting,
+              handleChange,
+              handleSubmit,
+              errors,
+              touched,
+              values,
+              handleBlur,
+              setFieldValue,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <Label for="addaddress-Name" className="form-label">
+                    Name
+                  </Label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="Name"
+                    placeholder="Enter Name"
+                    name="username"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.username}
+                  />
+                  <p classname="error text-danger">
+                    {errors.username && touched.username && errors.username}
+                  </p>
+                </div>
 
-            <div className="mb-3">
-              <Label for="addaddress-Name" className="form-label">
-                Name
-              </Label>
-              <Input
-                type="text"
-                className="form-control"
-                id="Name"
-                placeholder="Enter Name"
-                name="username"
-                value={CustomerInfo.username}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
+                <div className="mb-3">
+                  <Label for="Email" className="form-label">
+                    Email
+                  </Label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="Email"
+                    placeholder="Enter Email"
+                    name="email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                  />
+                  <p classname="error text-danger">
+                    {errors.email && touched.email && errors.email}
+                  </p>
+                </div>
+                <div className="mb-3">
+                  <Label for="password" className="form-label">
+                    Password
+                  </Label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                  />
+                  <p classname="error text-danger">
+                    {errors.password && touched.password && errors.password}
+                  </p>
+                </div>
+                <div className="mb-3">
+                  <Label for="password" className="form-label">
+                    Confirm Password
+                  </Label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirm Password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.confirmPassword}
+                  />
+                  <p classname="error text-danger">
+                    {errors.confirmPassword &&
+                      touched.confirmPassword &&
+                      errors.confirmPassword}
+                  </p>
+                </div>
+                <div className="mb-3">
+                  <Label for="status" className="form-label">
+                    Status
+                  </Label>
+                  <div>
+                    <div className="form-check form-check-inline">
+                      <Field
+                        type="radio"
+                        className="form-check-input"
+                        id="activeStatus"
+                        name="active"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.active}
+                      />
+                      <Label
+                        className="form-check-label"
+                        htmlFor="activeStatus"
+                      >
+                        Active
+                      </Label>
+                    </div>
+                  </div>
+                </div>
 
-            <div className="mb-3">
-              <Label for="Email" className="form-label">
-                Email
-              </Label>
-              <Input
-                type="text"
-                className="form-control"
-                id="Email"
-                placeholder="Enter Email"
-                name="email"
-                value={CustomerInfo.email}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="password" className="form-label">
-                Password
-              </Label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                name="password"
-                placeholder="Password"
-                value={CustomerInfo.password}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="password" className="form-label">
-                Confirm Password
-              </Label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={CustomerInfo.confirmPassword}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <Label for="state" className="form-label">
-                Status
-              </Label>
-              <select
-                className="form-select"
-                id="autoSizingSelect"
-                name="status"
-                value={CustomerInfo.status}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              >
-                <option value="">select status</option>
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
-              </select>
-            </div>
-
-            <ModalFooter>
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={() => {
-                  setModal(!modal);
-                }}
-              >
-                Close
-              </button>
-              <button
-                type="submit"
-                className="btn btn-success"
-                onClick={() => {
-                  setModal(!modal);
-                }}
-              >
-                Save
-              </button>
-            </ModalFooter>
-          </Form>
+                <ModalFooter>
+                  <button
+                    type="button"
+                    className="btn btn-light"
+                    onClick={() => {
+                      setModal(!modal);
+                    }}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    // onClick={() => {
+                    //   setModal(!modal);
+                    // }}
+                    disabled={isSubmitting}
+                  >
+                    Save
+                  </button>
+                </ModalFooter>
+              </Form>
+            )}
+          </Formik>
         </ModalBody>
       </Modal>
 
@@ -432,7 +469,7 @@ const NewCustomer = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-          <Form onSubmit={(e) => handleUpdate(e)}>
+          <form onSubmit={(e) => handleUpdate(e)}>
             <div className="mb-3">
               <Label for="addaddress-Name" className="form-label">
                 Name
@@ -444,40 +481,28 @@ const NewCustomer = () => {
                 placeholder="Enter Name"
                 name="username"
                 value={EditCustomerInfo.username}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
+                onChange={handleChange}
               />
             </div>
             <div className="mb-3">
-              <Label for="state" className="form-label">
+              <Label for="status" className="form-label">
                 Status
               </Label>
-              <select
-                className="form-select"
-                id="autoSizingSelect"
-                name="status"
-                value={EditCustomerInfo.status}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              >
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
-              </select>
-            </div>
-            <div className="mt-3">
-              <Input
-                type="checkbox"
-                id="deleted"
-                label="deleted"
-                name="deleted"
-                checked={EditCustomerInfo.deleted}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-              <label className="me-2">Is Deleted</label>
+              <div>
+                <div className="form-check form-check-inline">
+                  <Input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="activeStatus"
+                    name="active"
+                    value={EditCustomerInfo.active}
+                    checked={handleChange}
+                  />
+                  <Label className="form-check-label" htmlFor="activeStatus">
+                    Active
+                  </Label>
+                </div>
+              </div>
             </div>
 
             <ModalFooter>
@@ -500,7 +525,7 @@ const NewCustomer = () => {
                 Save
               </button>
             </ModalFooter>
-          </Form>
+          </form>
         </ModalBody>
       </Modal>
 

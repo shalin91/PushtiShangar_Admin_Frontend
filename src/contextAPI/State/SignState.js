@@ -9,26 +9,25 @@ export const SignState = (props) => {
   //Register User
   const registerUser = async (UserInfo) => {
     const formData = new FormData();
-    try{
-    console.log(formData)
-    formData.append("name" , UserInfo.name);
-    formData.append("email" , UserInfo.email);
-    formData.append("password" , UserInfo.password);
-    formData.append("confirmPassword" , UserInfo.confirmPassword);
-    formData.append("roles" , UserInfo.roles);
-    formData.append("active" , UserInfo.active);
-    formData.append("photo" , UserInfo.photo);
-   
-    const response = await axios.post(`${url}/api/register`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response;
-  }
-  catch (error) {
-    console.error("Error during API call:", error);
-  }
+    try {
+      console.log(formData);
+      formData.append("name", UserInfo.name);
+      formData.append("email", UserInfo.email);
+      formData.append("password", UserInfo.password);
+      formData.append("confirmPassword", UserInfo.confirmPassword);
+      formData.append("roles", UserInfo.roles);
+      formData.append("active", UserInfo.active);
+      formData.append("photo", UserInfo.photo);
+
+      const response = await axios.post(`${url}/api/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
   };
 
   // try {
@@ -44,8 +43,6 @@ export const SignState = (props) => {
   //   return ({ success: false, msg: "server Error" })
   // }
 
-
-
   //Login User
   const loginUser = async (UserInfo) => {
     try {
@@ -60,10 +57,7 @@ export const SignState = (props) => {
   //Forgot Password
   const forgotPassword = async (UserInfo) => {
     try {
-      const response = await axios.post(
-        `${url}/api/forgotpassword`,
-        UserInfo
-      );
+      const response = await axios.post(`${url}/api/forgotpassword`, UserInfo);
 
       return response;
     } catch (error) {
@@ -132,9 +126,8 @@ export const SignState = (props) => {
     }
   };
 
-
   // Update User
-  const updateUser = async (userInfo , photo) => {
+  const updateUser = async (userInfo, photo) => {
     try {
       const formData = new FormData();
       formData.append("name", userInfo.name);
@@ -191,7 +184,7 @@ export const SignState = (props) => {
   };
 
   // Add Product
-  const addProduct = async (ProductData , imageGallery ) => {
+  const addProduct = async (ProductData, imageGallery) => {
     try {
       const formData = new FormData();
       formData.append("name", ProductData.name);
@@ -207,34 +200,33 @@ export const SignState = (props) => {
       // formData.append("original", ProductData.original);
       // formData.append("original", ProductData.original);
       if (imageGallery) {
-        console.log(imageGallery)
+        console.log(imageGallery);
         formData.append("imageGallery", imageGallery);
       }
-      const response = await axios.post(
-        `${url}/product/addproduct`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${url}/product/addproduct`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
     }
   };
-  
+
   // Add Category
   const addCategory = async (categoryData) => {
     try {
       const response = await axios.post(`${url}/api/addcategory`, categoryData);
-      return response 
+      return response;
     } catch (error) {
-      console.error('Error adding category:', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
+      console.error("Error adding category:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  }
+  };
 
   // Get Categories
   const getCategories = async () => {
@@ -242,33 +234,34 @@ export const SignState = (props) => {
       const response = await axios.post(`${url}/api/getcategories`);
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      return { success: false, msg: "server Error" };
     }
   };
 
-  //Get Specific SubCategories 
+  //Get Specific SubCategories
   const getSpecificSubcategories = async (categoryId) => {
     try {
-      const response = await axios.post(`${url}/api/${categoryId}/subcategories`);
+      const response = await axios.post(
+        `${url}/api/${categoryId}/subcategories`
+      );
       return response;
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
   };
 
-  // Get Products  
+  // Get Products
   const getProducts = async () => {
     try {
       const response = await axios.post(`${url}/product/getallproducts`);
       return response;
-    
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
   };
 
   // Update Products
-  const updateProduct = async (productData, id ,mainImage) => {
+  const updateProduct = async (productData, id, mainImage) => {
     try {
       const formData = new FormData();
       formData.append("id", id);
@@ -281,7 +274,7 @@ export const SignState = (props) => {
       formData.append("stock", productData.stock);
       formData.append("sku", productData.sku);
       formData.append("status", productData.status);
-      
+
       if (mainImage) {
         formData.append("mainImage", mainImage);
       }
@@ -293,7 +286,7 @@ export const SignState = (props) => {
 
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
       return { success: false, msg: "server Error" };
     }
   };
@@ -306,21 +299,21 @@ export const SignState = (props) => {
       });
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      return { success: false, msg: "server Error" };
     }
   };
 
-  // Delete Product 
-  const deleteProduct = async (ProductId) =>{
+  // Delete Product
+  const deleteProduct = async (ProductId) => {
     try {
       const response = await axios.post(`${url}/api/deleteproduct`, {
         id: ProductId,
       });
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      return { success: false, msg: "server Error" };
     }
-  } 
+  };
 
   // Get All Customer
   const getCustomers = async () => {
@@ -332,47 +325,55 @@ export const SignState = (props) => {
     }
   };
 
-  // Create Customer 
-  const createCustomer = async (customerInfo)=>{
+  // Create Customer
+  const createCustomer = async (customerInfo) => {
     try {
-      const response = await axios.post(`${url}/customer/register`, customerInfo);
-      return response 
+      const response = await axios.post(
+        `${url}/customer/register`,
+        customerInfo
+      );
+      return response;
     } catch (error) {
-      console.error('Error', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
+      console.error("Error", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  }
+  };
 
   // Get Specific Customer
   const GetSpecificCustomer = async (customerId) => {
     try {
-      const response = await axios.post(`${url}/customer/getSpecificCustomer/${customerId}`, {
-      });
+      const response = await axios.post(
+        `${url}/customer/getSpecificCustomer/${customerId}`,
+        {}
+      );
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
     }
   };
 
-  // Update Customer 
-  const UpdateCustomer = async (customerInfo,CustomerId)=>{
+  // Update Customer
+  const UpdateCustomer = async (customerInfo) => {
     try {
       const response = await axios.post(`${url}/customer/updatecustomer`, {
-        id : CustomerId,
+        id: customerInfo._id,
         customerInfo,
       });
-      return response 
+      return response;
     } catch (error) {
-      console.error('Error', error);
-      return { success: false, msg: 'An error occurred' };
+      console.error("Error", error);
+      return { success: false, msg: "An error occurred" };
     }
-  }
+  };
 
-  // Delete Customer 
+  // Delete Customer
   const deleteCustomer = async (customerId) => {
     try {
       const response = await axios.post(`${url}/customer/deletecustomer`, {
-        id : customerId
+        id: customerId,
       });
       return response;
     } catch (error) {
@@ -393,20 +394,27 @@ export const SignState = (props) => {
   // Add Content
   const addContent = async (ContentData) => {
     try {
-      const response = await axios.post(`${url}/content/createcontent`, ContentData);
-      return response 
+      const response = await axios.post(
+        `${url}/content/createcontent`,
+        ContentData
+      );
+      return response;
     } catch (error) {
-      console.error('Error adding content:', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  } 
+  };
 
   // Get Specific Content
   const GetSpecificContent = async (id) => {
     try {
-      const response = await axios.post(`${url}/content/getspecificcontent/${id}`, {
-
-      });
+      const response = await axios.post(
+        `${url}/content/getspecificcontent/${id}`,
+        {}
+      );
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
@@ -414,33 +422,36 @@ export const SignState = (props) => {
   };
 
   // Update Content
-  const UpdateContent = async (contentData ,id) => {
+  const UpdateContent = async (contentData, id) => {
     try {
-      const response = await axios.post(`${url}/content/updatecontent/${id}`, contentData);
+      const response = await axios.post(
+        `${url}/content/updatecontent/${id}`,
+        contentData
+      );
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
     }
   };
 
   // Delete content
-  const DeleteContent = async (id) =>{
+  const DeleteContent = async (id) => {
     try {
-      const response = await axios.post(`${url}/content/deletecontent/${id}`, {
-    
-      });
+      const response = await axios.post(
+        `${url}/content/deletecontent/${id}`,
+        {}
+      );
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      return { success: false, msg: "server Error" };
     }
-  } 
+  };
 
-  // Get GalleryCategory 
+  // Get GalleryCategory
   const GetGalleryCat = async () => {
     try {
       const response = await axios.post(`${url}/gallery/getgallerycat`);
       return response;
-    
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
@@ -467,16 +478,17 @@ export const SignState = (props) => {
       );
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
     }
   };
 
   // Get SpecificGalleryCat By Id
   const GetSpecificGalleryCatbyId = async (galleryId) => {
     try {
-      const response = await axios.post(`${url}/gallery/getspecificgallery/${galleryId}`, {
-
-      });
+      const response = await axios.post(
+        `${url}/gallery/getspecificgallery/${galleryId}`,
+        {}
+      );
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
@@ -484,48 +496,52 @@ export const SignState = (props) => {
   };
 
   // Update GalleryCat
-  const UpdateGalleryCat = async (GalleryData, imagePath , GallaryId) => {
+  const UpdateGalleryCat = async (GalleryData, imagePath, GallaryId) => {
     try {
       const formData = new FormData();
-      console.log(GallaryId)
+      console.log(GallaryId);
       formData.append("gallaryCategoryTitle", GalleryData.gallaryCategoryTitle);
       formData.append("description", GalleryData.description);
       formData.append("active", GalleryData.active);
       formData.append("deleted", GalleryData.deleted);
-      
+
       if (imagePath) {
         formData.append("imagePath", imagePath);
       }
-      const response = await axios.post(`${url}/gallery/updategallery/${GallaryId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${url}/gallery/updategallery/${GallaryId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
       return { success: false, msg: "server Error" };
     }
   };
 
-  // Delete GalleryContent 
-  const DeleteGalleryCat = async (id) =>{
+  // Delete GalleryContent
+  const DeleteGalleryCat = async (id) => {
     try {
-      const response = await axios.post(`${url}/gallery/deletegallerycat/${id}`, {
-    
-      });
+      const response = await axios.post(
+        `${url}/gallery/deletegallerycat/${id}`,
+        {}
+      );
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      return { success: false, msg: "server Error" };
     }
-  } 
+  };
 
   // Get GalleryDetails
   const GetGalleryDetails = async () => {
     try {
       const response = await axios.post(`${url}/gallerydetails/getgalleries`);
       return response;
-    
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
@@ -541,7 +557,7 @@ export const SignState = (props) => {
       formData.append("active", GalleryDetailsData.active);
       formData.append("deleted", GalleryDetailsData.deleted);
       formData.append("imagePath", GalleryDetailsData.imagePath);
-  
+
       const response = await axios.post(
         `${url}/gallerydetails/creategalleryitem`,
         formData,
@@ -553,24 +569,25 @@ export const SignState = (props) => {
       );
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
     }
   };
 
   // GetSpecific GalleryDetails
   const GetSpecificGalleryDetails = async (id) => {
     try {
-      const response = await axios.post(`${url}/gallerydetails/getspecificgalleryitem/${id}`, {
-
-      });
+      const response = await axios.post(
+        `${url}/gallerydetails/getspecificgalleryitem/${id}`,
+        {}
+      );
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
     }
   };
- 
+
   // Update GalleyDetails
-  const updateGalleryDetails = async (GalleryDetailsData ,imagePath , id) => {
+  const updateGalleryDetails = async (GalleryDetailsData, imagePath, id) => {
     try {
       const formData = new FormData();
       formData.append("imageTitle", GalleryDetailsData.imageTitle);
@@ -592,61 +609,74 @@ export const SignState = (props) => {
       );
       return response;
     } catch (error) {
-      console.error('Axios Error:', error);
+      console.error("Axios Error:", error);
     }
   };
 
-   // Delete GalleryDetails 
-   const DeleteGalleryDetails = async (id) =>{
+  // Delete GalleryDetails
+  const DeleteGalleryDetails = async (id) => {
     try {
-      const response = await axios.post(`${url}/gallerydetails/deletegalleryitem/${id}`, {
-    
-      });
+      const response = await axios.post(
+        `${url}/gallerydetails/deletegalleryitem/${id}`,
+        {}
+      );
       return response;
-    } catch (error) {
-      return ({ success: false, msg: "server Error" })
-    }
-  } 
-
-  // Get Stocks
-  const GetStocks =  async () => {
-    try {
-      const response = await axios.post(`${url}/stocks/getstocks`);
-      return response;
-    
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
   };
 
-  // Create Stocks 
+  // Get Stocks
+  const GetStocks = async () => {
+    try {
+      const response = await axios.post(`${url}/stocks/getstocks`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // Create Stocks
   const AddStocks = async (stocksData) => {
     try {
-      const response = await axios.post(`${url}/stocks/createstock`, stocksData);
-      return response 
+      const response = await axios.post(
+        `${url}/stocks/createstock`,
+        stocksData
+      );
+      return response;
     } catch (error) {
-      console.error('Error adding content:', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  } 
+  };
 
   // Update Stocks
-  const UpdateStocks = async (stocksData , id) => {
+  const UpdateStocks = async (stocksData, id) => {
     try {
-      const response = await axios.post(`${url}/stocks/updatestock/${id}`, stocksData);
-      return response 
+      const response = await axios.post(
+        `${url}/stocks/updatestock/${id}`,
+        stocksData
+      );
+      return response;
     } catch (error) {
-      console.error('Error adding content:', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  } 
-
+  };
 
   // Get Specific Stocks by Id
   const GetSpecificStocks = async (id) => {
     try {
-      const response = await axios.post(`${url}/stocks/getspecificstock/${id}`, {
-      });
+      const response = await axios.post(
+        `${url}/stocks/getspecificstock/${id}`,
+        {}
+      );
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
@@ -654,33 +684,37 @@ export const SignState = (props) => {
   };
 
   // Delete Stocks by Id
-  const DeleteStocks = async (id) =>{
+  const DeleteStocks = async (id) => {
     try {
-      const response = await axios.post(`${url}/stocks/deletestocks/${id}`, {
-      });
+      const response = await axios.post(`${url}/stocks/deletestocks/${id}`, {});
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      return { success: false, msg: "server Error" };
     }
-  }
+  };
 
-  // Add Coupons 
+  // Add Coupons
   const CreateCoupon = async (couponData) => {
     try {
-      const response = await axios.post(`${url}/coupons/createcoupon`, couponData);
-      return response 
+      const response = await axios.post(
+        `${url}/coupons/createcoupon`,
+        couponData
+      );
+      return response;
     } catch (error) {
-      console.error('Error adding content:', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  } 
+  };
 
   // Get All Coupons
-  const GetCoupons  = async () => {
+  const GetCoupons = async () => {
     try {
       const response = await axios.post(`${url}/coupons/getcoupons`);
       return response;
-    
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
@@ -689,8 +723,10 @@ export const SignState = (props) => {
   // Coupon by Id
   const GetSpecificCouponbyId = async (id) => {
     try {
-      const response = await axios.post(`${url}/coupons/getspecificcoupon/${id}`, {
-      });
+      const response = await axios.post(
+        `${url}/coupons/getspecificcoupon/${id}`,
+        {}
+      );
       return response;
     } catch (error) {
       console.error("Error during API call:", error);
@@ -698,28 +734,34 @@ export const SignState = (props) => {
   };
 
   // UpdateCoupon by Id
-  const UpdateCoupon = async (couponData , id) => {
+  const UpdateCoupon = async (couponData, id) => {
     try {
-      const response = await axios.post(`${url}/coupons/updatecoupon/${id}`, couponData);
-      return response 
-    } catch (error) {
-      console.error('Error adding content:', error);
-      return { success: false, msg: 'An error occurred while adding the category.' };
-    }
-  } 
-
-  // delete Coupon by Id 
-  const DeleteCoupon  = async (id) =>{
-    try {
-      const response = await axios.post(`${url}/coupons/deletecoupon/${id}`, {
-      });
+      const response = await axios.post(
+        `${url}/coupons/updatecoupon/${id}`,
+        couponData
+      );
       return response;
     } catch (error) {
-      return ({ success: false, msg: "server Error" })
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
     }
-  }
+  };
 
-
+  // delete Coupon by Id
+  const DeleteCoupon = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/coupons/deletecoupon/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
 
   return (
     <SignContext.Provider
