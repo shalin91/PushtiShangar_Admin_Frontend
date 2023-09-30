@@ -179,6 +179,7 @@ import Coupons from "../pages/Coupon Management/Coupons";
 import AddCoupons from "../pages/Coupon Management/AddCoupons";
 import EditCoupons from "../pages/Coupon Management/EditCoupons";
 import AddUser from "../pages/Pages/Team/AddUser";
+import ProductMaster from "../pages/products/product";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -186,7 +187,7 @@ import AddUser from "../pages/Pages/Team/AddUser";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
-  { path: "/allproducts", component: <SignState><EcommerceAllProducts/></SignState> },
+  // { path: "/allproducts", component: <SignState><EcommerceAllProducts/></SignState> },
   { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
 
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
@@ -204,7 +205,9 @@ const authProtectedRoutes = [
   { path: "/sub-sub-category-master", component: <SubSubCategoryMaster/> },
 
 
-  
+  // product master
+
+  { path: "/allproducts", component: <ProductMaster /> },
 
   
   // Content
