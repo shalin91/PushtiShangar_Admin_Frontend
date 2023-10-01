@@ -405,8 +405,8 @@ const ProductMaster = () => {
                                 >
                                   {/* Populate the options dynamically */}
                                   <option value={null}>--select--</option>
-                                  {subCatDropbind
-                                    ? subCatDropbind.map((item) => (
+                                  {subCategoryData
+                                    ? subCategoryData.map((item) => (
                                         <option key={item._id} value={item._id}>
                                           {item.name}
                                         </option>
