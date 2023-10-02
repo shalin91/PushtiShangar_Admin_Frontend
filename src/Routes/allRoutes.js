@@ -86,7 +86,7 @@ import EditGalleryDetails from "../pages/GalleryManagement/EditGalleryDetails";
 import CategoryMaster from "../pages/manageCategory/Category";
 import SubCategoryMaster from "../pages/manageCategory/subCategory";
 import SubSubCategoryMaster from "../pages/manageCategory/subSubCategory";
-import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
+// import EcommerceNewAddProduct from "../pages/Ecommerce/EcommerceProducts/EcommerceNewAddProduct";
 import Stocks from "../pages/Stocks Management/Stocks";
 import AddStocks from "../pages/Stocks Management/AddStocks";
 import EditStocks from "../pages/Stocks Management/EditStocks";
@@ -102,7 +102,7 @@ import ProductMaster from "../pages/products/product";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
-  { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
+  // { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
 
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
   { path: "/apps-ecommerce-order-details", component: <EcommerceOrderDetail /> },
@@ -112,14 +112,12 @@ const authProtectedRoutes = [
   { path: "/apps-ecommerce-checkout", component: <EcommerceCheckout /> },
 
   // category Master
-
   { path: "/category-master", component: <CategoryMaster /> },
   { path: "/sub-category-master", component: <SubCategoryMaster/> },
   { path: "/sub-sub-category-master", component: <SubSubCategoryMaster/> },
 
 
   // product master
-
   { path: "/allproducts", component: <ProductMaster /> },
 
   
@@ -175,10 +173,8 @@ const authProtectedRoutes = [
   { path: "/pages-sitemap", component: <SiteMap /> },
   { path: "/pages-search-results", component: <SearchResults /> },
 
-
   //User Profile
   { path: "/profile/:id", component: <SignState><UserProfile /></SignState> },
-
 
 ];
 
