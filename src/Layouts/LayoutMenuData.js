@@ -314,6 +314,12 @@ const Navdata = () => {
               parentId: "apps",
             },
             {
+              id: 1,
+              label: "New Orders",
+              link: "/orders",
+              parentId: "apps",
+            },
+            {
               id: 2,
               label: "Order Details",
               link: "/apps-ecommerce-order-details",
@@ -429,7 +435,7 @@ const Navdata = () => {
           stateVariables: isCrypto,
           childItems: [
             { id: 1, label: "Stocks", link: "/stocks" },
-            // { id: 2, label: "Companies", link: "/apps-crm-companies" },
+            { id: 2, label: "Daily Rates", link: "/dailyrates" },
             // { id: 3, label: "Deals", link: "/apps-crm-deals" },
             // { id: 4, label: "Leads", link: "/apps-crm-leads" },
           ],
@@ -453,7 +459,7 @@ const Navdata = () => {
         },
         // {
         //     id: "supportTickets",
-        //     label: "Support Tickets",
+        //     label: "Daily Rates Updates",
         //     link: "/#",
         //     isChildItem: true,
         //     click: function (e) {
@@ -463,8 +469,8 @@ const Navdata = () => {
         //     parentId: "apps",
         //     stateVariables: isSupportTickets,
         //     childItems: [
-        //         { id: 1, label: "List View", link: "/apps-tickets-list" },
-        //         { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
+        //         { id: 1, label: "Gold-Silver Rates Updates", link: "/dailyrates" },
+        //         // { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
         //     ]
         // },
         // {

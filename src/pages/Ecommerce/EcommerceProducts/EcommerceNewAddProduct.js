@@ -128,6 +128,7 @@ const EcommerceNewAddProduct = () => {
       sku: Yup.string().required("required"),
       category: Yup.string().required("required"),
       subCategory: Yup.string().required("required"),
+      subSubCategory: Yup.string().nullable(),
       description: Yup.string().required("required"),
     }),
     onSubmit: async (values) => {
@@ -282,7 +283,7 @@ const EcommerceNewAddProduct = () => {
                               name="subSubCategory"
                               aria-label="Category"
                               onBlur={productForm.handleBlur}
-                              value={productForm.values.subSubCategory || ""}
+                              value={productForm.values.subSubCategory}
                               onChange={(e) => {
                                 productForm.handleChange(e);
                                

@@ -94,7 +94,12 @@ import Coupons from "../pages/Coupon Management/Coupons";
 import AddCoupons from "../pages/Coupon Management/AddCoupons";
 import EditCoupons from "../pages/Coupon Management/EditCoupons";
 import AddUser from "../pages/Pages/Team/AddUser";
+
 import ProductMaster from "../pages/products/product";
+
+import AllOrders from "../pages/Order Managemenr/AllOrders";
+import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
+
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -143,6 +148,20 @@ const authProtectedRoutes = [
   { path: "/coupons", component: <SignState><Coupons/></SignState> },
   { path: "/addcoupon", component: <SignState><AddCoupons/></SignState> },
   { path: "/editcoupon/:id", component: <SignState><EditCoupons/></SignState> },
+
+
+  // Orders
+  { path: "/orders", component: <SignState><AllOrders/></SignState> },
+
+  //Daily Price 
+  { path: "/dailyrates", component: <SignState><DailyPriceRates/></SignState> },
+
+
+
+  // Blogs
+  // { path: "/editcoupon/:id", component: <SignState><EditCoupons/></SignState> },
+
+
 
 
  

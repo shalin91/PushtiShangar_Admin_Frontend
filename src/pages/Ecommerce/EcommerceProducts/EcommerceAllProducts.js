@@ -180,7 +180,7 @@ const EcommerceAllProducts = () => {
                                 ₹{product.prices.discounted}
                               </td>
                               <td className="status">
-                                {product.status === "active" ? (
+                                {product.isActive === true ? (
                                   <span
                                     className="badge badge-soft"
                                     style={{
@@ -315,7 +315,7 @@ const EcommerceAllProducts = () => {
               type="button"
               className="btn w-sm btn-danger"
               onClick={() => {
-                handleDeleteProduct(productToDelete);
+                handleDeleteProduct(productToDelete._id);
                 setDeleteModal(false);
               }}
             >
