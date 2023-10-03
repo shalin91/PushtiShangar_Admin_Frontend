@@ -763,6 +763,55 @@ export const SignState = (props) => {
     }
   };
 
+  // Get Orders 
+  const GetAllOrders = async () => {
+    try {
+      const response = await axios.post(`${url}/orders/getallorders`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // GetPrice Updates
+  const GetPriceUpdates = async () => {
+    try {
+      const response = await axios.post(`${url}/dailyrates/getprices`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // GetspecificPrice By Id
+  const GetSpecificPricebyId = async (id) => {
+    try {
+      const response = await axios.post(`${url}/dailyrates/getprice/${id}` ,{});
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // Update Price by Id 
+  const UpdatePrice = async (priceData, id) => {
+    try {
+      const response = await axios.post(
+        `${url}/dailyrates/updateprice/${id}`,
+        priceData
+      );
+      return response;
+    } catch (error) {
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
+    }
+  };
+
+  
+
   return (
     <SignContext.Provider
       value={{
@@ -816,6 +865,10 @@ export const SignState = (props) => {
         UpdateCoupon,
         GetSpecificCouponbyId,
         DeleteCoupon,
+        GetAllOrders,
+        GetPriceUpdates,
+        GetSpecificPricebyId,
+        UpdatePrice,
       }}
     >
       {props.children}

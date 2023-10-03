@@ -58,7 +58,7 @@ export const deleteCategory = (todo) => api.delete(url.DELETE_TODO, { headers: {
 export const getCategory = async() => await api.create("http://localhost:5000/category/getcategories");
 export const updateCategory = (todo) => api.put(url.UPDATE_TODO, todo);
 export const getProducts = async() => await api.create("http://localhost:5000/product/getallproducts");
-export const deleteProduct = async() => await api.create("http://localhost:5000/product/deleteproduct");
+export const deleteProduct = async(id) => await api.create(`http://localhost:5000/product/deleteproduct/${id}` , {});
 
 
 // sub category
