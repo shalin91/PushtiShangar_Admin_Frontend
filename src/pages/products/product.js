@@ -20,7 +20,6 @@ import DeleteModal from "../../Components/Common/DeleteModal";
 import FeatherIcon from "feather-icons-react";
 import Dropzone from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
-
 import { Formik, useFormik } from "formik";
 import { ToastContainer } from "react-toastify";
 import Cleave from "cleave.js/react";
@@ -34,6 +33,7 @@ import {
   getCategory,
   getSubCategory,
   getSubSubCategory,
+  getGst,
 } from "../../helpers/backend_helper";
 
 const ProductMaster = () => {
@@ -49,9 +49,11 @@ const ProductMaster = () => {
   const [subCatDropbind, setSubCatDropbind] = useState([]);
   const [subSubCategoryData, setSubSubCategoryData] = useState([]);
   const [subSubCatDropbind, setSubSubCatDropbind] = useState([]);
+  const [GstData, setGstData] = useState([]);
   const [selectedFiles, setselectedFiles] = useState([]);
   const [buttnLoading, setButtnLoading] = useState(false);
   const [valuesForUpdate, setValuesForUpdate] = useState("");
+  const [SilverGoldDropdown, showSilverGoldDropdown] = useState(false);
 
   function handleAcceptedFiles(files) {
     productForm.setFieldValue("imageGallery", files);
@@ -73,9 +75,16 @@ const ProductMaster = () => {
 
       const res2 = await getSubCategory();
       setSubCategoryData(res2);
+      setSubCatDropbind(res2)
 
       const res3 = await getSubSubCategory();
       setSubSubCategoryData(res3);
+      setSubSubCatDropbind(res3)
+
+      const gstData = await getGst();
+      setGstData(gstData);
+
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -89,13 +98,10 @@ const ProductMaster = () => {
   };
 
   const handelSubCategorySelect = (event) => {
-    console.log(subSubCategoryData);
-
     const data = subSubCategoryData.filter(
       (item) => item.SubCategory === event.target.value
     );
     setSubSubCatDropbind(data);
-    console.log(subSubCatDropbind);
   };
 
   const config = useMemo(
@@ -152,7 +158,7 @@ const ProductMaster = () => {
       fetchData();
       fetchDropdownData();
     }
-  }, [getProducts,selectedFiles]);
+  }, [getProducts, selectedFiles]);
 
   const handleDeleteModal = (itemForDelete) => {
     setValuesForUpdate(itemForDelete);
@@ -174,8 +180,8 @@ const ProductMaster = () => {
       setValuesForUpdate({
         _id: selectedItem._id,
         name: selectedItem.name,
-        original: selectedItem.prices?selectedItem.prices.original:null,
-        discounted: selectedItem.prices?selectedItem.prices.discounted:null,
+        original: selectedItem.prices ? selectedItem.prices.original : null,
+        discounted: selectedItem.prices ? selectedItem.prices.discounted : null,
         category: selectedItem.category,
         subCategory: selectedItem.subCategory,
         subSubCategory: selectedItem.subSubCategory,
@@ -184,9 +190,9 @@ const ProductMaster = () => {
         isProductNew: selectedItem.isProductNew,
         isActive: selectedItem.isActive,
         description: selectedItem.description,
-        stock: selectedItem.stock?selectedItem.stock.quantity:null,
+        stock: selectedItem.stock ? selectedItem.stock.quantity : null,
         prices: selectedItem.prices,
-        
+        gst: selectedItem.gst,
       });
       const images = selectedItem.imageGallery.map((item) => {
         return { name: item, preview: `${url}/products/${item}` };
@@ -218,6 +224,7 @@ const ProductMaster = () => {
       isActive: (valuesForUpdate && valuesForUpdate.isActive) || true,
       description: (valuesForUpdate && valuesForUpdate.description) || "",
       imageGallery: (valuesForUpdate && valuesForUpdate.imageGallery) || [],
+      gst: (valuesForUpdate && valuesForUpdate.gst) || [],
     },
 
     validationSchema: Yup.object({
@@ -233,7 +240,6 @@ const ProductMaster = () => {
       // description: Yup.string().required("required"),
     }),
     onSubmit: async (values) => {
-      console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("description", values.description);
@@ -246,17 +252,17 @@ const ProductMaster = () => {
       formData.append("sku", values.sku);
       formData.append("isProductPopular", values.isProductPopular);
       formData.append("isProductNew", values.isProductNew);
+      formData.append("gst", values.gst);
       formData.append("isActive", values.isActive);
       for (let i = 0; i < values.imageGallery.length; i++) {
         formData.append("imageGallery", values.imageGallery[i]);
       }
-
+      console.log(valuesForUpdate)
       try {
         setButtnLoading(true);
-        if(isEdit){
-
-          await updateProduct(formData,valuesForUpdate._id)
-        }else{
+        if (isEdit) {
+          await updateProduct(formData, valuesForUpdate._id);
+        } else {
           await addProduct(formData);
         }
         console.log(formData);
@@ -267,7 +273,6 @@ const ProductMaster = () => {
         fetchData();
       } catch (error) {
         setButtnLoading(false);
-        
 
         console.log("Error submitting the form data:", error);
       }
@@ -405,8 +410,8 @@ const ProductMaster = () => {
                                 >
                                   {/* Populate the options dynamically */}
                                   <option value={null}>--select--</option>
-                                  {subCategoryData
-                                    ? subCategoryData.map((item) => (
+                                  {subCatDropbind
+                                    ? subCatDropbind.map((item) => (
                                         <option key={item._id} value={item._id}>
                                           {item.name}
                                         </option>
@@ -509,7 +514,7 @@ const ProductMaster = () => {
                           <Row className="align-items-center g-3">
                             <Row className="align-items-center g-1 mx-2">
                               {/* Price */}
-                              <Col sm={3}>
+                              <Col sm={2}>
                                 <div className="mb-3">
                                   <label
                                     className="form-label"
@@ -556,7 +561,7 @@ const ProductMaster = () => {
                               </Col>
 
                               {/* Discounted Price */}
-                              <Col sm={3}>
+                              <Col sm={2}>
                                 <div className="mb-3">
                                   <label
                                     className="form-label"
@@ -599,9 +604,48 @@ const ProductMaster = () => {
                                   </div>
                                 </div>
                               </Col>
-
+                              {/* Gst */}
+                              <Col sm={2}>
+                                <div className="mb-3">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="category-select"
+                                  >
+                                    gst
+                                  </label>
+                                  <select
+                                    className="form-select"
+                                    id="gst"
+                                    name="gst"
+                                    aria-label="gst"
+                                    onBlur={productForm.handleBlur}
+                                    value={productForm.values.gst || ""}
+                                    onChange={(e) => {
+                                      productForm.handleChange(e);
+                                    }}
+                                  >
+                                    <option value={null}>--select--</option>
+                                    {GstData
+                                      ? GstData.map((gst) => (
+                                          <option
+                                            key={gst._id}
+                                            value={gst._id}
+                                          >
+                                            {gst.gst+"% GST"}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </select>
+                                  {productForm.touched.gst &&
+                                  productForm.errors.gst ? (
+                                    <FormFeedback type="invalid">
+                                      {productForm.errors.gst}
+                                    </FormFeedback>
+                                  ) : null}
+                                </div>
+                              </Col>
                               {/* Stocks */}
-                              <Col sm={3}>
+                              <Col sm={2}>
                                 <div className="mb-3">
                                   <label
                                     className="form-label"
@@ -637,7 +681,7 @@ const ProductMaster = () => {
                               </Col>
 
                               {/* SKU */}
-                              <Col sm={3}>
+                              <Col sm={4}>
                                 <div className="mb-3">
                                   <label
                                     className="form-label"
@@ -684,7 +728,8 @@ const ProductMaster = () => {
                                     className="form-check-input"
                                     id="isProductPopular"
                                     name="isProductPopular"
-                                    checked={productForm.isProductPopular}da
+                                    checked={productForm.isProductPopular}
+                                    da
                                     onChange={productForm.handleChange}
                                   />
                                   <label
@@ -731,7 +776,60 @@ const ProductMaster = () => {
                                   </label>
                                 </div>
                               </Col>
+
+                              <Col sm={2}>
+                                <div className="mb-3 form-check">
+                                  <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    id="isOnWeight"
+                                    name="isOnWeight"
+                                    onChange={(e)=>{showSilverGoldDropdown(e.target.checked)}}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="isOnWeight"
+                                  >
+                                    Calculation on weight
+                                  </label>
+                                </div>
+                              </Col>
+
+                              {SilverGoldDropdown?
+                                <Col sm={2}>
+                                <div className="mb-3">
+                                  
+                                  <select
+                                    className="form-select"
+                                    id="silverGold"
+                                    name="silverGold"
+                                    aria-label="silverGold"
+                                    // onBlur={productForm.handleBlur}
+                                    // value={productForm.values.gst || ""}
+                                    onChange={(e) => {
+                                      // productForm.handleChange(e);
+                                    }}
+                                  >
+                                    <option value={null} disabled>select element</option>
+                                    <option value={"gold"}>gold</option>
+                                    <option value={"silver"}>silver</option>
+                                  
+                                        
+                                       
+                                  </select>
+                                  {productForm.touched.gst &&
+                                  productForm.errors.gst ? (
+                                    <FormFeedback type="invalid">
+                                      {productForm.errors.gst}
+                                    </FormFeedback>
+                                  ) : null}
+                                </div>
+                              </Col>:null
+                              }
+                            
                             </Row>
+
+                            
 
                             {/* Description */}
                             <Col lg={12}>
@@ -838,15 +936,20 @@ const ProductMaster = () => {
                                             </Col>
                                             <Col className="col-auto">
                                               <button
-                                                 type="button"
+                                                type="button"
                                                 className="btn btn-danger btn-sm"
-                                                onClick={(e) =>
-                                                  {                                                    
-                                                    const updatedSelectedFiles = [...selectedFiles];
-                                                    updatedSelectedFiles.splice(i, 1); // Remove the element at index i
-                                                    setselectedFiles(updatedSelectedFiles); // Update the state
-                                                  }
-                                                }
+                                                onClick={(e) => {
+                                                  const updatedSelectedFiles = [
+                                                    ...selectedFiles,
+                                                  ];
+                                                  updatedSelectedFiles.splice(
+                                                    i,
+                                                    1
+                                                  ); // Remove the element at index i
+                                                  setselectedFiles(
+                                                    updatedSelectedFiles
+                                                  ); // Update the state
+                                                }}
                                               >
                                                 <i className="ri-delete-bin-5-fill align-bottom" />
                                               </button>
@@ -975,9 +1078,13 @@ const ProductMaster = () => {
                                 <div>{`${item.sku}`}</div>
                               </td>
                               <td>{item.category}</td>
-                              <td>{item.stock?item.stock.quantity:null}</td>
-                              <td>{item.prices?item.prices.original:null}</td>
-                              <td>{item.prices?item.prices.discounted:null}</td>
+                              <td>{item.stock ? item.stock.quantity : null}</td>
+                              <td>
+                                {item.prices ? item.prices.original : null}
+                              </td>
+                              <td>
+                                {item.prices ? item.prices.discounted : null}
+                              </td>
                               <td>
                                 <div className="hstack gap-2">
                                   <button

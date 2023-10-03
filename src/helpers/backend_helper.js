@@ -66,6 +66,9 @@ export const getSubCategory = async() => await api.create("http://localhost:5000
 
 export const getSubSubCategory = async() => await api.create("http://localhost:5000/subsubcategory/getsubsubcategories");
 
+
+export const getGst = async() => await api.create("http://localhost:5000/gst/getGst");
+
 //product
 export const getProducts = async() => await api.create("http://localhost:5000/product/getallproducts");
 export const addProduct = async (data) => await api.create("http://localhost:5000/product/addproduct", data);
