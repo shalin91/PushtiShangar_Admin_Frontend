@@ -3,16 +3,14 @@ import UiContent from "../../Components/Common/UiContent";
 import { Card, Col, Container, Form, Label, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import SignContext from "../../contextAPI/Context/SignContext";
-import { toast , ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const DailyPriceRates = () => {
   const { UpdatePrice, GetSpecificPricebyId, GetPriceUpdates } =
     useContext(SignContext);
   const [formData, setFormData] = useState({
     ProductType: "",
-    unit: "",
     price: "",
-    date: "",
   });
   const [DailyPrice, setDailyPrice] = useState([]);
 
@@ -21,10 +19,12 @@ const DailyPriceRates = () => {
     console.log(res);
     setDailyPrice(res.prices);
   };
-  
+
   const handleProductTypeChange = async (e) => {
     const selectedProductId = e.target.value;
-    const selectedPrice = DailyPrice.find((price) => price._id === selectedProductId);
+    const selectedPrice = DailyPrice.find(
+      (price) => price._id === selectedProductId
+    );
 
     if (selectedPrice) {
       setFormData({
@@ -34,7 +34,6 @@ const DailyPriceRates = () => {
       });
     }
   };
-
 
   const handleChange = (e) => {
     setFormData({
@@ -48,17 +47,19 @@ const DailyPriceRates = () => {
 
     const idToUpdate = formData.ProductType;
 
-    const res = await UpdatePrice({
-      price: formData.price,
-    },idToUpdate,);
+    const res = await UpdatePrice(
+      {
+        price: formData.price,
+      },
+      idToUpdate
+    );
 
-    if(res.success){
-    toast.success(res.msg, { autoClose: 3000 });
-    console.log("Price updated successfully", res);
+    if (res.success) {
+      toast.success(res.msg, { autoClose: 3000 });
+      console.log("Price updated successfully", res);
 
-
-    // Optionally, you can reload the prices after the update
-    getPriceUpdates();
+      // Optionally, you can reload the prices after the update
+      getPriceUpdates();
     }
   };
 
@@ -72,7 +73,7 @@ const DailyPriceRates = () => {
   return (
     <>
       <UiContent />
-      <ToastContainer closeButton={false}/>
+      <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Updates Rates" pageTitle="Rates" />
@@ -83,7 +84,7 @@ const DailyPriceRates = () => {
                   <div className="card-body">
                     <div className="live-preview">
                       <Row className="align-items-center g-3">
-                        <Col lg={3}>
+                        <Col lg={4}>
                           <div className="mb-3">
                             <Label htmlFor="ProductType">Product Type:</Label>
                             <select
@@ -114,7 +115,7 @@ const DailyPriceRates = () => {
                             />
                           </div> */}
                           <div className="mb-3">
-                            <Label htmlFor="price">Price/grams :</Label>
+                            <Label htmlFor="price">Price per gram :</Label>
                             <input
                               className="form-control"
                               type="number"
@@ -122,6 +123,7 @@ const DailyPriceRates = () => {
                               name="price"
                               value={formData.price}
                               onChange={handleChange}
+                              
                             />
                           </div>
                         </Col>

@@ -356,10 +356,10 @@ export const SignState = (props) => {
   };
 
   // Update Customer
-  const UpdateCustomer = async (customerInfo) => {
+  const UpdateCustomer = async (customerInfo , id) => {
     try {
       const response = await axios.post(`${url}/customer/updatecustomer`, {
-        id: customerInfo._id,
+        id: id,
         customerInfo,
       });
       return response;
@@ -810,7 +810,7 @@ export const SignState = (props) => {
     }
   };
 
-  
+
 
   return (
     <SignContext.Provider
