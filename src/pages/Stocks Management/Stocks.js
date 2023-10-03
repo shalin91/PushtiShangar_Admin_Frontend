@@ -118,11 +118,11 @@ function Stocks() {
                                 {content.name}
                               </td>
                               <td className="product-name">
-                                {content.name}
-                              </td>
-                              <td className="product-name">
                                 {content.quantity}
                               </td>
+                              {/* <td className="product-name">
+                                {content.quantity}
+                              </td> */}
                               <td className="product-name">
                                 {content.currentPricePerUnit}
                               </td>
