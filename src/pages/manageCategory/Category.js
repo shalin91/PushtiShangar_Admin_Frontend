@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   Form,
+  CardHeader,
   Button,
   FormFeedback,
   Spinner,
@@ -15,24 +16,45 @@ import {
   Row,
   Label,
 } from "reactstrap";
+import Loader from "../../Components/Common/Loader";
+
 import { isEmpty } from "lodash";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
+
 import { ToastContainer } from "react-toastify";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
-import { addCategory, getCategory } from "../../helpers/backend_helper";
+import {
+  addCategory,
+  deleteCategory,
+  getCategory,
+  updateCategory,
+} from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
-// import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
+// Import React FilePond
+import { FilePond, registerPlugin } from "react-filepond";
+// Import FilePond styles
+import "filepond/dist/filepond.min.css";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+// Register the plugins
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const CategoryMaster = () => {
   document.title = "Category Master";
-
+  const url = `${process.env.REACT_APP_BASE_URL}`;
   const [deleteModal, setDeleteModal] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [recordForSubmit, setrecordForSubmit] = useState(null);
   const [errorBanner, setErrorBanner] = useState("");
   const [successBanner, setSuccessBanner] = useState("");
   const [buttnLoading, setButtnLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [valuesForUpdate, setValuesForUpdate] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -59,104 +81,100 @@ const CategoryMaster = () => {
     }
   }, [showModal]);
 
-  const handleEdit = (item) => {
-    setShowModal(true)
-      console.log(item)
-  };
-
-  const handleDelete = (selectedCategory) => {
-    console.log(selectedCategory);
-    setrecordForSubmit(selectedCategory);
-    setDeleteModal(true);
-  };
-
-  const handleDeleteCategory = async () => {
-    if (recordForSubmit) {
+  const handledeleteProduct = async () => {
+    if (valuesForUpdate) {
+      await deleteCategory(valuesForUpdate);
       fetchData();
       setDeleteModal(false);
     }
   };
 
   const categoryValidation = Yup.object().shape({
-    name: Yup.string().required("Name is must be required !!!"),
+    name: Yup.string().required("required"),
+    description: Yup.string().min(5, "Too short"),
   });
+
+  const categoryForm = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      name: (valuesForUpdate && valuesForUpdate.name) || "",
+      description: (valuesForUpdate && valuesForUpdate.description) || "",
+    },
+    validationSchema: categoryValidation,
+    onSubmit: async (values) => {
+      console.log(files[0].file);
+      setSubmitted(true);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      if (files.length !== 0) {
+        formData.append("image", files[0].file);
+      }
+
+     
+
+      if(isEdit){
+
+        await updateCategory(formData,valuesForUpdate._id)
+      }else{
+        await addCategory(formData);
+      }
+      setIsEdit(false)
+      categoryForm.resetForm();
+      toggle();
+      // setButtnLoading(false);
+    },
+  });
+
   return (
-    <React.Fragment>
-      <ToastContainer closeButton={false} />
+    <div className="page-content">
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={() => handleDeleteCategory()}
+        onDeleteClick={() => handledeleteProduct()}
         onCloseClick={() => setDeleteModal(false)}
       />
-      <div className="page-content">
-        <Container fluid>
-          <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
-            <div className="file-manager-content w-100 p-4 pb-0">
-              <div className="hstack mb-4">
-                <h5 className="fw-semibold flex-grow-1 mb-0">
-                  Category Master
-                </h5>
-                <div className="hstack gap-2">
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Basic example"
-                  >
-                    <Col className="col-lg mx-2">
-                      <div className="search-box">
-                        <input
-                          type="text"
-                          id="searchTaskList"
-                          className="form-control search"
-                          placeholder="Search by Category Title"
-                        />
-                        <i className="ri-search-line search-icon"></i>
-                      </div>
-                    </Col>
-                    <Col className="col-lg-auto">
+      <Container fluid>
+        <BreadCrumb title="Orders" pageTitle="Category" />
+        <Row>
+          <Col lg={12}>
+            <Card id="orderList">
+              <CardHeader className="card-header border-0">
+                <div className="d-flex align-items-center">
+                  <h5 className="card-title mb-0 flex-grow-1">Order History</h5>
+                  <div className="flex-shrink-0">
+                    <div className="d-flex gap-1 flex-wrap">
                       <button
-                        className="btn btn-primary createTask"
                         type="button"
+                        className="btn btn-primary add-btn"
+                        id="create-btn"
                         onClick={() => {
+                          setIsEdit(false);
                           toggle();
                         }}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add Category
-                      </button>
-                    </Col>
+                        <i className="ri-add-line align-bottom me-1"></i> Create
+                        Order
+                      </button>{" "}
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div
-                className="todo-content position-relative px-4 mx-n4"
-                id="todo-content"
-              >
-                {isEmpty(tableData) && (
-                  <div id="elmLoader">
-                    {/* <div
-                      className="spinner-border text-primary avatar-sm"
-                      role="status"
-                    >
-                      <span className="visually-hidden">Loading...</span>
-                    </div> */}
-                    <h1>no data ...</h1>
-                  </div>
-                )}
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>index</th>
-                      <th>Category Title</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tableData
-                      ? tableData.map((item,key) => (
+              </CardHeader>
+              <CardBody className="pt-0">
+                <div>
+                  <table className="table">
+                    <thead className="table-active">
+                      <tr>
+                        <th>index</th>
+                        <th>Category Title</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.length ? (
+                        tableData.map((item, key) => (
                           <tr key={key}>
-                            <td>{key+1}</td>
+                            <td>{key + 1}</td>
                             <td>{item.name}</td>
                             <td>
                               {" "}
@@ -178,154 +196,155 @@ const CategoryMaster = () => {
                             <td>
                               <button
                                 className="btn btn-sm btn-soft-danger remove-list"
-                                onClick={() => handleDelete(item)}
+                                onClick={() => {
+                                  setValuesForUpdate(item);
+                                  setDeleteModal(true);
+                                }}
                               >
                                 <i className="ri-delete-bin-5-fill align-bottom" />
                               </button>
                               <button
                                 className="btn btn-sm btn-soft-info edit-list"
-                                onClick={() => handleEdit(item)}
+                                onClick={() => {
+                                  setIsEdit(true)
+                                  setValuesForUpdate(item);
+                                  setShowModal(true);
+                                }}
                               >
                                 <i className="ri-pencil-fill align-bottom" />
                               </button>
                             </td>
                           </tr>
                         ))
-                      : null}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </div>
-
-      <Modal
-        id="createTask"
-        isOpen={showModal}
-        toggle={toggle}
-        modalClassName="zoomIn"
-        centered
-        tabIndex="-1"
-      >
-        <ModalHeader toggle={toggle} className="p-3 bg-soft-success">
-          {" "}
-          {!!isEdit ? "Edit Category" : "Create new Category"}{" "}
-        </ModalHeader>
-        <ModalBody>
-          {successBanner ? (
-            <div class="alert alert-success" role="alert">
-              {successBanner}
-            </div>
-          ) : null}
-          {errorBanner ? (
-            <div class="alert alert-danger" role="alert">
-              {errorBanner}
-            </div>
-          ) : null}
-          <Formik
-            initialValues={{ name: "",isActive:null }}
-            validationSchema={categoryValidation}
-            onSubmit={async (values, { resetForm }) => {
-              console.log(values);
-              await addCategory(values);
-              resetForm();
-            }}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }) => (
-              <div>
-                <div>
-                  <Form>
-                  <Col md={12}>
-                    <label className="modalLable">category title</label>
-                    <input
-                      type="text"
-                      name="name"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.name}
-                      placeholder="Enter category title"
-                      className="form-control inp_text modalInput"
-                      
-                      id="name"
-                    />
-                    {/* If validation is not passed show errors */}
-                    <p style={{color:"red",fontSize:"12px"}}>
-                      {errors.name && touched.name && errors.name}
-                    </p>
-                    </Col>
-
-                    <Col md={12}>
-                <div className="form-check mb-2">
-                  <Input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="active"
-                    name="active"
-                    checked={values.isActive}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <Label className="form-check-label" htmlFor="active">
-                    Is Active
-                  </Label>
+                      ) : (
+                        <Loader error={tableData} />
+                      )}
+                    </tbody>
+                  </table>
                 </div>
-              </Col>
-                  </Form>
-                  <div className="hstack gap-2 justify-content-end">
-                    <button
-                      type="button"
-                      className="btn btn-ghost-danger"
-                      onClick={() => {
-                        toggle();
-                        setIsEdit(false);
-                      }}
-                    >
-                      <i className="ri-close-fill align-bottom"></i> Cancel
-                    </button>
-
-                    {!buttnLoading ? (
-                      <React.Fragment>
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          id="addNewTodo"
-                          onClick={handleSubmit}
+                <Modal
+                  id="showModal"
+                  isOpen={showModal}
+                  toggle={toggle}
+                  centered
+                >
+                  <ModalHeader className="bg-light p-3" toggle={toggle}>
+                    {!!isEdit ? "Edit Order" : "Add Order"}
+                  </ModalHeader>
+                  <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      categoryForm.handleSubmit();
+                      return false;
+                    }}
+                  >
+                    <ModalBody>
+                      <div className="mb-3">
+                        <FilePond
+                          files={files}
+                          onupdatefiles={setFiles}
+                          allowMultiple={false}
+                          maxFiles={3}
+                          name="files"
+                          className="filepond filepond-input-multiple"
                         >
-                          {!!isEdit ? "Update" : "save"}
+                         
+                        </FilePond>
+                        <img
+                            // src={files.length === 0 ? `${url}/cagtegory/${valuesForUpdate.image}` : null}
+                            // src="https://nodeapp.barodaweb.com/api/news-images/1694829789855_news_Image.jpeg"
+                            src={files.length === 0 ? `${url}/cagtegory/${valuesForUpdate.image}` : null}
+                            
+                            alt="Preview"
+                            className="filepond-preview"
+                          />
+                        {submitted && files.length === 0 ? (
+                          <p style={{ color: "red" }}>Please select an image</p>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-3">
+                        <Label htmlFor="name" className="form-label">
+                          category title*
+                        </Label>
+                        <Input
+                          name="name"
+                          id="name"
+                          className="form-control"
+                          placeholder="Enter categry titel"
+                          type="text"
+                          onChange={categoryForm.handleChange}
+                          onBlur={categoryForm.handleBlur}
+                          value={categoryForm.values.name || ""}
+                          invalid={
+                            categoryForm.touched.name &&
+                            categoryForm.errors.name
+                              ? true
+                              : false
+                          }
+                        />
+                        {categoryForm.touched.name &&
+                        categoryForm.errors.name ? (
+                          <FormFeedback type="invalid">
+                            {categoryForm.errors.name}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="id-field" className="form-label">
+                          description
+                        </Label>
+                        <Input
+                          name="description"
+                          id="description"
+                          className="form-control"
+                          placeholder="Enter description"
+                          type="textarea"
+                          onChange={categoryForm.handleChange}
+                          onBlur={categoryForm.handleBlur}
+                          value={categoryForm.values.description || ""}
+                          invalid={
+                            categoryForm.touched.description &&
+                            categoryForm.errors.description
+                              ? true
+                              : false
+                          }
+                        />
+                        {categoryForm.touched.description &&
+                        categoryForm.errors.description ? (
+                          <FormFeedback type="invalid">
+                            {categoryForm.errors.description}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </ModalBody>
+                    <div className="modal-footer">
+                      <div className="hstack gap-2 justify-content-end">
+                        <button
+                          type="button"
+                          className="btn btn-light"
+                          onClick={() => {
+                            setShowModal(false);
+                            setValuesForUpdate("");
+                          }}
+                        >
+                          Close
                         </button>
-                      </React.Fragment>
-                    ) : (
-                      <Button
-                        color="primary"
-                        className="btn-load"
-                        outline
-                        disabled
-                      >
-                        <span className="d-flex align-items-center">
-                          <Spinner size="sm" className="flex-shrink-0">
-                            {" "}
-                            Loading...{" "}
-                          </Spinner>
-                          <span className="flex-grow-1 ms-2">Loading...</span>
-                        </span>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </Formik>
-        </ModalBody>
-      </Modal>
-    </React.Fragment>
+
+                        <button type="submit" className="btn btn-success">
+                          {!!isEdit ? "Update" : "Add Customer"}
+                        </button>
+                      </div>
+                    </div>
+                  </Form>
+                </Modal>
+                <ToastContainer closeButton={false} />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
