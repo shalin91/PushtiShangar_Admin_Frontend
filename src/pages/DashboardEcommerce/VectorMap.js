@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from "react";
 import { VectorMap } from "react-jvectormap";
-import "../DashboardAnalytics/jquery-jvectormap.scss";
+import "./jquery-jvectormap.scss";
 
 const map = React.createRef(null);
 const Vectormap = props => {
