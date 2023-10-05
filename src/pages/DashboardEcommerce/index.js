@@ -14,7 +14,7 @@ const DashboardEcommerce = () => {
   document.title ="Dashboard | by Shalin";
   return (
     <React.Fragment>
-      <div className="page-content">
+      {/* <div className="page-content">
         <Container fluid>
           <Row>
             <Col>
@@ -42,7 +42,7 @@ const DashboardEcommerce = () => {
             <RecentActivity />
           </Row>
         </Container>
-      </div>
+      </div> */}
     </React.Fragment>
   );
 };

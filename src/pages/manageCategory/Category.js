@@ -134,13 +134,13 @@ const CategoryMaster = () => {
         onCloseClick={() => setDeleteModal(false)}
       />
       <Container fluid>
-        <BreadCrumb title="Orders" pageTitle="Category" />
+        <BreadCrumb title="Category" pageTitle="Category" />
         <Row>
           <Col lg={12}>
             <Card id="orderList">
               <CardHeader className="card-header border-0">
                 <div className="d-flex align-items-center">
-                  <h5 className="card-title mb-0 flex-grow-1">Order History</h5>
+                  <h5 className="card-title mb-0 flex-grow-1">Category</h5>
                   <div className="flex-shrink-0">
                     <div className="d-flex gap-1 flex-wrap">
                       <button
@@ -153,7 +153,7 @@ const CategoryMaster = () => {
                         }}
                       >
                         <i className="ri-add-line align-bottom me-1"></i> Create
-                        Order
+                        Category
                       </button>{" "}
                     </div>
                   </div>

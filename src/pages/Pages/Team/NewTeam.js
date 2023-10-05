@@ -638,12 +638,12 @@ const NewTeam = () => {
                   <div>
                     <div className="form-check form-check-inline">
                       <Input
-                        type="radio"
+                        type="checkbox"
                         className="form-check-input"
                         id="activeStatus"
                         name="active"
                         onChange={handleChange}
-                        value={editUserInfo.active}
+                        checked={editUserInfo.active}
                       />
                       <Label
                         className="form-check-label"
