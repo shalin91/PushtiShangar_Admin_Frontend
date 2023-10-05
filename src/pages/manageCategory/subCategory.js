@@ -3,17 +3,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Col,
   Container,
-  Card,
-  CardBody,
   Form,
   Button,
-  FormFeedback,
   Spinner,
   Input,
   Modal,
   ModalBody,
   ModalHeader,
-  Row,
   Label,
 } from "reactstrap";
 import { isEmpty } from "lodash";
@@ -22,8 +18,6 @@ import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
 import { addCategory, getCategory, getSubCategory } from "../../helpers/backend_helper";
-import Dropzone from "react-dropzone";
-import { getCategories } from "../../store/actions";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
 const SubCategoryMaster = () => {

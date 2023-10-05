@@ -41,8 +41,8 @@ const ProductMaster = () => {
   const [IsformActive, setIsformActive] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [contentData, setContentData] = useState([]);
-  const [allContentData, setallContentData] = useState([]);
+  const [productData, setProductData] = useState([]);
+  const [allProductData, setallProductData] = useState([]);
   const [isFetchingData, setIsFetchingData] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
@@ -56,7 +56,9 @@ const ProductMaster = () => {
   const [SilverGoldDropdown, showSilverGoldDropdown] = useState(false);
 
   function handleAcceptedFiles(files) {
-    productForm.setFieldValue("imageGallery", files);
+    const updatedSelectedFiles = selectedFiles.concat(files);
+
+    productForm.setFieldValue("imageGallery", updatedSelectedFiles);
 
     files.map((file) =>
       Object.assign(file, {
@@ -65,7 +67,7 @@ const ProductMaster = () => {
       })
     );
     console.log(files);
-    setselectedFiles(files);
+    setselectedFiles(updatedSelectedFiles);
   }
 
   const fetchDropdownData = async () => {
@@ -116,12 +118,12 @@ const ProductMaster = () => {
 
     function filterItems(arr, query) {
       return arr.filter(function (el) {
-        return el.contentType.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+        return el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||  el.sku.toLowerCase().indexOf(query.toLowerCase()) !== -1;
       });
     }
 
-    let filterData = filterItems(allContentData, inputVal);
-    setContentData(filterData);
+    let filterData = filterItems(allProductData, inputVal);
+    setProductData(filterData);
     if (filterData.length === 0) {
       document.getElementById("noresult").style.display = "block";
       document.getElementById("todo-task").style.display = "none";
@@ -137,8 +139,8 @@ const ProductMaster = () => {
 
       const response = await getProducts();
 
-      setContentData(response.products);
-      setallContentData(response.products);
+      setProductData(response.products);
+      setallProductData(response.products);
       setIsFetchingData(false);
     } catch (error) {
       console.error("Error fetching data:", error.message);
@@ -154,7 +156,7 @@ const ProductMaster = () => {
   }, [IsformActive]);
 
   useEffect(() => {
-    if (!contentData.length) {
+    if (!productData.length) {
       fetchData();
       fetchDropdownData();
     }
@@ -293,7 +295,7 @@ const ProductMaster = () => {
             <CardHeader className="d-flex justify-content-between align-items-center">
               {!IsformActive ? (
                 <React.Fragment>
-                  <h4 className="card-title mb-0">Content Master</h4>
+                  <h4 className="card-title mb-0">Product Master</h4>
                   <Row className="align-items-center">
                     <Col className="col-lg-auto">
                       <div className="search-box">
@@ -301,7 +303,7 @@ const ProductMaster = () => {
                           type="text"
                           id="searchTaskList"
                           className="form-control search"
-                          placeholder="Search by content type"
+                          placeholder="Search by product name"
                           onKeyUp={(e) => searchList(e.target.value)}
                         />
                         <i className="ri-search-line search-icon"></i>
@@ -314,15 +316,15 @@ const ProductMaster = () => {
                         onClick={() => toggle()}
                       >
                         <i className="ri-add-fill align-bottom" /> Add New
-                        Content
+                        Product
                       </button>
                     </Col>
                   </Row>
                 </React.Fragment>
               ) : !isEdit ? (
-                <h4 className="card-title mb-0">Add new content</h4>
+                <h4 className="card-title mb-0">Add new product</h4>
               ) : (
-                <h4 className="card-title mb-0">update content</h4>
+                <h4 className="card-title mb-0">update product</h4>
               )}
             </CardHeader>
 
@@ -487,7 +489,7 @@ const ProductMaster = () => {
                                   <Input
                                     type="text"
                                     id="name"
-                                    placeholder="Enter Title"
+                                    placeholder="Enter Stock"
                                     name="name"
                                     aria-label="name"
                                     value={productForm.values.name}
@@ -694,7 +696,7 @@ const ProductMaster = () => {
                                       type="text"
                                       className="form-control"
                                       id="sku"
-                                      placeholder="Enter Title"
+                                      placeholder="Enter SKU"
                                       name="sku"
                                       aria-label="sku"
                                       aria-describedby="product-orders-addon"
@@ -841,10 +843,10 @@ const ProductMaster = () => {
                                   id="description"
                                   name="description"
                                   value={productForm.values.description}
-                                  onChange={(content) =>
+                                  onChange={(product) =>
                                     productForm.setFieldValue(
                                       "description",
-                                      content
+                                      product
                                     )
                                   }
                                   onBlur={productForm.handleBlur}
@@ -1016,7 +1018,7 @@ const ProductMaster = () => {
                   className="todo-content position-relative px-4 mx-n4"
                   id="todo-task"
                 >
-                  {isEmpty(contentData) &&
+                  {isEmpty(productData) &&
                     (isFetchingData ? (
                       <div id="elmLoader">
                         <div
@@ -1055,8 +1057,8 @@ const ProductMaster = () => {
                     </thead>
 
                     <tbody id="task-list">
-                      {contentData
-                        ? contentData.map((item, key) => (
+                      {productData
+                        ? productData.map((item, key) => (
                             <tr key={key}>
                               <td>{key + 1}</td>
                               <td>
