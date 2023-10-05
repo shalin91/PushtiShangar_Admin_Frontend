@@ -6,21 +6,18 @@ import {
   CardBody,
   Form,
   CardHeader,
-  Button,
   FormFeedback,
-  Spinner,
   Input,
   Modal,
+  Button,
   ModalBody,
+  Spinner,
   ModalHeader,
   Row,
   Label,
 } from "reactstrap";
 import Loader from "../../Components/Common/Loader";
-
-import { isEmpty } from "lodash";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
-
 import { ToastContainer } from "react-toastify";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
@@ -31,17 +28,22 @@ import {
   getCategory,
   updateCategory,
 } from "../../helpers/backend_helper";
-import Dropzone from "react-dropzone";
-// Import React FilePond
+
 import { FilePond, registerPlugin } from "react-filepond";
-// Import FilePond styles
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFilePoster from "filepond-plugin-file-poster";
+
+import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 // Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+registerPlugin(
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImagePreview,
+  FilePondPluginFilePoster
+);
 
 const CategoryMaster = () => {
   document.title = "Category Master";
@@ -49,15 +51,14 @@ const CategoryMaster = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [recordForSubmit, setrecordForSubmit] = useState(null);
-  const [errorBanner, setErrorBanner] = useState("");
-  const [successBanner, setSuccessBanner] = useState("");
-  const [buttnLoading, setButtnLoading] = useState(false);
+
   const [submitted, setSubmitted] = useState(false);
   const [files, setFiles] = useState([]);
   const [valuesForUpdate, setValuesForUpdate] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [buttnLoading, setButtnLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -70,12 +71,11 @@ const CategoryMaster = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+    setFiles([])  }, [isEdit]);
 
   const toggle = useCallback(() => {
     if (showModal) {
       setShowModal(false);
-      setrecordForSubmit(null);
     } else {
       setShowModal(true);
     }
@@ -98,6 +98,7 @@ const CategoryMaster = () => {
     enableReinitialize: true,
     initialValues: {
       name: (valuesForUpdate && valuesForUpdate.name) || "",
+      noOfProducts: (valuesForUpdate && valuesForUpdate.noOfProducts) || "",
       description: (valuesForUpdate && valuesForUpdate.description) || "",
     },
     validationSchema: categoryValidation,
@@ -107,22 +108,21 @@ const CategoryMaster = () => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("description", values.description);
+      formData.append("noOfProducts", values.noOfProducts);
       if (files.length !== 0) {
         formData.append("image", files[0].file);
       }
-
-     
-
-      if(isEdit){
-
-        await updateCategory(formData,valuesForUpdate._id)
-      }else{
+      setButtnLoading(true)
+      if (isEdit) {
+        await updateCategory(formData, valuesForUpdate._id);
+      } else {
         await addCategory(formData);
       }
-      setIsEdit(false)
+      setButtnLoading(false)
+      setIsEdit(false);
+      setSubmitted(false)
       categoryForm.resetForm();
       toggle();
-      // setButtnLoading(false);
     },
   });
 
@@ -140,7 +140,9 @@ const CategoryMaster = () => {
             <Card id="orderList">
               <CardHeader className="card-header border-0">
                 <div className="d-flex align-items-center">
-                  <h5 className="card-title mb-0 flex-grow-1">Category</h5>
+
+                  <h5 className="card-title mb-0 flex-grow-1">Category </h5>
+
                   <div className="flex-shrink-0">
                     <div className="d-flex gap-1 flex-wrap">
                       <button
@@ -149,6 +151,9 @@ const CategoryMaster = () => {
                         id="create-btn"
                         onClick={() => {
                           setIsEdit(false);
+                          setValuesForUpdate("")
+                          setFiles([])
+                          
                           toggle();
                         }}
                       >
@@ -197,6 +202,8 @@ const CategoryMaster = () => {
                               <button
                                 className="btn btn-sm btn-soft-danger remove-list"
                                 onClick={() => {
+                                  
+
                                   setValuesForUpdate(item);
                                   setDeleteModal(true);
                                 }}
@@ -206,7 +213,7 @@ const CategoryMaster = () => {
                               <button
                                 className="btn btn-sm btn-soft-info edit-list"
                                 onClick={() => {
-                                  setIsEdit(true)
+                                  setIsEdit(true);
                                   setValuesForUpdate(item);
                                   setShowModal(true);
                                 }}
@@ -229,7 +236,7 @@ const CategoryMaster = () => {
                   centered
                 >
                   <ModalHeader className="bg-light p-3" toggle={toggle}>
-                    {!!isEdit ? "Edit Order" : "Add Order"}
+                    {!!isEdit ? "Edit Category" : "Add Category"}
                   </ModalHeader>
                   <Form
                     onSubmit={(e) => {
@@ -247,18 +254,25 @@ const CategoryMaster = () => {
                           maxFiles={3}
                           name="files"
                           className="filepond filepond-input-multiple"
-                        >
-                         
-                        </FilePond>
+                          allowFilePoster={true}
+                        ></FilePond>
                         <img
-                            // src={files.length === 0 ? `${url}/cagtegory/${valuesForUpdate.image}` : null}
-                            // src="https://nodeapp.barodaweb.com/api/news-images/1694829789855_news_Image.jpeg"
-                            src={files.length === 0 ? `${url}/cagtegory/${valuesForUpdate.image}` : null}
-                            
-                            alt="Preview"
-                            className="filepond-preview"
-                          />
-                        {submitted && files.length === 0 ? (
+                          src={
+                            files.length === 0
+                              ? `${url}/cagtegory/${valuesForUpdate.image}`
+                              : null
+                          }
+                          alt=""
+                          style={{
+                            width: "450px",
+                            height: "auto",
+                            maxHeight: "250px",
+                            objectFit: "cover",
+                            borderRadius: "3px",
+                          }}
+                        />
+
+                        {submitted  &&files.length === 0 ? (
                           <p style={{ color: "red" }}>Please select an image</p>
                         ) : null}
                       </div>
@@ -290,6 +304,35 @@ const CategoryMaster = () => {
                           </FormFeedback>
                         ) : null}
                       </div>
+
+                      <div className="mb-3">
+                        <Label htmlFor="name" className="form-label">
+                          no of products
+                        </Label>
+                        <Input
+                          name="noOfProducts"
+                          id="noOfProducts"
+                          className="form-control"
+                          placeholder="total products under this category"
+                          type="number"
+                          onChange={categoryForm.handleChange}
+                          onBlur={categoryForm.handleBlur}
+                          value={categoryForm.values.noOfProducts || ""}
+                          invalid={
+                            categoryForm.touched.noOfProducts &&
+                            categoryForm.errors.noOfProducts
+                              ? true
+                              : false
+                          }
+                        />
+                        {categoryForm.touched.noOfProducts &&
+                        categoryForm.errors.noOfProducts ? (
+                          <FormFeedback type="invalid">
+                            {categoryForm.errors.noOfProducts}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+
                       <div className="mb-3">
                         <Label htmlFor="id-field" className="form-label">
                           description
@@ -331,9 +374,34 @@ const CategoryMaster = () => {
                           Close
                         </button>
 
-                        <button type="submit" className="btn btn-success">
-                          {!!isEdit ? "Update" : "Add Customer"}
-                        </button>
+                        
+
+                        {!buttnLoading ? (
+                        <React.Fragment>
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                            id="addNewTodo"
+                          >
+                            {!!isEdit ? "Update" : "Add Category"}
+                          </button>
+                        </React.Fragment>
+                      ) : (
+                        <Button
+                          color="primary"
+                          className="btn-load"
+                          outline
+                          disabled
+                        >
+                          <span className="d-flex align-items-center">
+                            <Spinner size="sm" className="flex-shrink-0">
+                              {" "}
+                              Loading...{" "}
+                            </Spinner>
+                            <span className="flex-grow-1 ms-2">Loading...</span>
+                          </span>
+                        </Button>
+                      )}
                       </div>
                     </div>
                   </Form>

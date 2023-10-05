@@ -59,10 +59,13 @@ export const getCategory = async() => await api.create("http://localhost:5000/ca
 export const updateCategory = (data,id) => api.create("http://localhost:5000/category/updatecategory/"+id, data);
 
 
+<<<<<<< HEAD
+=======
 // export const getProducts = async() => await api.create("http://localhost:5000/product/getallproducts");
 // export const deleteProduct = async(id) => await api.create(`http://localhost:5000/product/deleteproduct/${id}` , {});
 
 
+>>>>>>> 39f6850a285213cb8d85dad05c57c58d8a442be2
 
 // sub category
 export const getSubCategory = async() => await api.create("http://localhost:5000/subcategory/getsubcategories");
