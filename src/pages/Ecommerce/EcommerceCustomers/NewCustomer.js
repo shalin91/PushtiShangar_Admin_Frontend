@@ -11,6 +11,9 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Pagination,
+  PaginationLink,
+  PaginationItem,
 } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Grid } from "gridjs";
@@ -20,9 +23,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 
+const ITEMS_PER_PAGE = 10;
+
 const NewCustomer = () => {
-  const { id } = useParams();
-  console.log(id);
+  // const { id } = useParams();
+  // console.log(id);
   const {
     getCustomers,
     createCustomer,
@@ -47,6 +52,7 @@ const NewCustomer = () => {
   const [EditModal, setEditModal] = useState(false);
   const [CustomerToDelete, setCustomerToDelete] = useState(null);
   const [deletemodal, setDeleteModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Name is required"),
@@ -83,6 +89,7 @@ const NewCustomer = () => {
     const res = await createCustomer(Values);
     console.log(res);
     if (res.success) {
+      setCustomerInfo(res.customer);
       Getcustomers();
     }
   };
@@ -101,7 +108,8 @@ const NewCustomer = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const resUpdate = await UpdateCustomer(EditCustomerInfo, id);
+    const customerId = CustomerInfo._id;
+    const resUpdate = await UpdateCustomer(customerId, EditCustomerInfo);
     console.log(resUpdate);
     if (resUpdate.success) {
       Getcustomers();
@@ -137,15 +145,21 @@ const NewCustomer = () => {
   };
 
   const toggleEditmodal = (id) => {
+    // console.log(id);
     setEditModal(!modal);
     getspecificCustomer(id);
-    console.log(id);
   };
 
   useEffect(() => {
     Getcustomers();
-    getspecificCustomer(id);
-  }, [id]);
+    getspecificCustomer(CustomerInfo._id);
+  }, [CustomerInfo._id]);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = CustomersData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   document.title = "Customers | By Shalin";
   return (
@@ -159,13 +173,13 @@ const NewCustomer = () => {
                 <CardHeader className="border-0">
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
-                      <div>
+                      {/* <div>
                         <h5 className="card-title mb-0">Customer List</h5>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-sm-auto">
                       <div>
-                        <button
+                        {/* <button
                           type="button"
                           className="btn btn-success add-btn"
                           id="create-btn"
@@ -181,7 +195,7 @@ const NewCustomer = () => {
                         >
                           <i className="ri-file-download-line align-bottom me-1"></i>{" "}
                           Export
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </Row>
@@ -193,7 +207,6 @@ const NewCustomer = () => {
                     >
                       <thead className="table-light">
                         <tr>
-                          
                           <th className="name">Index</th>
                           <th className="name">Name</th>
                           <th className="price">email</th>
@@ -202,12 +215,10 @@ const NewCustomer = () => {
                         </tr>
                       </thead>
                       <tbody className="list form-check-all">
-                        {CustomersData.map((customer, key) => (
+                        {currentItems.map((customer, key) => (
                           <tr key={customer.id}>
                             <th scope="row">
-                            <td className="product-name">
-                              {key+1}
-                            </td>
+                              <td className="product-name">{key + 1}</td>
                             </th>
                             <td className="product-name">
                               {customer.username}
@@ -240,7 +251,7 @@ const NewCustomer = () => {
                             {/* Add other columns here as needed */}
                             <td>
                               <div className="d-flex gap-2">
-                                <div className="edit">
+                                {/* <div className="edit">
                                   <Link
                                     onClick={() =>
                                       toggleEditmodal(customer._id)
@@ -249,7 +260,7 @@ const NewCustomer = () => {
                                   >
                                     Edit
                                   </Link>
-                                </div>
+                                </div> */}
                                 <div className="remove">
                                   <button
                                     className="btn btn-sm btn-danger remove-item-btn"
@@ -270,6 +281,43 @@ const NewCustomer = () => {
                       </tbody>
                     </table>
                   </div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(CustomersData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(CustomersData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                 </CardHeader>
               </Card>
             </Col>
@@ -469,7 +517,7 @@ const NewCustomer = () => {
           </h5>
         </ModalHeader>
         <ModalBody>
-          <form onSubmit={(e) => handleUpdate(e)}>
+          <form onSubmit={handleUpdate}>
             <div className="mb-3">
               <Label for="addaddress-Name" className="form-label">
                 Name
@@ -495,8 +543,8 @@ const NewCustomer = () => {
                     className="form-check-input"
                     id="activeStatus"
                     name="active"
-                    value={EditCustomerInfo.active}
-                    checked={handleChange}
+                    checked={EditCustomerInfo.active}
+                    onChange={handleChange}
                   />
                   <Label className="form-check-label" htmlFor="activeStatus">
                     Active
