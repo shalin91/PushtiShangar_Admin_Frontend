@@ -28,6 +28,7 @@
     "eslint": "^8.9.0",
     "feather-icons-react": "^0.5.0",
     "filepond": "^4.30.3",
+    "filepond-plugin-file-poster": "^2.5.1",
     "filepond-plugin-image-exif-orientation": "^1.0.11",
     "filepond-plugin-image-preview": "^4.6.10",
     "firebase": "^9.6.7",

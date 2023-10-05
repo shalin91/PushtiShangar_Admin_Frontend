@@ -138,68 +138,14 @@ const Navdata = () => {
   ]);
 
   const menuItems = [
-    // {
-    //     label: "Menu",
-    //     isHeader: true,
-    // },
+ 
     {
       id: "ecommerce",
       label: "Dashboard",
       icon: "ri-dashboard-2-line",
       link: "/dashboard",
       stateVariables: isDashboard,
-      // click: function (e) {
-      //     e.preventDefault();
-      //     setIsDashboard(!isDashboard);
-      //     setIscurrentState('Dashboard');
-      //     updateIconSidebar(e);
-      // },
-      // subItems: [
-      //     // {
-      //     //     id: "analytics",
-      //     //     label: "Analytics",
-      //     //     link: "/dashboard-analytics",
-      //     //     parentId: "dashboard",
-      //     // },
-      //     // {
-      //     //     id: "crm",
-      //     //     label: "CRM",
-      //     //     link: "/dashboard-crm",
-      //     //     parentId: "dashboard",
-      //     // },
-      //     {
-      //         id: "ecommerce",
-      //         label: "Ecommerce",
-      //         link: "/dashboard",
-      //         parentId: "dashboard",
-      //     },
-      //     // {
-      //     //     id: "crypto",
-      //     //     label: "Crypto",
-      //     //     link: "/dashboard-crypto",
-      //     //     parentId: "dashboard",
-      //     // },
-      //     // {
-      //     //     id: "projects",
-      //     //     label: "Projects",
-      //     //     link: "/dashboard-projects",
-      //     //     parentId: "dashboard",
-      //     // },
-      //     // {
-      //     //     id: "nft",
-      //     //     label: "NFT",
-      //     //     link: "/dashboard-nft",
-      //     //     parentId: "dashboard",
-      //     // },
-      //     // {
-      //     //     id: "job",
-      //     //     label: "Job",
-      //     //     link: "/dashboard-job",
-      //     //     parentId: "dashboard",
-      //     //     badgeColor: "success",
-      //     //     badgeName: "New",
-      //     // },
-      // ],
+
     },
     {
       id: "apps",
@@ -214,54 +160,7 @@ const Navdata = () => {
       },
       stateVariables: isApps,
       subItems: [
-        // {
-        //     id: "calendar",
-        //     label: "Calendar",
-        //     link: "/apps-calendar",
-        //     parentId: "apps",
-        // },
-        // {
-        //     id: "chat",
-        //     label: "Chat",
-        //     link: "/apps-chat",
-        //     parentId: "apps",
-        // },
-        // {
-        //     id: "mailbox",
-        //     label: "Email",
-        //     link: "/#",
-        //     parentId: "apps",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setEmail(!isEmail);
-        //     },
-        //     stateVariables: isEmail,
-        //     childItems: [
-        //         {
-        //             id: 1,
-        //             label: "Mailbox",
-        //             link: "/apps-mailbox",
-        //             parentId: "apps"
-        //         },
-        //         {
-        //             id: 2,
-        //             label: "Email Templates",
-        //             link: "/#",
-        //             parentId: "apps",
-        //             isChildItem: true,
-        //             stateVariables: isSubEmail,
-        //             click: function (e) {
-        //                 e.preventDefault();
-        //                 setSubEmail(!isSubEmail);
-        //             },
-        //             childItems: [
-        //                 { id: 2, label: "Basic Action", link: "/apps-email-basic", parentId: "apps" },
-        //                 { id: 3, label: "Ecommerce Action", link: "/apps-email-ecommerce", parentId: "apps" },
-        //             ],
-        //         },
-        //     ]
-        // },
+
         {
           id: "appsecommerce",
           label: "Products",
@@ -281,18 +180,18 @@ const Navdata = () => {
               parentId: "apps",
             },
 
-            {
-              id: 3,
-              label: "Create Product New",
-              link: "/addproduct",
-              parentId: "apps",
-            },
-            {
-              id: 4,
-              label: "Orders",
-              link: "/apps-ecommerce-orders",
-              parentId: "apps",
-            },
+            // {
+            //   id: 3,
+            //   label: "Create Product New",
+            //   link: "/addproduct",
+            //   parentId: "apps",
+            // },
+            // {
+            //   id: 4,
+            //   label: "Orders",
+            //   link: "/apps-ecommerce-orders",
+            //   parentId: "apps",
+            // },
           ],
         },
         {
@@ -307,24 +206,24 @@ const Navdata = () => {
           parentId: "apps",
           stateVariables: isProjects,
           childItems: [
-            {
-              id: 1,
-              label: "Orders",
-              link: "/apps-ecommerce-orders",
-              parentId: "apps",
-            },
+            // {
+            //   id: 1,
+            //   label: "Orders",
+            //   link: "/apps-ecommerce-orders",
+            //   parentId: "apps",
+            // },
             {
               id: 1,
               label: "New Orders",
               link: "/orders",
               parentId: "apps",
             },
-            {
-              id: 2,
-              label: "Order Details",
-              link: "/apps-ecommerce-order-details",
-              parentId: "apps",
-            },
+            // {
+            //   id: 2,
+            //   label: "Order Details",
+            //   link: "/apps-ecommerce-order-details",
+            //   parentId: "apps",
+            // },
             // { id: 3, label: "Create Project", link: "/apps-projects-create", parentId: "apps", },
           ],
         },
@@ -372,25 +271,9 @@ const Navdata = () => {
           parentId: "apps",
           stateVariables: isTasks,
           childItems: [
-            // {
-            //   id: 1,
-            //   label: "OldCustomers",
-            //   link: "/apps-ecommerce-customers",
-            //   parentId: "apps",
-            // },
+
             { id: 2, label: "Customers", link: "/customers", parentId: "apps" },
-            // {
-            //   id: 3,
-            //   label: "Shopping Cart",
-            //   link: "/apps-ecommerce-cart",
-            //   parentId: "apps",
-            // },
-            // {
-            //   id: 4,
-            //   label: "Checkout",
-            //   link: "/apps-ecommerce-checkout",
-            //   parentId: "apps",
-            // },
+
           ],
         },
         {

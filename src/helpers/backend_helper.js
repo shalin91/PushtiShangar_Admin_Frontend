@@ -59,10 +59,6 @@ export const getCategory = async() => await api.create("http://localhost:5000/ca
 export const updateCategory = (data,id) => api.create("http://localhost:5000/category/updatecategory/"+id, data);
 
 
-export const getProducts = async() => await api.create("http://localhost:5000/product/getallproducts");
-export const deleteProduct = async(id) => await api.create(`http://localhost:5000/product/deleteproduct/${id}` , {});
-
-
 
 // sub category
 export const getSubCategory = async() => await api.create("http://localhost:5000/subcategory/getsubcategories");
