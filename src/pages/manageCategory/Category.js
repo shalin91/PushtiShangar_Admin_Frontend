@@ -33,16 +33,16 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import FilePondPluginFilePoster from "filepond-plugin-file-poster";
+// import FilePondPluginFilePoster from "filepond-plugin-file-poster";
 
-import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
+// import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview,
-  FilePondPluginFilePoster
+  // FilePondPluginFilePoster
 );
 
 const CategoryMaster = () => {
