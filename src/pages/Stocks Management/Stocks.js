@@ -6,7 +6,7 @@ import SignContext from "../../contextAPI/Context/SignContext";
 import AddStocks from "./AddStocks";
 
 function Stocks() {
-  const { GetStocks , DeleteStocks  } = useContext(SignContext);
+  const { GetStocks , DeleteStocks , UpdateStocks  } = useContext(SignContext);
   const [ContentData, setContentData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
@@ -43,6 +43,20 @@ function Stocks() {
     }
   };
 
+  // const handleEditStock = (stockId) => {
+  //   setEditingStockId(stockId);
+
+  //   // Assuming ContentData is the array containing stock data
+  //   const editedStock = ContentData.find((stock) => stock.id === stockId);
+
+  //   setStocksData({
+  //     ProductId: editedStock.ProductId,
+  //     quantity: editedStock.quantity,
+  //     currentPricePerUnit: editedStock.currentPricePerUnit,
+  //     date: editedStock.date,
+  //   });
+  // };
+
 
 
   useEffect(() => {
@@ -54,14 +68,11 @@ function Stocks() {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Stocks" pageTitle="Stocks" />
+          <BreadCrumb title="Stock Manage Of Products" pageTitle="Stocks" />
           <Row>
             <Col lg={12}>
-            <AddStocks refreshTable={Getstocks} />
+            <AddStocks refreshTable={Getstocks} UpdateStocks={UpdateStocks} />
               <Card>
-                <CardHeader>
-                  <h4 className="card-title mb-0">Stock Manage Of Products</h4>
-                </CardHeader>
                 <CardBody>
                   <div id="contentList">
                     <Row className="g-4 mb-3">

@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 
-const AddStocks = ({ refreshTable }) => {
+const AddStocks = ({ refreshTable , UpdateStocks}) => {
   const { AddStocks, getProducts } = useContext(SignContext);
   const [StocksData, setStocksData] = useState({
     ProductId: "",
@@ -18,6 +18,7 @@ const AddStocks = ({ refreshTable }) => {
     date: "",
   });
   const [Product, setProduct] = useState([]);
+  const [editingStockId, setEditingStockId] = useState(null);
 
   const validationSchema = Yup.object().shape({
     ProductId: Yup.string().required("Select a product"),
@@ -43,18 +44,28 @@ const AddStocks = ({ refreshTable }) => {
   // };
 
   const handleSavedStocks = async (Values) => {
-    const res = await AddStocks(Values);
-
-    console.log(res);
-    if (res.success) {
-      // Handle success
-      // For example, display a success message and reset the form
-      console.log("Content added successfully");
-      refreshTable();
+    if (editingStockId) {
+      // Update the existing stock item
+      const res = await UpdateStocks(editingStockId,  Values);
+      console.log(res);
+      if (res.success) {
+        refreshTable();
+        setEditingStockId(null);
+      } else {
+        console.error("Error updating stock:", res.msg);
+      }
     } else {
-      // Handle error
-      console.error("Error adding content:", res.msg);
+      // Add a new stock item
+      const res = await AddStocks(Values);
+      console.log(res);
+      if (res.success) {
+        refreshTable();
+      } else {
+        console.error("Error adding stock:", res.msg);
+      }
     }
+    // Reset the form
+    // resetForm();
   };
 
   const Getproducts = async () => {
@@ -181,7 +192,7 @@ const AddStocks = ({ refreshTable }) => {
                             {errors.date && touched.date && errors.date}
                           </p>
                         </Col>
-                        <div className="text-end mb-3">
+                        <div className="text-center mb-3">
                           <button
                             type="submit"
                             className="btn btn-success w-sm"

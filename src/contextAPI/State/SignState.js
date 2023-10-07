@@ -810,6 +810,50 @@ export const SignState = (props) => {
     }
   };
 
+  // Delete Order 
+  const DeleteOrder = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/orders/deleteorder/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // Get Specific Order by Id
+  const getSpecificOrderbyId = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/orders/getspecificorder/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // Update Order By Id
+  const UpdateOrder = async (OrderData, id) => {
+    try {
+      const response = await axios.post(
+        `${url}/orders/updateorder/${id}`,
+        OrderData
+      );
+      return response;
+    } catch (error) {
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
+    }
+  };
+
+
 
 
   return (
@@ -869,6 +913,9 @@ export const SignState = (props) => {
         GetPriceUpdates,
         GetSpecificPricebyId,
         UpdatePrice,
+        DeleteOrder,
+        getSpecificOrderbyId,
+        UpdateOrder
       }}
     >
       {props.children}

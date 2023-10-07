@@ -1,13 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
-import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 
 const AllOrders = () => {
-  const { GetAllOrders, getCustomers } = useContext(SignContext);
+  const {
+    GetAllOrders,
+    getCustomers,
+    DeleteOrder,
+    getSpecificOrderbyId,
+    UpdateOrder,
+  } = useContext(SignContext);
   const [OrdersData, setOrdersData] = useState([]);
   const [CustomerNameMapping, setCustomerNameMapping] = useState({});
+  const [deletemodal, setDeleteModal] = useState(false);
+  const [OrderToDelete, setOrderToDelete] = useState(null);
+  const [EditModal, setEditModal] = useState(false);
+  const [editOrder, setEditOrder] = useState(null);
+  const [updatedOrderData, setUpdatedOrderData] = useState({
+    status: "",
+  });
 
   const GetOrders = async () => {
     const res = await GetAllOrders();
@@ -16,9 +42,77 @@ const AllOrders = () => {
     setOrdersData(res.orders);
   };
 
+  const toggledeletemodal = () => {
+    setDeleteModal(!deletemodal);
+  };
+
+  const handleDeleteOrder = async (id) => {
+    const res = await DeleteOrder(id);
+    console.log(res);
+    if (res.success) {
+      // Product was successfully deleted
+      // Perform any necessary state updates or notifications
+      // Reset productToDelete and close the modal
+      setOrderToDelete(null);
+      setDeleteModal(false);
+      // Refresh the product list after deletion
+      GetOrders();
+    } else {
+      // Handle deletion error, show error message
+      // You might want to display an error notification
+    }
+  };
+
+  const toggleEditmodal = (id) => {
+    setEditModal(!EditModal);
+    getSpecificOrder(id);
+    // console.log(id);
+  };
+
+  const getSpecificOrder = async (id) => {
+    try {
+      const response = await getSpecificOrderbyId(id);
+      if (response.success) {
+        setEditOrder(response.order);
+        setUpdatedOrderData({
+          status: response.order.status,
+          // Add other fields as needed
+        });
+      } else {
+        console.error("Error fetching order:", response.msg);
+      }
+    } catch (error) {
+      console.error("Error fetching order:", error);
+    }
+  };
+
+  const handleUpdateOrder = async (id) => {
+    try {
+      const response = await UpdateOrder(updatedOrderData, id);
+      console.log(response);
+      if (response.success) {
+        setEditModal(false);
+        // Refresh the order list after updating
+        GetOrders();
+      } else {
+        console.error("Error updating order:", response.msg);
+      }
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
   useEffect(() => {
     GetOrders();
   }, []);
+
+  const statusColors = {
+    completed: { backgroundColor: "#28a745", color: "white" },
+    pending: { backgroundColor: "#ffc107", color: "black" },
+    processing: { backgroundColor: "#007bff", color: "white" },
+    cancelled: { backgroundColor: "#dc3545", color: "white" },
+    return: { backgroundColor: "#6c757d", color: "white" },
+  };
 
   return (
     <>
@@ -28,9 +122,6 @@ const AllOrders = () => {
           <Row>
             <Col lg={12}>
               <Card>
-                <CardHeader>
-                  <h4 className="card-title mb-0">Orders</h4>
-                </CardHeader>
                 <CardBody>
                   <div id="contentList">
                     <Row className="g-4 mb-3">
@@ -46,18 +137,7 @@ const AllOrders = () => {
                           </div>
                         </div>
                       </Col>
-                      <Col className="col-sm-auto">
-                        <div>
-                          <Link
-                            to="/addcoupon"
-                            className="btn btn-success add-btn me-1"
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add
-                          </Link>
-                        </div>
-                      </Col>
+                      
                     </Row>
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
@@ -87,7 +167,9 @@ const AllOrders = () => {
                                 </div>
                               </th>
                               <td className="product-name">{order._id}</td>
-                              <td className="product-name">{order.FirstName}</td>
+                              <td className="product-name">
+                                {order.FirstName}
+                              </td>
                               <td className="product-name">{order.LastName}</td>
                               <td className="product-name">
                                 ₹{order.totalAmount}
@@ -96,27 +178,12 @@ const AllOrders = () => {
                                 {order.paymentMethod}
                               </td>
                               <td className="status">
-                                {order.status === "completed" ? (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#28a745",
-                                      color: "white",
-                                    }}
-                                  >
-                                    {order.status}
-                                  </span>
-                                ) : (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#dc3545",
-                                      color: "white",
-                                    }}
-                                  >
-                                    {order.status}
-                                  </span>
-                                )}
+                                <span
+                                  className="badge badge-soft"
+                                  style={statusColors[order.status]}
+                                >
+                                  {order.status}
+                                </span>
                               </td>
 
                               {/* Add other columns here as needed */}
@@ -132,7 +199,7 @@ const AllOrders = () => {
                                   </div>
                                   <div className="edit">
                                     <Link
-                                      // to={`/editcoupon/${coupon._id}`}
+                                      onClick={() => toggleEditmodal(order._id)}
                                       className="btn btn-sm btn-success edit-item-btn"
                                     >
                                       <i className="ri-pencil-line"></i>
@@ -143,10 +210,10 @@ const AllOrders = () => {
                                       className="btn btn-sm btn-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
-                                      // onClick={() => {
-                                      //   toggledeletemodal();
-                                      //   setContentToDelete(coupon);
-                                      // }}
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setOrderToDelete(order);
+                                      }}
                                     >
                                       <i className="ri-delete-bin-line"></i>
                                     </button>
@@ -170,6 +237,124 @@ const AllOrders = () => {
           </Row>
         </Container>
       </div>
+
+      <Modal
+        isOpen={EditModal}
+        role="dialog"
+        autoFocus={true}
+        centered
+        id="addAddressModal"
+        toggle={toggleEditmodal}
+      >
+        <ModalHeader
+          toggle={() => {
+            setEditModal(!EditModal);
+          }}
+        >
+          <h5 className="modal-title" id="addAddressModalLabel">
+            Edit User
+          </h5>
+        </ModalHeader>
+        <ModalBody>
+          <form>
+            <div className="mb-3">
+              <Label for="status" className="form-label">
+                Status
+              </Label>
+              <select
+                className="form-select"
+                id="state"
+                name="status"
+                value={updatedOrderData.status}
+                onChange={(e) =>
+                  setUpdatedOrderData({
+                    ...updatedOrderData,
+                    status: e.target.value,
+                  })
+                }
+              >
+                {/* Add options for different order statuses */}
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="return">Return</option>
+                {/* Add more options as needed */}
+              </select>
+            </div>
+            <ModalFooter>
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => {
+                  setEditModal(!EditModal);
+                }}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={() => handleUpdateOrder(editOrder._id)}
+              >
+                Save
+              </button>
+            </ModalFooter>
+          </form>
+        </ModalBody>
+      </Modal>
+
+      <Modal
+        isOpen={deletemodal}
+        role="dialog"
+        autoFocus={true}
+        centered
+        id="removeItemModal"
+        toggle={toggledeletemodal}
+      >
+        <ModalHeader
+          toggle={() => {
+            setDeleteModal(!deletemodal);
+          }}
+        ></ModalHeader>
+        <ModalBody>
+          <div className="mt-2 text-center">
+            <lord-icon
+              src="https://cdn.lordicon.com/gsqxdxog.json"
+              trigger="loop"
+              colors="primary:#f7b84b,secondary:#f06548"
+              style={{ width: "100px", height: "100px" }}
+            ></lord-icon>
+            <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+              <h4>Are you sure ?</h4>
+              <p className="text-muted mx-4 mb-0">
+                Are you Sure You want to Remove this Coupon ?
+              </p>
+            </div>
+          </div>
+          <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-danger"
+              onClick={() => {
+                handleDeleteOrder(OrderToDelete._id);
+                setDeleteModal(false);
+              }}
+            >
+              Yes, Delete It!
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
     </>
   );
 };
