@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -10,14 +10,64 @@ import {
 } from "reactstrap";
 
 import classnames from "classnames";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { productDetails } from "../../../common/data/ecommerce";
 import EcommerceOrderProduct from "./EcommerceOrderProduct";
 import avatar3 from "../../../assets/images/users/avatar-3.jpg";
+import SignContext from "../../../contextAPI/Context/SignContext";
 
 const EcommerceOrderDetail = (props) => {
+  const { id } = useParams();
+  const { getSpecificOrderbyId , GetSpecificCustomer } = useContext(SignContext);
+  const [OrderData, setOrderData] = useState([]);
+  const [ProductData, setProductData] = useState([]);
+  const [CustomerInfo, setCustomerInfo] = useState({});
+  const customerId = OrderData.customer;
+  // console.log(customerId)
+
+
+
+  const GetspecificOrderbyId = async (id) => {
+    const res = await getSpecificOrderbyId(id);
+    console.log(res);
+    if (res.success) {
+      setOrderData(res.orderWithProductDetails.order);
+      setProductData(res.orderWithProductDetails.products);
+
+    }
+  };
+
+  const getSpecificCustomer = async (id) => {
+    try {
+      const res = await GetSpecificCustomer(id);
+      console.log(res);
+      if (res.success) {
+        setCustomerInfo(res.customer);
+      } 
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+  const totalPrice = ProductData ? ProductData.reduce((acc, item) => {
+    
+    const quantity = parseFloat(item.quantity);
+    // const gst = parseFloat(item.tax);
+  
+    const discountedPrice = parseFloat(
+      item.product.prices ? item.product.prices.discounted : null
+    );
+    
+    if (isNaN(quantity) || isNaN(discountedPrice)) {
+      return acc; // Skip this item if it has invalid data
+    }
+
+    return acc + quantity * discountedPrice;
+  }, 0): null;
+
+
   const [col1, setcol1] = useState(true);
   const [col2, setcol2] = useState(true);
   const [col3, setcol3] = useState(true);
@@ -34,7 +84,19 @@ const EcommerceOrderDetail = (props) => {
     setcol3(!col3);
   }
 
-document.title ="Order Details | Velzon - React Admin & Dashboard Template";
+  useEffect(() => {
+    console.log("id:", id);
+    console.log("customerId:", customerId);
+    GetspecificOrderbyId(id);
+    if (customerId) {
+      getSpecificCustomer(customerId);
+    }
+  }, [id, customerId]);
+
+
+  document.title ="Order Details | by Barodaweb";
+
+
   return (
     <div className="page-content">
       <Container fluid>        
@@ -45,7 +107,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
             <Card>
               <CardHeader>
                 <div className="d-flex align-items-center">
-                  <h5 className="card-title flex-grow-1 mb-0">Order #VL2667</h5>
+                  <h5 className="card-title flex-grow-1 mb-0">Order {OrderData._id} </h5>
                   <div className="flex-shrink-0">
                     <Link
                       to="/apps-invoices-details"
@@ -65,14 +127,14 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                         <th scope="col">Product Details</th>
                         <th scope="col">Item Price</th>
                         <th scope="col">Quantity</th>
-                        <th scope="col">Rating</th>
-                        <th scope="col" className="text-end">
+                        <th scope="col">GST</th>
+                        {/* <th scope="col" className="text-end">
                           Total Amount
-                        </th>
+                        </th> */}
                       </tr>
                     </thead>
                     <tbody>
-                      {productDetails.map((product, key) => (
+                      {ProductData.map((product, key) => (
                         <EcommerceOrderProduct product={product} key={key} />
                       ))}
                       <tr className="border-top border-top-dashed">
@@ -82,27 +144,27 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                             <tbody>
                               <tr>
                                 <td>Sub Total :</td>
-                                <td className="text-end">$359.96</td>
+                                <td className="text-end">₹ {totalPrice}</td>
                               </tr>
                               <tr>
                                 <td>
                                   Discount{" "}
-                                  <span className="text-muted">(VELZON15)</span>{" "}
+                                  <span className="text-muted">()</span>{" "}
                                   : :
                                 </td>
-                                <td className="text-end">-$53.99</td>
+                                {/* <td className="text-end">-$53.99</td> */}
                               </tr>
                               <tr>
                                 <td>Shipping Charge :</td>
-                                <td className="text-end">$65.00</td>
+                                {/* <td className="text-end">$65.00</td> */}
                               </tr>
                               <tr>
                                 <td>Estimated Tax :</td>
-                                <td className="text-end">$44.99</td>
+                                <td className="text-end">₹ {(OrderData.totalAmount-totalPrice).toFixed(2)}</td>
                               </tr>
                               <tr className="border-top border-top-dashed">
-                                <th scope="row">Total (USD) :</th>
-                                <th className="text-end">$415.96</th>
+                                <th scope="row">Total (₹) :</th>
+                                <th className="text-end">₹ {OrderData.totalAmount}</th>
                               </tr>
                             </tbody>
                           </table>
@@ -114,7 +176,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
               </CardBody>
             </Card>
 
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <div className="d-sm-flex align-items-center">
                   <h5 className="card-title flex-grow-1 mb-0">Order Status</h5>
@@ -319,11 +381,11 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                   </div>
                 </div>
               </CardBody>
-            </Card>
+            </Card> */}
           </Col>
 
           <Col xl={3}>
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <div className="d-flex">
                   <h5 className="card-title flex-grow-1 mb-0">
@@ -350,7 +412,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                   <p className="text-muted mb-0">Payment Mode : Debit Card</p>
                 </div>
               </CardBody>
-            </Card>
+            </Card> */}
 
             <Card>
               <CardHeader>
@@ -358,43 +420,43 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                   <h5 className="card-title flex-grow-1 mb-0">
                     Customer Details
                   </h5>
-                  <div className="flex-shrink-0">
+                  {/* <div className="flex-shrink-0">
                     <Link to="#" className="link-secondary">
                       View Profile
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
               </CardHeader>
               <CardBody>
                 <ul className="list-unstyled mb-0 vstack gap-3">
                   <li>
                     <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0">
+                      {/* <div className="flex-shrink-0">
                         <img
                           src={avatar3}
                           alt=""
                           className="avatar-sm rounded"
                         />
-                      </div>
+                      </div> */}
                       <div className="flex-grow-1 ms-3">
-                        <h6 className="fs-14 mb-1">Joseph Parkers</h6>
+                        <h6 className="fs-14 mb-1">{OrderData.FirstName} {OrderData.LastName}</h6>
                         <p className="text-muted mb-0">Customer</p>
                       </div>
                     </div>
                   </li>
                   <li>
                     <i className="ri-mail-line me-2 align-middle text-muted fs-16"></i>
-                    josephparker@gmail.com
+                    {CustomerInfo.email}
                   </li>
                   <li>
                     <i className="ri-phone-line me-2 align-middle text-muted fs-16"></i>
-                    +(256) 245451 441
+                    +(91) {CustomerInfo.phone}
                   </li>
                 </ul>
               </CardBody>
             </Card>
 
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <h5 className="card-title mb-0">
                   <i className="ri-map-pin-line align-middle me-1 text-muted"></i>{" "}
@@ -410,7 +472,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                   <li>United States</li>
                 </ul>
               </CardBody>
-            </Card>
+            </Card> */}
 
             <Card>
               <CardHeader>
@@ -421,11 +483,11 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
               </CardHeader>
               <CardBody>
                 <ul className="list-unstyled vstack gap-2 fs-13 mb-0">
-                  <li className="fw-medium fs-14">Joseph Parker</li>
-                  <li>+(256) 245451 451</li>
-                  <li>2186 Joyce Street Rocky Mount</li>
-                  <li>California - 24567</li>
-                  <li>United States</li>
+                  <li className="fw-medium fs-14">{OrderData.FirstName} {OrderData.LastName}</li>
+                  <li>+(91) {CustomerInfo.phone} </li>
+                  <li>{OrderData.shippingAddress}</li>
+                  <li>{OrderData.state} - {OrderData.postCode}</li>
+                  <li>{OrderData.country}</li>
                 </ul>
               </CardBody>
             </Card>
@@ -443,7 +505,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                     <p className="text-muted mb-0">Transactions:</p>
                   </div>
                   <div className="flex-grow-1 ms-2">
-                    <h6 className="mb-0">#VLZ124561278124</h6>
+                    <h6 className="mb-0">{OrderData.paymentMethod}</h6>
                   </div>
                 </div>
                 <div className="d-flex align-items-center mb-2">
@@ -451,7 +513,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                     <p className="text-muted mb-0">Payment Method:</p>
                   </div>
                   <div className="flex-grow-1 ms-2">
-                    <h6 className="mb-0">Debit Card</h6>
+                    <h6 className="mb-0">{OrderData.paymentMethod}</h6>
                   </div>
                 </div>
                 <div className="d-flex align-items-center mb-2">
@@ -459,15 +521,15 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                     <p className="text-muted mb-0">Card Holder Name:</p>
                   </div>
                   <div className="flex-grow-1 ms-2">
-                    <h6 className="mb-0">Joseph Parker</h6>
+                    {/* <h6 className="mb-0">Joseph Parker</h6> */}
                   </div>
                 </div>
                 <div className="d-flex align-items-center mb-2">
                   <div className="flex-shrink-0">
-                    <p className="text-muted mb-0">Card Number:</p>
+                    {/* <p className="text-muted mb-0">Card Number:</p> */}
                   </div>
                   <div className="flex-grow-1 ms-2">
-                    <h6 className="mb-0">xxxx xxxx xxxx 2456</h6>
+                    {/* <h6 className="mb-0">xxxx xxxx xxxx 2456</h6> */}
                   </div>
                 </div>
                 <div className="d-flex align-items-center">
@@ -475,7 +537,7 @@ document.title ="Order Details | Velzon - React Admin & Dashboard Template";
                     <p className="text-muted mb-0">Total Amount:</p>
                   </div>
                   <div className="flex-grow-1 ms-2">
-                    <h6 className="mb-0">$415.96</h6>
+                    <h6 className="mb-0">₹ {OrderData.totalAmount}</h6>
                   </div>
                 </div>
               </CardBody>

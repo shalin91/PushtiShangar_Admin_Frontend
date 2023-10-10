@@ -1,14 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import { Link } from "react-router-dom";
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+  PaginationLink,
+  PaginationItem, } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
+
+const ITEMS_PER_PAGE = 10;
+
 
 const Coupons = () => {
   const { GetCoupons , DeleteCoupon } = useContext(SignContext);
   const [CouponData, setCouponData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
@@ -45,6 +52,13 @@ const Coupons = () => {
   useEffect(() => {
     Getcoupons();
   }, []);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = CouponData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   document.title = "Coupons | By Shalin";
 
@@ -106,7 +120,7 @@ const Coupons = () => {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {CouponData.map((coupon , key) => (
+                          {currentItems.map((coupon , key) => (
                             <tr key={coupon.id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -194,6 +208,43 @@ const Coupons = () => {
                       </table>
                     </div>
                   </div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(CouponData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(CouponData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                 </CardBody>
               </Card>
             </Col>

@@ -1,6 +1,10 @@
 import React from "react";
 
 const EcommerceOrderProduct = (props) => {
+  const url = `${process.env.REACT_APP_BASE_URL}`;
+  console.log(url)
+
+
   return (
     <React.Fragment>
       <tr>
@@ -8,7 +12,7 @@ const EcommerceOrderProduct = (props) => {
           <div className="d-flex">
             <div className="flex-shrink-0 avatar-md bg-light rounded p-1">
               <img
-                src={props.product.img}
+                src={`${url}/products/${props.product.product.imageGallery[0]}`}
                 alt=""
                 className="img-fluid d-block"
               />
@@ -19,30 +23,25 @@ const EcommerceOrderProduct = (props) => {
                   href="apps-ecommerce-product-details"
                   className="link-primary"
                 >
-                  {props.product.name}
+                  {props.product.product.name}
                 </a>
               </h5>
+                  {props.product.product.sku}
               <p className="text-muted mb-0">
-                Color: <span className="fw-medium">{props.product.color}</span>
+                {/* Color: <span className="fw-medium">{props.product.color}</span> */}
               </p>
               <p className="text-muted mb-0">
-                Size: <span className="fw-medium">{props.product.size}</span>
+                {/* Size: <span className="fw-medium">{props.product.size}</span> */}
               </p>
             </div>
           </div>
         </td>
-        <td>{props.product.price}</td>
+        <td>{props.product.product.prices.discounted}</td>
         <td>{props.product.quantity}</td>
         <td>
-          <div className="text-warning fs-15">
-            <i className="ri-star-fill"></i>
-            <i className="ri-star-fill"></i>
-            <i className="ri-star-fill"></i>
-            <i className="ri-star-fill"></i>
-            <i className="ri-star-half-fill"></i>
-          </div>
+        {props.product.product.gst} %
         </td>
-        <td className="fw-medium text-end">{props.product.amount}</td>
+        {/* <td className="fw-medium text-end">{props.product.amount}</td> */}
       </tr>
     </React.Fragment>
   );
