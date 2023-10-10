@@ -100,6 +100,10 @@ import ProductMaster from "../pages/products/product";
 import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
 
+// import ProductForm from "../pages/products/productForm";
+import AddProduct  from "../pages/products/addProduct";
+
+
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -124,7 +128,10 @@ const authProtectedRoutes = [
 
   // product master
   { path: "/allproducts", component: <ProductMaster /> },
+
+
   // { path: "/product-form", component: <ProductForm /> },
+
   { path: "/add-product", component: <AddProduct /> },
   { path: "/add-product/:id", component: <AddProduct /> },
 
