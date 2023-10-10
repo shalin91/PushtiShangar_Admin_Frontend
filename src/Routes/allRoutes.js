@@ -94,19 +94,13 @@ import Coupons from "../pages/Coupon Management/Coupons";
 import AddCoupons from "../pages/Coupon Management/AddCoupons";
 import EditCoupons from "../pages/Coupon Management/EditCoupons";
 import AddUser from "../pages/Pages/Team/AddUser";
-
 import ProductMaster from "../pages/products/product";
-
 import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
 // import ProductForm from "../pages/products/productForm";
 import AddProduct  from "../pages/products/addProduct";
 
-
-
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
-
-
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   // { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },

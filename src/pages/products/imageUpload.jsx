@@ -107,15 +107,7 @@ const ImageUpload = ({getSelectedImages}) => {
             </div>
           </Col>
         </Row>
-        {selectedFiles.length > 3 ? (
-      
-        <React.Fragment>
-          <button type="submit" className="btn btn-primary" id="addNewTodo">
-            Upload
-          </button>
-        </React.Fragment>
-      ) 
-       : null}
+       
         </React.Fragment>
         
 
