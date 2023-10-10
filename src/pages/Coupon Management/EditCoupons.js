@@ -13,16 +13,16 @@ const EditCoupons = () => {
   const [CouponData, setCouponData] = useState({
     name: "",
     type: "",
-    start: "",
-    expiry: "",
-    discount: "",
-    active: "",
+    start: new Date(),
+    expiry: new Date(),
+    discount: 0,
+    active: true,
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
+    const newValue = type === "checkbox" ? checked : type === "number" ? parseFloat(value) : value;
+  
     setCouponData({
       ...CouponData,
       [name]: newValue,
@@ -98,7 +98,7 @@ const EditCoupons = () => {
                             className="form-control"
                             type="text"
                             name="name"
-                            placeholder="add Coupon-Name"
+                            placeholder="Coupon-Name"
                             value={CouponData.name}
                             onChange={handleChange}
                           />
@@ -126,7 +126,7 @@ const EditCoupons = () => {
                             </Label>
                             <Input
                               className="form-control"
-                              type="text"
+                              type="number"
                               name="discount"
                               placeholder="add Discount"
                               value={CouponData.discount}

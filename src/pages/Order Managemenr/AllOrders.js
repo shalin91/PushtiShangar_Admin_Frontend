@@ -13,9 +13,15 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Pagination,
+  PaginationLink,
+  PaginationItem,
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
+
+const ITEMS_PER_PAGE = 20;
+
 
 const AllOrders = () => {
   const {
@@ -26,7 +32,8 @@ const AllOrders = () => {
     UpdateOrder,
   } = useContext(SignContext);
   const [OrdersData, setOrdersData] = useState([]);
-  const [CustomerNameMapping, setCustomerNameMapping] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [CustomerNameMapping, setCustomerNameMapping] = useState({});
   const [deletemodal, setDeleteModal] = useState(false);
   const [OrderToDelete, setOrderToDelete] = useState(null);
   const [EditModal, setEditModal] = useState(false);
@@ -34,6 +41,12 @@ const AllOrders = () => {
   const [updatedOrderData, setUpdatedOrderData] = useState({
     status: "",
   });
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = OrdersData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const GetOrders = async () => {
     const res = await GetAllOrders();
@@ -72,8 +85,9 @@ const AllOrders = () => {
   const getSpecificOrder = async (id) => {
     try {
       const response = await getSpecificOrderbyId(id);
+      console.log(response)
       if (response.success) {
-        setEditOrder(response.order);
+        setEditOrder(response.orderWithProductDetails.order);
         setUpdatedOrderData({
           status: response.order.status,
           // Add other fields as needed
@@ -104,6 +118,7 @@ const AllOrders = () => {
 
   useEffect(() => {
     GetOrders();
+
   }, []);
 
   const statusColors = {
@@ -159,7 +174,7 @@ const AllOrders = () => {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {OrdersData.map((order, key) => (
+                          {currentItems.map((order, key) => (
                             <tr key={order.id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -231,6 +246,43 @@ const AllOrders = () => {
                       </table>
                     </div>
                   </div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(OrdersData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(OrdersData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                 </CardBody>
               </Card>
             </Col>

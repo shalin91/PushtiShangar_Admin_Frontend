@@ -1,8 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+  PaginationLink,
+  PaginationItem, } from 'reactstrap'
 import BreadCrumb from '../../Components/Common/BreadCrumb'
 import { Link} from 'react-router-dom'
 import SignContext from '../../contextAPI/Context/SignContext'
+
+const ITEMS_PER_PAGE = 10;
 
 const ManageGallery = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -10,6 +14,8 @@ const ManageGallery = () => {
   const [GalleryDetData, setGalleryDetData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [GalleryDetToDelete, setGalleryDetToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
@@ -43,6 +49,12 @@ const ManageGallery = () => {
       // You might want to display an error notification
     }
   };
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = GalleryDetData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     getgalleryDetails();
@@ -112,7 +124,7 @@ const ManageGallery = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {GalleryDetData.map((galleryDet) => (
+                          {currentItems.map((galleryDet) => (
                             <tr key={galleryDet.id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -202,6 +214,43 @@ const ManageGallery = () => {
                         </table>
                         </div>
                   </div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(GalleryDetData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(GalleryDetData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                 </CardBody>
               </Card>
             </Col>
