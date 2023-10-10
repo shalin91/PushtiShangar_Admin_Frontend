@@ -15,6 +15,8 @@ import Ecommerce from "./ecommerce/reducer";
 //Project
 import Projects from "./projects/reducer";
 
+import Product from "./product/reducer";
+
 // Dashboard Ecommerce
 import DashboardEcommerce from "./dashboardEcommerce/reducer";
 
@@ -29,6 +31,7 @@ const rootReducer = combineReducers({
   Projects,
   Ecommerce,
   DashboardEcommerce,
+  Product
 });
 
 export default rootReducer;
