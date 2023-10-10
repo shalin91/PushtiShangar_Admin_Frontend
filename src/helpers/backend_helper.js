@@ -80,3 +80,11 @@ export const getProducts = async() => await api.create("http://localhost:5000/pr
 export const addProduct = async (data) => await api.create("http://localhost:5000/product/addproduct", data);
 export const updateProduct = async (data,id) => await api.create(`http://localhost:5000/product/updateproduct/${id}`, data);
 export const deleteProduct = async(id) => await api.create(`http://localhost:5000/product/deleteproduct/${id}`);
+
+
+export const getColor = async() => await api.create("http://localhost:5000/color/getcolors");
+export const getMaterial = async() => await api.create("http://localhost:5000/material/getmaterial");
+export const getSeason = async() => await api.create("http://localhost:5000/season/getseasons");
+
+export const getDailyPrice = async() => await api.create("http://localhost:5000/dailyrates/getprices");
+
