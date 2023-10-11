@@ -99,6 +99,7 @@ import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
 // import ProductForm from "../pages/products/productForm";
 import AddProduct  from "../pages/products/addProduct";
+import BannerMaster from "../pages/BannerMaster/bannerMaster";
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 const authProtectedRoutes = [
@@ -123,6 +124,8 @@ const authProtectedRoutes = [
   { path: "/add-product", component: <AddProduct /> },
   { path: "/add-product/:id", component: <AddProduct /> },
 
+  //bannner master
+  { path: "/banner-master", component: <BannerMaster /> },
   
   // Content
   { path: "/contentmanage", component: <SignState><Content /></SignState> },
@@ -198,7 +201,7 @@ const authProtectedRoutes = [
 const publicRoutes = [
   // Authentication Page
   { path: "/logout", component: <SignState><Logout /></SignState> },
-  { path: "/", component: <SignState><Login /></SignState> },
+  { path: "/login", component: <SignState><Login /></SignState> },
   { path: "/forgot-password", component: <SignState><ForgetPasswordPage /></SignState> },
   // { path: "/register", component: <Register /> },
 

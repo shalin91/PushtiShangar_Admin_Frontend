@@ -19,6 +19,7 @@ import {
   getCategory,
   getSubCategory,
   getSubSubCategory,
+  getspecificproduct,
 } from "../../helpers/backend_helper";
 import {
   GET_GST,
@@ -32,8 +33,11 @@ import * as Yup from "yup";
 import ImageUpload from "./imageUpload";
 import ProducTags from "./producTags";
 import Filters from "./filters";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddProduct = () => {
+
+const navigate = useNavigate(); 
   const GstData = useSelector((state) => state.Product.gst);
   const DailyRateData = useSelector((state) => state.Product.DailyPrices);
   const categoryData = useSelector((state) => state.Product.category);
@@ -53,6 +57,9 @@ const AddProduct = () => {
   const [selectedcolors, setSelectedcolors] = useState([]);
   const [selectedseasons, setSelectedseasons] = useState([]);
   const [selectedmaterials, setSelectedmaterials] = useState([]);
+  const [productForUpdate, setProductForUpdate] = useState([]);
+
+  const {id} = useParams();
 
   const config = useMemo(
     () => ({
@@ -131,7 +138,8 @@ const AddProduct = () => {
     setSubSubCatDropbind(data);
   };
 
-  useEffect(() => {
+  useEffect(async () => {
+    console.log(id)
     if (
       GstData.length === 0 ||
       DailyRateData.length === 0 ||
@@ -141,6 +149,10 @@ const AddProduct = () => {
     ) {
       fetchDropdownData();
     }
+
+    const pfu = await getspecificproduct(id)
+    // setFormVAlues(pfu.product)
+    console.log(formVAlues)
   }, [formVAlues]);
 
   const productForm = useFormik({
@@ -156,15 +168,15 @@ const AddProduct = () => {
       isProductNew: (formVAlues && formVAlues.isProductNew) || true,
       isActive: (formVAlues && formVAlues.isActive) || true,
       description: (formVAlues && formVAlues.description) || "",
-      original: (formVAlues && formVAlues.prices.original) || "",
-      discounted: (formVAlues && formVAlues.prices.discounted) || "",
+      original: (formVAlues && formVAlues.prices && formVAlues.prices.original) || "",
+      discounted: (formVAlues && formVAlues.prices && formVAlues.prices.discounted) || "",
       calculationOnWeight: (formVAlues && formVAlues.calculationOnWeight) || "",
       weightType: (formVAlues && formVAlues.weightType) || null,
       weight: (formVAlues && formVAlues.weight) || "",
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
+      stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
 
-      stock: (formVAlues && formVAlues.stock.quantity) || "",
       sku: (formVAlues && formVAlues.sku) || "",
       gst: (formVAlues && formVAlues.gst) || "",
     },
@@ -218,6 +230,7 @@ const AddProduct = () => {
           console.log(values);
           const addedProduct = await addProduct(formData);
           // setFormVAlues(addedProduct.newProduct);
+          navigate("/allproducts")
           setSubmitting(false);
         }
         console.log(values);
@@ -323,7 +336,7 @@ const AddProduct = () => {
                   name="subSubCategory"
                   aria-label="Category"
                   onBlur={productForm.handleBlur}
-                  value={productForm.values.subSubCategory || null}
+                  value={productForm.values.subSubCategory || ""}
                   onChange={(e) => {
                     productForm.handleChange(e);
                   }}

@@ -58,6 +58,12 @@ export const deleteCategory = (data) => api.create("http://localhost:5000/catego
 export const getCategory = async() => await api.create("http://localhost:5000/category/getcategories");
 export const updateCategory = (data,id) => api.create("http://localhost:5000/category/updatecategory/"+id, data);
 
+//Banner
+export const getBanner = () => api.create("http://localhost:5000/banner/get-banner");
+export const addNewBanner = (data) => api.create("http://localhost:5000/banner/add-new-banner",data);
+export const updateBanner = async(data,id) => await api.create("http://localhost:5000/banner/update-banner"+id, data);
+export const deleteBanner = (id) => api.create("http://localhost:5000/banner/delete-banner/"+id);
+
 
 
 // export const getProducts = async() => await api.create("http://localhost:5000/product/getallproducts");
@@ -87,4 +93,8 @@ export const getMaterial = async() => await api.create("http://localhost:5000/ma
 export const getSeason = async() => await api.create("http://localhost:5000/season/getseasons");
 
 export const getDailyPrice = async() => await api.create("http://localhost:5000/dailyrates/getprices");
+
+
+
+export const getspecificproduct = async(id) => await api.create("http://localhost:5000/product/getspecificproduct/"+id)
 

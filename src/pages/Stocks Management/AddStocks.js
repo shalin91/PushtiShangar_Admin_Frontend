@@ -4,12 +4,34 @@ import UiContent from "../../Components/Common/UiContent";
 import { Card, Col, Container, Form, Input, Label, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 
-const AddStocks = ({ refreshTable , UpdateStocks}) => {
+const noSortingGroup = [
+  { value: 'Madrid', label: 'Madrid' },
+  { value: 'Toronto', label: 'Toronto' },
+  { value: 'Vancouver', label: 'Vancouver' },
+  { value: 'London', label: 'London' },
+  { value: 'Manchester', label: 'Manchester' },
+  { value: 'Liverpool', label: 'Liverpool' },
+  { value: 'Paris', label: 'Paris' },
+  { value: 'Malaga', label: 'Malaga' },
+  { value: 'Washington', label: 'Washington' },
+  { value: 'Lyon', label: 'Lyon' },
+  { value: 'Marseille', label: 'Marseille' },
+  { value: 'Hamburg', label: 'Hamburg' },
+  { value: 'Munich', label: 'Munich' },
+  { value: 'Barcelona', label: 'Barcelona' },
+  { value: 'Berlin', label: 'Berlin' },
+  { value: 'Montreal', label: 'Montreal' },
+  { value: 'New York', label: 'New York' },
+  { value: 'Michigan', label: 'Michigan' },
+];
+
+const AddStocks = ({ refreshTable, UpdateStocks }) => {
   const { AddStocks, getProducts } = useContext(SignContext);
   const [StocksData, setStocksData] = useState({
     ProductId: "",
@@ -19,6 +41,11 @@ const AddStocks = ({ refreshTable , UpdateStocks}) => {
   });
   const [Product, setProduct] = useState([]);
   const [editingStockId, setEditingStockId] = useState(null);
+  const [selectedNoSortingGroup, setSelectedNoSortingGroup] = useState(null);
+
+  function handleSelectNoSortingGroup(selectedNoSortingGroup) {
+    setSelectedNoSortingGroup(selectedNoSortingGroup);
+}
 
   const validationSchema = Yup.object().shape({
     ProductId: Yup.string().required("Select a product"),
@@ -46,7 +73,7 @@ const AddStocks = ({ refreshTable , UpdateStocks}) => {
   const handleSavedStocks = async (Values) => {
     if (editingStockId) {
       // Update the existing stock item
-      const res = await UpdateStocks(editingStockId,  Values);
+      const res = await UpdateStocks(editingStockId, Values);
       console.log(res);
       if (res.success) {
         refreshTable();
@@ -140,6 +167,25 @@ const AddStocks = ({ refreshTable , UpdateStocks}) => {
                               errors.ProductId}
                           </p>
                         </Col>
+
+                        <Col lg={4} md={6}>
+                          <div className="mb-3">
+                            <Label
+                              htmlFor="choices-single-no-sorting"
+                              className="form-label text-muted"
+                            >
+                              Options added via config with no sorting
+                            </Label>
+                            <Select
+                              value={selectedNoSortingGroup}
+                              onChange={() => {
+                                handleSelectNoSortingGroup();
+                              }}
+                              options={noSortingGroup}
+                            />
+                          </div>
+                        </Col>
+
                         <Col lg={3}>
                           <Label className="form-label" htmlFor="category">
                             Add Quantity

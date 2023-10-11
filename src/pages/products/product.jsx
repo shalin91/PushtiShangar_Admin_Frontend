@@ -10,10 +10,7 @@ import { ToastContainer } from "react-toastify";
 import {
   deleteProduct,
   getProducts,
-  getCategory,
-  getSubCategory,
-  getSubSubCategory,
-  getGst,
+
 } from "../../helpers/backend_helper";
 import { GET_PRODUCTS } from "../../store/product/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +51,7 @@ const ProductMaster = () => {
 
   const dispatch = useDispatch();
   const fetchData = async () => {
-    if (allProductData.length === 0) {
+
       try {
         setIsFetchingData(true);
         const productsResponse = await getProducts();
@@ -71,13 +68,18 @@ const ProductMaster = () => {
         console.error("Error fetching data:", error.message);
         setIsFetchingData(false);
       }
-    }
+    
   };
 
   useEffect(() => {
-      fetchData();
-      setProductData(allProductData)
-  }, [getProducts,allProductData]);
+    fetchData();
+  }, []); 
+  
+  useEffect(() => {
+    setProductData(allProductData);
+  }, [allProductData]);
+
+
 
   const handledeleteProduct = async () => {
     if (valuesForUpdate) {
@@ -215,7 +217,8 @@ const ProductMaster = () => {
                                 <button
                                   className="btn btn-sm btn-soft-info edit-list"
                                   onClick={() => {
-                                    navigate(`/add-product`, { state: item });
+                                    navigate(`/add-product/${item._id}`);
+                                    
                                   }}
                                 >
                                   <i className="ri-pencil-fill align-bottom" />
@@ -228,7 +231,7 @@ const ProductMaster = () => {
                   </tbody>
                 </table>
               </div>
-              <div1
+              <div
                 className="py-4 mt-4 text-center"
                 id="noresult"
                 style={{ display: "none" }}
@@ -237,7 +240,7 @@ const ProductMaster = () => {
                   <FeatherIcon icon="search" />
                 </h1>
                 <h5 className="mt-4">Sorry! No Result Found</h5>
-              </div1>
+              </div>
             </CardBody>
           </Card>
         </Container>

@@ -8,7 +8,7 @@ import {
   Label,
   Row,
   Button,
-  Form,
+  Form,Spinner,
   FormFeedback,
   Alert,
 } from "reactstrap";
@@ -35,12 +35,17 @@ const Login = () => {
   };
   const [Error, setError] = useState("");
   const [Success, setSuccess] = useState("");
+  const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
+  const [buttnLoading, setButtnLoading] = useState(false);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setButtnLoading(true)
     const res = await loginUser(UserInfo);
-    console.log(res.roles.role)
-    if (res.success) {
+   
+    try{
+      
       window.localStorage.setItem("loggedIn", true);
       window.localStorage.setItem("authToken", res.token);
       window.localStorage.setItem("user", JSON.stringify(res));
@@ -56,8 +61,13 @@ const Login = () => {
           navigate("/dashboard");
         }, 1000);
       }
-    } else {
-      setError(res.msg);
+    setButtnLoading(false)
+
+    } catch(error)  {
+      console.log("colleds",error)
+      setError("invalid credentials");
+    setButtnLoading(false)
+
       setTimeout(() => {
         setError("");
       }, 1000);
@@ -131,10 +141,10 @@ const Login = () => {
                           </Label>
                           <div className="position-relative auth-pass-inputgroup mb-3">
                             <Input
-                              type="password"
                               className="form-control pe-5"
                               placeholder="Enter Password"
                               name="password"
+                              type={confrimPasswordShow ? "text" : "password"}
                               value={UserInfo.password}
                               onChange={(e) => {
                                 handleChange(e);
@@ -144,11 +154,16 @@ const Login = () => {
                               className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
                               type="button"
                               id="password-addon"
+                              onClick={() =>
+                                setConfrimPasswordShow(!confrimPasswordShow)
+                              }
                             >
                               <i className="ri-eye-fill align-middle"></i>
                             </button>
                           </div>
                         </div>
+
+                        
 
                         {/* <div className="form-check">
                           <Input
@@ -165,15 +180,36 @@ const Login = () => {
                           </Label>
                         </div> */}
 
-                        <div className="mt-4">
+                        
+
+                        {!buttnLoading ? (
+                         <div className="mt-4">
+                         <Button
+                           color="success"
+                           className="btn btn-success w-100"
+                           type="submit"
+                         >
+                           Sign In
+                         </Button>
+                       </div>
+                        ) : (
                           <Button
                             color="success"
-                            className="btn btn-success w-100"
-                            type="submit"
+                            className="btn-load  w-100"
+                            outline
+                            disabled
                           >
-                            Sign In
+                            <span className="d-flex align-items-center">
+                              <Spinner size="sm" className="flex-shrink-0">
+                                {" "}
+                                Loading...{" "}
+                              </Spinner>
+                              <span className="flex-grow-1 ms-2">
+                                Loading...
+                              </span>
+                            </span>
                           </Button>
-                        </div>
+                        )}
 
                         {/* <div className="mt-4 text-center">
                           <div className="signin-other-title">
