@@ -77,7 +77,7 @@ const ProductMaster = () => {
   useEffect(() => {
       fetchData();
       setProductData(allProductData)
-  }, []);
+  }, [getProducts,allProductData]);
 
   const handledeleteProduct = async () => {
     if (valuesForUpdate) {
