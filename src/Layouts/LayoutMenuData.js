@@ -287,7 +287,7 @@ const Navdata = () => {
           },
           parentId: "apps",
           stateVariables: isCRM,
-          childItems: [{ id: 1, label: "Content", link: "/contentmanage" }],
+          childItems: [{ id: 1, label: "Content", link: "/contentmanage" },{ id: 1, label: "Banner Master", link: "/banner-master" },{ id: 3, label: "Blogs Master", link: "/blogs-master" }],
         },
         {
           id: "NFTMarketplace",

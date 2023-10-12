@@ -94,18 +94,15 @@ import Coupons from "../pages/Coupon Management/Coupons";
 import AddCoupons from "../pages/Coupon Management/AddCoupons";
 import EditCoupons from "../pages/Coupon Management/EditCoupons";
 import AddUser from "../pages/Pages/Team/AddUser";
-
 import ProductMaster from "../pages/products/product";
+
 import AddProduct from "../pages/products/addProduct";
 
 import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
-
-
+import BannerMaster from "../pages/BannerMaster/bannerMaster.js"
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
-
-
 const authProtectedRoutes = [
   { path: "/dashboard", component: <DashboardEcommerce /> },
   // { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
@@ -129,6 +126,8 @@ const authProtectedRoutes = [
   { path: "/add-product", component: <AddProduct /> },
   { path: "/add-product/:id", component: <AddProduct /> },
 
+  //bannner master
+  { path: "/banner-master", component: <BannerMaster /> },
   
   // Content
   { path: "/contentmanage", component: <SignState><Content /></SignState> },
@@ -205,6 +204,7 @@ const authProtectedRoutes = [
 const publicRoutes = [
   // Authentication Page
   { path: "/logout", component: <SignState><Logout /></SignState> },
+  { path: "/login", component: <SignState><Login /></SignState> },
   { path: "/", component: <SignState><Login /></SignState> },
   { path: "/forgot-password", component: <SignState><ForgetPasswordPage /></SignState> },
   // { path: "/register", component: <Register /> },

@@ -19,6 +19,7 @@ import {
   getCategory,
   getSubCategory,
   getSubSubCategory,
+  getspecificproduct,
 } from "../../helpers/backend_helper";
 import {
   GET_GST,
@@ -32,8 +33,11 @@ import * as Yup from "yup";
 import ImageUpload from "./imageUpload";
 import ProducTags from "./producTags";
 import Filters from "./filters";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddProduct = () => {
+
+const navigate = useNavigate(); 
   const GstData = useSelector((state) => state.Product.gst);
   const DailyRateData = useSelector((state) => state.Product.DailyPrices);
   const categoryData = useSelector((state) => state.Product.category);
@@ -46,13 +50,15 @@ const AddProduct = () => {
   const [subCatDropbind, setSubCatDropbind] = useState([]);
   const [subSubCatDropbind, setSubSubCatDropbind] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedTags, setSelected] = useState([]);
-  const [selectedMulti2, setselectedMulti2] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedFilters, setselectedFilters] = useState([]);
   const [selectedItems, setselectedItems] = useState([]);
-
   const [selectedcolors, setSelectedcolors] = useState([]);
   const [selectedseasons, setSelectedseasons] = useState([]);
   const [selectedmaterials, setSelectedmaterials] = useState([]);
+  const [productForUpdate, setProductForUpdate] = useState([]);
+
+  const {id} = useParams();
 
   const config = useMemo(
     () => ({
@@ -73,7 +79,7 @@ const AddProduct = () => {
           data: res,
         },
       });
-
+  
       const res2 = await getSubCategory();
       dispatch({
         type: GET_SUB_CATEGORY,
@@ -82,7 +88,7 @@ const AddProduct = () => {
           data: res2,
         },
       });
-
+  
       setSubCatDropbind(res2);
       const res3 = await getSubSubCategory();
       dispatch({
@@ -92,9 +98,9 @@ const AddProduct = () => {
           data: res3,
         },
       });
-
+  
       setSubSubCatDropbind(res3);
-
+  
       const getDP = await getDailyPrice();
       dispatch({
         type: GET_DAILY_PRICE,
@@ -103,7 +109,7 @@ const AddProduct = () => {
           data: getDP.prices,
         },
       });
-
+  
       const gstRes = await getGst();
       dispatch({
         type: GET_GST,
@@ -132,16 +138,34 @@ const AddProduct = () => {
   };
 
   useEffect(() => {
+
     if (
       GstData.length === 0 ||
       DailyRateData.length === 0 ||
       categoryData.length === 0 ||
       subCategoryData.length === 0 ||
-      subSubCategoryData === 0
+      subSubCategoryData.length === 0 
     ) {
       fetchDropdownData();
     }
-  }, [formVAlues]);
+    if (id) {
+      getspecificproduct(id).then((pfu) => {
+        setFormVAlues(pfu.product);
+        console.log(pfu.product);
+
+setShowSilverGoldDropdown(pfu.product.calculationOnWeight)
+setSelectedImages(pfu.product.imageGallery)
+setSelectedTags(pfu.product.tags)
+setselectedFilters(pfu.product.filters)
+setSelectedcolors(pfu.product.color)
+setSelectedseasons(pfu.product.season)
+setSelectedmaterials(pfu.product.material)
+
+
+      });
+    }
+  }, [id]);
+  
 
   const productForm = useFormik({
     enableReinitialize: true,
@@ -156,15 +180,15 @@ const AddProduct = () => {
       isProductNew: (formVAlues && formVAlues.isProductNew) || true,
       isActive: (formVAlues && formVAlues.isActive) || true,
       description: (formVAlues && formVAlues.description) || "",
-      original: (formVAlues && formVAlues.prices.original) || "",
-      discounted: (formVAlues && formVAlues.prices.discounted) || "",
+      original: (formVAlues && formVAlues.prices && formVAlues.prices.original) || "",
+      discounted: (formVAlues && formVAlues.prices && formVAlues.prices.discounted) || "",
       calculationOnWeight: (formVAlues && formVAlues.calculationOnWeight) || "",
       weightType: (formVAlues && formVAlues.weightType) || null,
       weight: (formVAlues && formVAlues.weight) || "",
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
+      stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
 
-      stock: (formVAlues && formVAlues.stock.quantity) || "",
       sku: (formVAlues && formVAlues.sku) || "",
       gst: (formVAlues && formVAlues.gst) || "",
     },
@@ -218,6 +242,7 @@ const AddProduct = () => {
           console.log(values);
           const addedProduct = await addProduct(formData);
           // setFormVAlues(addedProduct.newProduct);
+          navigate("/allproducts")
           setSubmitting(false);
         }
         console.log(values);
@@ -323,7 +348,7 @@ const AddProduct = () => {
                   name="subSubCategory"
                   aria-label="Category"
                   onBlur={productForm.handleBlur}
-                  value={productForm.values.subSubCategory || null}
+                  value={productForm.values.subSubCategory || ""}
                   onChange={(e) => {
                     productForm.handleChange(e);
                   }}
@@ -781,7 +806,7 @@ const AddProduct = () => {
 
           <ProducTags
             data={selectedTags}
-            sendTagsToParent={setSelected}
+            sendTagsToParent={setSelectedTags}
           ></ProducTags>
 
           <Filters
@@ -791,9 +816,9 @@ const AddProduct = () => {
             selectedseasons={selectedseasons}
             selectedmaterials={selectedmaterials}
             setSelectedmaterials={setSelectedmaterials}
-            selectedMulti2={selectedMulti2}
+            selectedFilters={selectedFilters}
             selectedItems={selectedItems}
-            setselectedMulti2={setselectedMulti2}
+            setselectedFilters={setselectedFilters}
             setselectedItems={setselectedItems}
           ></Filters>
 

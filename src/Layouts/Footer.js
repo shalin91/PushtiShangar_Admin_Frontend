@@ -8,11 +8,11 @@ const Footer = () => {
                 <Container fluid>
                     <Row>
                         <Col sm={6}>
-                            {new Date().getFullYear()} © Shalin.
+                            {new Date().getFullYear()} © pushtiShangar.
                         </Col>
                         <Col sm={6}>
                             <div className="text-sm-end d-none d-sm-block">
-                                Design & Develop by Shalin
+                                Design & Develop by Barodaweb
                             </div>
                         </Col>
                     </Row>
