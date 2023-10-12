@@ -82,8 +82,9 @@ const ProductMaster = () => {
 
 
   const handledeleteProduct = async () => {
-    if (valuesForUpdate) {
+    if (selectedForDelete) {
       await deleteProduct(selectedForDelete);
+      console.log(selectedForDelete)
       fetchData();
       setDeleteModal(false);
     }

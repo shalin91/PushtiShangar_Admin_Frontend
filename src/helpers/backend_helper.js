@@ -4,8 +4,8 @@ import * as url from "./url_helper";
 
 const api = new APIClient();
 
-const hostedUrl = `${process.env.REACT_APP_BASE_URL}`;
-
+// const hostedUrl = `${process.env.REACT_APP_BASE_URL}`;
+const hostedUrl="http://localhost:5000"
 
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
@@ -101,6 +101,9 @@ export const updateProduct = async (data, id) =>
   await api.create(`${hostedUrl}/product/updateproduct/${id}`, data);
 export const deleteProduct = async (id) =>
   await api.create(`${hostedUrl}/product/deleteproduct/${id}`);
+  export const getspecificproduct = async (id) =>
+  await api.create(`${hostedUrl}/product/getspecificproduct/${id}`);
+
 
 export const getColor = async () =>
   await api.create(hostedUrl+"/color/getcolors");

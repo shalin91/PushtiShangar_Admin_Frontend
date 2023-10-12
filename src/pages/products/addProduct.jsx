@@ -50,10 +50,9 @@ const navigate = useNavigate();
   const [subCatDropbind, setSubCatDropbind] = useState([]);
   const [subSubCatDropbind, setSubSubCatDropbind] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedTags, setSelected] = useState([]);
-  const [selectedMulti2, setselectedMulti2] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedFilters, setselectedFilters] = useState([]);
   const [selectedItems, setselectedItems] = useState([]);
-
   const [selectedcolors, setSelectedcolors] = useState([]);
   const [selectedseasons, setSelectedseasons] = useState([]);
   const [selectedmaterials, setSelectedmaterials] = useState([]);
@@ -80,7 +79,7 @@ const navigate = useNavigate();
           data: res,
         },
       });
-
+  
       const res2 = await getSubCategory();
       dispatch({
         type: GET_SUB_CATEGORY,
@@ -89,7 +88,7 @@ const navigate = useNavigate();
           data: res2,
         },
       });
-
+  
       setSubCatDropbind(res2);
       const res3 = await getSubSubCategory();
       dispatch({
@@ -99,9 +98,9 @@ const navigate = useNavigate();
           data: res3,
         },
       });
-
+  
       setSubSubCatDropbind(res3);
-
+  
       const getDP = await getDailyPrice();
       dispatch({
         type: GET_DAILY_PRICE,
@@ -110,7 +109,7 @@ const navigate = useNavigate();
           data: getDP.prices,
         },
       });
-
+  
       const gstRes = await getGst();
       dispatch({
         type: GET_GST,
@@ -138,22 +137,35 @@ const navigate = useNavigate();
     setSubSubCatDropbind(data);
   };
 
-  useEffect(async () => {
-    console.log(id)
+  useEffect(() => {
+
     if (
       GstData.length === 0 ||
       DailyRateData.length === 0 ||
       categoryData.length === 0 ||
       subCategoryData.length === 0 ||
-      subSubCategoryData === 0
+      subSubCategoryData.length === 0 
     ) {
       fetchDropdownData();
     }
+    if (id) {
+      getspecificproduct(id).then((pfu) => {
+        setFormVAlues(pfu.product);
+        console.log(pfu.product);
 
-    const pfu = await getspecificproduct(id)
-    // setFormVAlues(pfu.product)
-    console.log(formVAlues)
-  }, [formVAlues]);
+setShowSilverGoldDropdown(pfu.product.calculationOnWeight)
+setSelectedImages(pfu.product.imageGallery)
+setSelectedTags(pfu.product.tags)
+setselectedFilters(pfu.product.filters)
+setSelectedcolors(pfu.product.color)
+setSelectedseasons(pfu.product.season)
+setSelectedmaterials(pfu.product.material)
+
+
+      });
+    }
+  }, [id]);
+  
 
   const productForm = useFormik({
     enableReinitialize: true,
@@ -794,7 +806,7 @@ const navigate = useNavigate();
 
           <ProducTags
             data={selectedTags}
-            sendTagsToParent={setSelected}
+            sendTagsToParent={setSelectedTags}
           ></ProducTags>
 
           <Filters
@@ -804,9 +816,9 @@ const navigate = useNavigate();
             selectedseasons={selectedseasons}
             selectedmaterials={selectedmaterials}
             setSelectedmaterials={setSelectedmaterials}
-            selectedMulti2={selectedMulti2}
+            selectedFilters={selectedFilters}
             selectedItems={selectedItems}
-            setselectedMulti2={setselectedMulti2}
+            setselectedFilters={setselectedFilters}
             setselectedItems={setselectedItems}
           ></Filters>
 

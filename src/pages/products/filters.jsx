@@ -77,7 +77,7 @@ const Filters = (props) => {
             isMulti={true}
             isClearable={true}
             onChange={(selectedMulti2) => {
-              props.setselectedMulti2(selectedMulti2);
+              props.setselectedFilters(selectedMulti2);
               props.setselectedItems(selectedMulti2.map((i) => i.value));
             }}
             options={[
