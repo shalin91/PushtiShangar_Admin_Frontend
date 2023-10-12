@@ -3,8 +3,8 @@ import SignContext from "../Context/SignContext";
 import React from "react";
 
 export const SignState = (props) => {
-  const url = `http://localhost:5000`;
-  // const url = `${process.env.REACT_APP_BASE_URL}`;
+  // const url = `http://localhost:5000`;
+  const url = `${process.env.REACT_APP_BASE_URL}`;
 
   //Register User
   const registerUser = async (UserInfo) => {

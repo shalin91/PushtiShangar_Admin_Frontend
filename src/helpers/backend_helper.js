@@ -4,8 +4,8 @@ import * as url from "./url_helper";
 
 const api = new APIClient();
 
-// const hostedUrl = `${process.env.REACT_APP_BASE_URL}`;
-const hostedUrl="http://localhost:5000"
+const hostedUrl = `${process.env.REACT_APP_BASE_URL}`;
+//const hostedUrl=hostedUrl+""
 
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
@@ -59,10 +59,10 @@ export const postJwtRegister = (url, data) => {
 
 
 //Banner
-export const getBanner = () => api.create("http://localhost:5000/banner/get-banner");
-export const addNewBanner = (data) => api.create("http://localhost:5000/banner/add-new-banner",data);
-export const updateBanner = async(data,id) => await api.create("http://localhost:5000/banner/update-banner"+id, data);
-export const deleteBanner = (id) => api.create("http://localhost:5000/banner/delete-banner/"+id);
+export const getBanner = () => api.create(hostedUrl+"/banner/get-banner");
+export const addNewBanner = (data) => api.create(hostedUrl+"/banner/add-new-banner",data);
+export const updateBanner = async(data,id) => await api.create(hostedUrl+"/banner/update-banner"+id, data);
+export const deleteBanner = (id) => api.create(hostedUrl+"/banner/delete-banner/"+id);
 
 
 

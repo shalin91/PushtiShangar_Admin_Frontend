@@ -19,6 +19,7 @@ const ProductMaster = () => {
   const navigate = useNavigate();
   const allProductData = useSelector((state) => state.Product.products);
   const url = `${process.env.REACT_APP_BASE_URL}`;
+  // const url = `http://localhost:5000`;
   const [IsformActive, setIsformActive] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [productData, setProductData] = useState([]);
