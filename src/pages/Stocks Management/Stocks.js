@@ -1,15 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+  PaginationLink,
+  PaginationItem, } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
 import AddStocks from "./AddStocks";
+
+const ITEMS_PER_PAGE = 10;
+
 
 function Stocks() {
   const { GetStocks , DeleteStocks , UpdateStocks  } = useContext(SignContext);
   const [ContentData, setContentData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
@@ -56,6 +63,12 @@ function Stocks() {
   //     date: editedStock.date,
   //   });
   // };
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = ContentData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
 
@@ -118,7 +131,7 @@ function Stocks() {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {ContentData.map((content , key) => (
+                          {currentItems.map((content , key) => (
                             <tr key={content.id}>
                               
 
@@ -173,6 +186,43 @@ function Stocks() {
                       </table>
                     </div>
                   </div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(ContentData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(ContentData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                 </CardBody>
               </Card>
             </Col>

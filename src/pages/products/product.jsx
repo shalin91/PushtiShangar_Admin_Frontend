@@ -199,9 +199,9 @@ const ProductMaster = () => {
                             </td>
                             <td>{item.category}</td>
                             <td>{item.stock ? item.stock.quantity : null}</td>
-                            <td>{item.prices ? item.prices.original : null}</td>
+                            <td>{item.prices.calculatedPrice ? item.prices.calculatedPrice : "NA"}</td>
                             <td>
-                              {item.prices ? item.prices.discounted : null}
+                              {item.prices.discounted ? item.prices.discounted : "NA"}
                             </td>
                             <td>
                               <div className="hstack gap-2">

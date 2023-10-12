@@ -95,11 +95,12 @@ import AddCoupons from "../pages/Coupon Management/AddCoupons";
 import EditCoupons from "../pages/Coupon Management/EditCoupons";
 import AddUser from "../pages/Pages/Team/AddUser";
 import ProductMaster from "../pages/products/product";
+
+import AddProduct from "../pages/products/addProduct";
+
 import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
-// import ProductForm from "../pages/products/productForm";
-import AddProduct  from "../pages/products/addProduct";
-import BannerMaster from "../pages/BannerMaster/bannerMaster";
+
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 const authProtectedRoutes = [
@@ -107,7 +108,7 @@ const authProtectedRoutes = [
   // { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
 
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
-  { path: "/apps-ecommerce-order-details", component: <EcommerceOrderDetail /> },
+  // { path: "/apps-ecommerce-order-details", component: <EcommerceOrderDetail /> },
   { path: "/apps-ecommerce-customers", component: <EcommerceCustomers /> },
   { path: "/customers", component: <SignState><NewCustomer/></SignState> },
   { path: "/apps-ecommerce-cart", component: <EcommerceCart /> },
@@ -121,6 +122,7 @@ const authProtectedRoutes = [
 
   // product master
   { path: "/allproducts", component: <ProductMaster /> },
+  // { path: "/product-form", component: <ProductForm /> },
   { path: "/add-product", component: <AddProduct /> },
   { path: "/add-product/:id", component: <AddProduct /> },
 
@@ -153,6 +155,7 @@ const authProtectedRoutes = [
 
   // Orders
   { path: "/orders", component: <SignState><AllOrders/></SignState> },
+  { path: "/vieworder/:id", component: <SignState><EcommerceOrderDetail/></SignState> },
 
   //Daily Price 
   { path: "/dailyrates", component: <SignState><DailyPriceRates/></SignState> },
