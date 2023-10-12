@@ -64,7 +64,7 @@ const Login = () => {
     }
   };
 
-  document.title = "SignIn | Dj";
+  document.title = "SignIn | Barodaweb";
   return (
     <React.Fragment>
       <ParticlesAuth>

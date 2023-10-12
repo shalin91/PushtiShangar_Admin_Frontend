@@ -118,7 +118,6 @@ const AllOrders = () => {
 
   useEffect(() => {
     GetOrders();
-
   }, []);
 
   const statusColors = {

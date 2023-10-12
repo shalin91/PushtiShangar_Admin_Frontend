@@ -14,20 +14,20 @@ import {
 } from "reactstrap";
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
 
 // Formik Validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+// import * as Yup from "yup";
+// import { useFormik } from "formik";
 
 // action
-import { userForgetPassword } from "../../store/actions";
+// import { userForgetPassword } from "../../store/actions";
 
 // import images
 // import profile from "../../assets/images/bg.png";
-import logoLight from "../../assets/images/logo-light.png";
+// import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
 import withRouter from "../../Components/Common/withRouter";
@@ -50,9 +50,6 @@ const ForgetPasswordPage = (props) => {
     const res = await forgotPassword(UserInfo);
     if (res.success) {
       setSuccess(res.msg);
-      setTimeout(() => {
-        setSuccess("");
-      }, 1000);
     } else {
       setError(res.msg);
       setTimeout(() => {
@@ -60,12 +57,6 @@ const ForgetPasswordPage = (props) => {
       }, 1000);
     }
   };
-
-
-
-  
-
-  
 
   document.title = "Reset Password | By Shalin";
   return (
@@ -98,20 +89,20 @@ const ForgetPasswordPage = (props) => {
                   <div className="text-center mt-2">
                     <h5 className="text-primary">Forgot Password?</h5>
                     <p className="text-muted">Reset password</p>
-
                   </div>
 
                   <Alert
-                    className="alert-borderless alert-warning text-center mb-2 mx-2"
+                    className={`alert-borderless ${
+                      Success ? "alert-success" : "alert-warning"
+                    } text-center mb-2 mx-2`}
                     role="alert"
                   >
-                    Enter your email and instructions will be sent to you!
+                    {Success
+                      ? Success
+                      : "Enter your email and instructions will be sent to you!"}
                   </Alert>
                   <div className="p-2">
-                   
-                   
-                    <Form 
-                    >
+                    <Form onSubmit={handleSubmit}>
                       <div className="mb-4">
                         <Label className="form-label">Email</Label>
                         <Input
@@ -119,9 +110,9 @@ const ForgetPasswordPage = (props) => {
                           placeholder="Enter email"
                           type="email"
                           name="email"
-
+                          value={UserInfo.email}
+                          onChange={handleChange}
                         />
-                
                       </div>
 
                       <div className="text-center mt-4">
