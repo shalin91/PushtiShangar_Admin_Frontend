@@ -65,19 +65,19 @@ const ProfileDropdown = () => {
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <h6 className="dropdown-header">Welcome {UserInfo.name}!</h6>
-          <Link  to={`/profile/${UserInfo._id}`}>
+          <Link  to="/pages-profile">
           <DropdownItem >
             <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
             <span className="align-middle">Profile</span>
           </DropdownItem>
           </Link>
           <div className="dropdown-divider"></div>
-          <DropdownItem>
+          {/* <DropdownItem>
             <i className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i>{" "}
             <span className="align-middle">
               Balance : <b>₹5971.67</b>
             </span>
-          </DropdownItem>
+          </DropdownItem> */}
           <DropdownItem href="/logout">
             <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
             <span className="align-middle" onClick={handleLogout} data-key="t-logout">

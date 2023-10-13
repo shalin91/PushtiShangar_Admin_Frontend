@@ -36,7 +36,7 @@ const EcommerceOrderProduct = (props) => {
             </div>
           </div>
         </td>
-        <td>{props.product.product.prices.discounted}</td>
+        <td>{props.product.product.prices.discounted?props.product.product.prices.discounted : props.product.product.prices.calculatedPrice}</td>
         <td>{props.product.quantity}</td>
         <td>
         {props.product.product.gst} %
