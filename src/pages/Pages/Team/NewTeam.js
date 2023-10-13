@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import SignContext from "../../../contextAPI/Context/SignContext";
+import FeatherIcon from "feather-icons-react";
+
 import {
   CardBody,
   CardHeader,
-  Col,
+  Col,Card,
   Container,
   Input,
   Label,
@@ -31,6 +33,7 @@ const NewTeam = () => {
     GetRoles,
   } = useContext(SignContext);
   const [usersData, setUsersData] = useState([]);
+  const [allusersData, setAllUsersData] = useState([]);
   const [editUserInfo, setEditUserInfo] = useState({
     name: "",
     email: "",
@@ -85,12 +88,37 @@ const NewTeam = () => {
       id: index + 1,
     }));
     setUsersData(transformedData);
+    setAllUsersData(transformedData);
   };
 
   const getRoles = async () => {
     const res = await GetRoles();
     console.log(res);
     setRoles(res);
+  };
+
+
+  const searchList = (e) => {
+    let inputVal = e.toLowerCase();
+
+    function filterItems(arr, query) {
+      return arr.filter(function (el) {
+        return (
+          el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+          el.email.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        );
+      });
+    }
+
+    let filterData = filterItems(allusersData, inputVal);
+    setUsersData(filterData);
+    if (filterData.length === 0) {
+      document.getElementById("noresult").style.display = "block";
+      document.getElementById("todo-task").style.display = "none";
+    } else {
+      document.getElementById("noresult").style.display = "none";
+      document.getElementById("todo-task").style.display = "block";
+    }
   };
 
   const getspecificUser = async (id) => {
@@ -186,15 +214,15 @@ const NewTeam = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Users" pageTitle="Profile" />
-
+          <BreadCrumb  parent="Profile" child="Team" grandChild ="All users" title pageTitle />
+<Card>
           <Row>
             <Col lg={12}>
               <CardHeader>
                 <h4 className="card-title mb-0">Users</h4>
               </CardHeader>
               <CardBody>
-                <div id="customerList">
+                <div id="">
                   <Row className="g-4 mb-3">
                     <Col className="col-sm">
                       <div className="d-flex justify-content-sm-end">
@@ -203,6 +231,7 @@ const NewTeam = () => {
                             type="text"
                             className="form-control search"
                             placeholder="Search..."
+                            onKeyUp={(e) => searchList(e.target.value)}
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -221,7 +250,7 @@ const NewTeam = () => {
                       </div>
                     </Col>
                   </Row>
-                  <div className="table-responsive table-card mt-1 mb-3">
+                  <div id="todo-task" className="table-responsive table-card mt-1 mb-3">
                     <table
                       className="table align-middle table-nowrap"
                       id="customerTable"
@@ -323,9 +352,20 @@ const NewTeam = () => {
                     </table>
                   </div>
                 </div>
+                <div
+                className="py-4 mt-4 text-center"
+                id="noresult"
+                style={{ display: "none" }}
+              >
+                <h1>
+                  <FeatherIcon icon="search" />
+                </h1>
+                <h5 className="mt-4">Sorry! No Result Found</h5>
+              </div>
               </CardBody>
             </Col>
           </Row>
+          </Card>
         </Container>
       </div>
 

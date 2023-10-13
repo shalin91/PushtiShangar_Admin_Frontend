@@ -340,11 +340,12 @@ const Settings = () => {
                           <Col lg={12}>
                             <div className="hstack gap-2 justify-content-end">
                               <button type="submit" className="btn btn-primary">
-                                Updates
+                                Update
                               </button>
                               <button
                                 type="button"
                                 className="btn btn-soft-success"
+                                onClick={()=>{navigate("/pages-profile");}}
                               >
                                 Cancel
                               </button>
@@ -429,7 +430,7 @@ const Settings = () => {
                           <Col lg={12}>
                             <div className="mb-3">
                               <Link
-                                to="#"
+                                to="/forgot-password"
                                 className="link-primary text-decoration-underline"
                               >
                                 Forgot Password ?
