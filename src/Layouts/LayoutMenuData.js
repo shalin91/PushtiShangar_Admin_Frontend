@@ -545,12 +545,12 @@ const Navdata = () => {
       },
       stateVariables: isAuth,
       subItems: [
-        {
-          id: "1",
-          label: "View Profile",
-          link: "/pages-profile",
-          parentId: "pages",
-        },
+        // {
+        //   id: "1",
+        //   label: "View Profile",
+        //   link: "/pages-profile",
+        //   parentId: "pages",
+        // },
         { id: "newteam", label: "Team", link: "/newteam", parentId: "team" },
         // {
         //     id: "signUp",

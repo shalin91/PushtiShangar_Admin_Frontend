@@ -75,7 +75,7 @@ const SimplePage = () => {
     getloggedinUser(authToken);
   }, []);
 
-  document.title = "Profile | by Shalin";
+  document.title = "Profile | by Barodaweb";
 
   return (
     <React.Fragment>
@@ -141,48 +141,7 @@ const SimplePage = () => {
                         </span>
                       </NavLink>
                     </NavItem>
-                    {/* <NavItem>
-                      <NavLink
-                        href="#activities"
-                        className={classnames({ active: activeTab === "2" })}
-                        onClick={() => {
-                          toggleTab("2");
-                        }}
-                      >
-                        <i className="ri-list-unordered d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Activities
-                        </span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        href="#projects"
-                        className={classnames({ active: activeTab === "3" })}
-                        onClick={() => {
-                          toggleTab("3");
-                        }}
-                      >
-                        <i className="ri-price-tag-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Projects
-                        </span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        href="#documents"
-                        className={classnames({ active: activeTab === "4" })}
-                        onClick={() => {
-                          toggleTab("4");
-                        }}
-                      >
-                        <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Documents
-                        </span>
-                      </NavLink>
-                    </NavItem> */}
+                    
                   </Nav>
                   <div className="flex-shrink-0">
                     <Link
