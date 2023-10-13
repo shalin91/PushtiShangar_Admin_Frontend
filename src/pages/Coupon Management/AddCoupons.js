@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import UiContent from "../../Components/Common/UiContent";
-import { Card, Col, Container, Form, Input, Label, Row } from "reactstrap";
+import { Card, Col, Container,CardHeader, Form, Input, Label, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as Yup from "yup";
-import { toast , ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
@@ -57,18 +57,16 @@ const AddCoupons = () => {
   // };
 
   const handleSavedCoupon = async (Values) => {
-
     const res = await CreateCoupon(Values);
     console.log(res);
     if (res.success) {
       toast.success("Coupon Added Successfully", { autoClose: 3000 });
       console.log("Coupon added successfully");
-      navigate("/coupons")
-
+      navigate("/coupons");
     } else {
       // Handle error
       console.error("Error adding content:", res.msg);
-      toast.error("Coupon add failed" , { autoClose: 3000 })
+      toast.error("Coupon add failed", { autoClose: 3000 });
     }
   };
 
@@ -77,10 +75,10 @@ const AddCoupons = () => {
   return (
     <>
       <UiContent />
-      <ToastContainer closeButton={false}/>
+      <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Add Coupon" pageTitle="Coupon" />
+          <BreadCrumb parent="setup" child="Coupons" grandChild="Add Coupons" />
           <Row>
             <Col lg={12}>
               <Formik
@@ -111,10 +109,13 @@ const AddCoupons = () => {
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <Card>
+                      <CardHeader>
+                        <h4 className="card-title mb-0">Add Coupons</h4>
+                      </CardHeader>
                       <div className="card-body">
                         <div className="live-preview">
                           <Row className="align-items-center g-3">
-                            <Col lg={6}>
+                            <Col lg={4}>
                               <Label className="form-label" htmlFor="category">
                                 Coupon Name
                               </Label>
@@ -131,7 +132,7 @@ const AddCoupons = () => {
                                 {errors.name && touched.name && errors.name}
                               </p>
                             </Col>
-                            <Col lg={6}>
+                            <Col lg={2}>
                               <Label className="form-label" htmlFor="category">
                                 Coupon Type
                               </Label>
@@ -150,33 +151,27 @@ const AddCoupons = () => {
                                 {errors.type && touched.type && errors.type}
                               </p>
                             </Col>
-                          </Row>
-                          <Row className="align-items-center g-3">
-                            <Col lg={6}>
-                              <div className="mt-3">
-                                <Label
-                                  className="form-label"
-                                  htmlFor="category"
-                                >
-                                  Discount
-                                </Label>
-                                <Input
-                                  className="form-control"
-                                  type="text"
-                                  name="discount"
-                                  placeholder="add Discount"
-                                  value={values.discount}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                />
-                                <p className="error text-danger">
-                                  {errors.discount &&
-                                    touched.discount &&
-                                    errors.discount}
-                                </p>
-                              </div>
+
+                            <Col lg={2}>
+                              <Label className="form-label" htmlFor="category">
+                                Discount
+                              </Label>
+                              <Input
+                                className="form-control"
+                                type="number"
+                                name="discount"
+                                placeholder="add Discount"
+                                value={values.discount}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                              <p className="error text-danger">
+                                {errors.discount &&
+                                  touched.discount &&
+                                  errors.discount}
+                              </p>
                             </Col>
-                            <Col lg={6}>
+                            <Col lg={2}>
                               <Label className="form-label" htmlFor="category">
                                 Start Date
                               </Label>
@@ -192,7 +187,7 @@ const AddCoupons = () => {
                                 {errors.start && touched.start && errors.start}
                               </p>
                             </Col>
-                            <Col lg={6}>
+                            <Col lg={2}>
                               <Label
                                 className="form-label g-2"
                                 htmlFor="category"
@@ -214,31 +209,55 @@ const AddCoupons = () => {
                               </p>
                             </Col>
 
-                            <div className="mt-3">
-                              <Input
-                                type="checkbox"
-                                id="isActive"
-                                label="Is Active"
-                                name="active"
-                                checked={values.active}
-                                onChange={handleChange}
-                                // onBlur={handleBlur}
-                              />
-                              <label className="me-2">Is Active</label>
-                            </div>
+                            <div className="text-end mb-3"></div>
+                          </Row>
+
+                          <Row className="align-items-last justify-content-end">
+                            <Col lg={1}>
+                              <div className="mt-2">
+                                <Input
+                               
+                                  type="checkbox"
+                                  id="isActive"
+                                  label="Is Active"
+                                  name="active"
+                                  checked={values.active}
+                                  onChange={handleChange}
+                                  // onBlur={handleBlur}
+                                />
+
+                                <Label
+                                  className="form-label g-2"
+                                  htmlFor="active"
+                                >
+                                  Is Active
+                                </Label>
+                              </div>
+                            </Col>
+                            
+                            <Col lg={1}>
+                            <button
+                                type="button"
+                                className="btn btn-soft-danger"
+                                onClick={()=>{navigate("/coupons");}}
+                              >
+                                Cancel
+                              </button>
+                            </Col>
+
+                              <Col lg={1}>
+                              <button
+                                type="submit"
+                                className="btn btn-success w-sm"
+                                //   onClick={togglesuccessmodal}
+                              >
+                                Submit
+                              </button>
+                            </Col>
                           </Row>
                         </div>
                       </div>
                     </Card>
-                    <div className="text-end mb-3">
-                      <button
-                        type="submit"
-                        className="btn btn-success w-sm"
-                        //   onClick={togglesuccessmodal}
-                      >
-                        Submit
-                      </button>
-                    </div>
                   </Form>
                 )}
               </Formik>

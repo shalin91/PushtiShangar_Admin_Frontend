@@ -23,6 +23,7 @@ const ITEMS_PER_PAGE = 10;
 function Stocks() {
   const { GetStocks, DeleteStocks } = useContext(SignContext);
   const [ContentData, setContentData] = useState([]);
+  const [allContentData, setAllContentData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
   const [UpdatedStocks, setUpdatedStocks] = useState(null);
@@ -41,6 +42,31 @@ function Stocks() {
       id: index + 1,
     }));
     setContentData(transformedData);
+    setAllContentData(transformedData)
+  };
+
+
+
+  const searchList = (e) => {
+    let inputVal = e.toLowerCase();
+
+    function filterItems(arr, query) {
+      return arr.filter(function (el) {
+        return (
+          el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        );
+      });
+    }
+
+    let filterData = filterItems(allContentData, inputVal);
+    setContentData(filterData);
+    if (filterData.length === 0) {
+      document.getElementById("noresult").style.display = "block";
+      document.getElementById("todo-task").style.display = "none";
+    } else {
+      document.getElementById("noresult").style.display = "none";
+      document.getElementById("todo-task").style.display = "block";
+    }
   };
 
   const handleDeleteStocks = async (id) => {
@@ -84,7 +110,7 @@ function Stocks() {
     Getstocks();
   }, []);
 
-  document.title = "Stocks | By Shalin";
+  document.title = "Stocks | pushti shangar";
   return (
     <>
       <div className="page-content">
@@ -101,11 +127,13 @@ function Stocks() {
                         type="text"
                         className="form-control search"
                         placeholder="Search..."
+                        onKeyUp={(e) => searchList(e.target.value)}
                       />
                       <i className="ri-search-line search-icon"></i>
                     </div>
                   </div>
                 </Col>
+                
               </Row>
             </CardHeader>
             <CardBody>
@@ -122,6 +150,7 @@ function Stocks() {
                         <th className="name">Product-Name</th>
                         <th className="name">Quantity</th>
                         <th className="name">Price</th>
+                        <th className="name">Date</th>
                         <th className="action">Action</th>
                       </tr>
                     </thead>
@@ -138,6 +167,16 @@ function Stocks() {
                           <td className="product-name">
                             {content.currentPricePerUnit}
                           </td>
+                          <td className="product-name">
+                          {new Date(content.date).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  }
+                                )}</td>
+
                           {/* <td className="product-name">
                                 {content.contentType}
                               </td> */}
