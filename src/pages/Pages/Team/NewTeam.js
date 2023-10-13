@@ -20,6 +20,7 @@ import { Link, useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { color } from "echarts";
 
 const NewTeam = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -419,7 +420,7 @@ const NewTeam = () => {
               <Form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <Label for="profile-photo" className="form-label">
-                    Profile Photo
+                    Profile Photo*
                   </Label>
                   <input
                     type="file"
@@ -433,7 +434,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     // value={values.photo}
                   />
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.photo && touched.photo && errors.photo}
                   </p>
                 </div>
@@ -464,7 +465,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.name}
                   />
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.name && touched.name && errors.name}
                   </p>
                 </div>
@@ -482,7 +483,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.email}
                   />
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.email && touched.email && errors.email}
                   </p>
                 </div>
@@ -499,7 +500,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.password}
                   />
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.password && touched.password && errors.password}
                   </p>
                 </div>
@@ -516,7 +517,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.confirmPassword}
                   />
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.confirmPassword &&
                       touched.confirmPassword &&
                       errors.confirmPassword}
@@ -542,7 +543,7 @@ const NewTeam = () => {
                       </option>
                     ))}
                   </Field>
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.roles && touched.roles && errors.roles}
                   </p>
                 </div>
@@ -569,7 +570,7 @@ const NewTeam = () => {
                       </Label>
                     </div>
                   </div>
-                  <p className="error">
+                  <p className="error" style={{color:"red"}}>
                     {errors.active && touched.active && errors.active}
                   </p>
                 </div>
@@ -620,7 +621,7 @@ const NewTeam = () => {
           <form onSubmit={(e) => handleUpdate(e)}>
             <div className="mb-3">
               <Label for="profile-photo" className="form-label">
-                Profile Photo
+                Profile Photo*
               </Label>
               <input
                 type="file"

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import UiContent from "../../Components/Common/UiContent";
-import { Card, Col, Container, Form, Label, Row } from "reactstrap";
+import { Card, Col, Container, CardHeader, Form, Label, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import SignContext from "../../contextAPI/Context/SignContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -76,14 +76,21 @@ const DailyPriceRates = () => {
       <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Updates Rates" pageTitle="Rates" />
+          <BreadCrumb
+            parent="setup"
+            child="Inventory"
+            grandChild="Daily Rates"
+          />
           <Row>
             <Col lg={12}>
               <Form onSubmit={handleSubmit}>
                 <Card>
+                  <CardHeader>
+                    <h4 className="card-title mb-0">Update Rates</h4>
+                  </CardHeader>
                   <div className="card-body">
                     <div className="live-preview">
-                      <Row className="align-items-center g-3">
+                      <Row className="g-3 justify-content-center">
                         <Col lg={4}>
                           <div className="mb-3">
                             <Label htmlFor="ProductType">Product Type:</Label>
@@ -123,23 +130,23 @@ const DailyPriceRates = () => {
                               name="price"
                               value={formData.price}
                               onChange={handleChange}
-                              
                             />
+                          </div>
+
+                          <div className="text-center mb-3">
+                            <button
+                              type="submit"
+                              className="btn btn-success w-sm"
+                              //   onClick={togglesuccessmodal}
+                            >
+                              Update
+                            </button>
                           </div>
                         </Col>
                       </Row>
                     </div>
                   </div>
                 </Card>
-                <div className="text-center mb-3">
-                  <button
-                    type="submit"
-                    className="btn btn-success w-sm"
-                    //   onClick={togglesuccessmodal}
-                  >
-                    Submit
-                  </button>
-                </div>
               </Form>
             </Col>
           </Row>

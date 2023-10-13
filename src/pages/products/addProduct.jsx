@@ -187,7 +187,7 @@ setSelectedmaterials(pfu.product.material)
       weight: (formVAlues && formVAlues.weight) || "",
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
-      stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
+      // stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
 
       sku: (formVAlues && formVAlues.sku) || "",
       gst: (formVAlues && formVAlues.gst) || "",
@@ -223,7 +223,7 @@ setSelectedmaterials(pfu.product.material)
       formData.append("isProductPopular", values.isProductPopular);
       formData.append("description", values.description);
 
-      formData.append("stock", values.stock);
+      // formData.append("stock", values.stock);
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("tags", selectedTags);
@@ -673,7 +673,7 @@ setSelectedmaterials(pfu.product.material)
 
           <Row className="align-items-center g-1 mx-2">
             {/* Gst */}
-            <Col sm={4}>
+            <Col sm={6}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="gst">
                   gst
@@ -706,7 +706,7 @@ setSelectedmaterials(pfu.product.material)
               </div>
             </Col>
             {/* Stocks */}
-            <Col sm={4}>
+            {/* <Col sm={4}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="product-orders-input">
                   Stock
@@ -734,10 +734,10 @@ setSelectedmaterials(pfu.product.material)
                   ) : null}
                 </div>
               </div>
-            </Col>
+            </Col> */}
 
             {/* SKU */}
-            <Col sm={4}>
+            <Col sm={6}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="product-orders-input">
                   SKU

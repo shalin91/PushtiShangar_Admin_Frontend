@@ -8,7 +8,7 @@ const BreadCrumb = ({ parent, child,grandChild }) => {
             <Row>
                 <Col xs={12}>
                     <div className="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 className="mb-sm-0">{grandChild}</h4>
+                        <h4 className="mb-sm-0">{parent}</h4>
 
                         <div className="page-title-right">
                             <ol className="breadcrumb m-0">

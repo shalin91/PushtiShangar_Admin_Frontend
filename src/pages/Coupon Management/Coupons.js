@@ -1,21 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
+import FeatherIcon from "feather-icons-react";
 import { Link } from "react-router-dom";
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+  Pagination,
   PaginationLink,
-  PaginationItem, } from "reactstrap";
+  PaginationItem,
+} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 
 const ITEMS_PER_PAGE = 10;
 
-
 const Coupons = () => {
-  const { GetCoupons , DeleteCoupon } = useContext(SignContext);
+  const { GetCoupons, DeleteCoupon } = useContext(SignContext);
   const [CouponData, setCouponData] = useState([]);
+  const [allCouponData, setAllCouponData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
@@ -23,13 +34,31 @@ const Coupons = () => {
 
   const Getcoupons = async () => {
     const res = await GetCoupons();
-    console.log(res);
+   
+    setCouponData(res.coupons);
+    setAllCouponData(res.coupons)
+  };
 
-    const transformedData = res.coupons.map((coupons, index) => ({
-      ...coupons,
-      id: index + 1,
-    }));
-    setCouponData(transformedData);
+  const searchList = (e) => {
+    let inputVal = e.toLowerCase();
+
+    function filterItems(arr, query) {
+      return arr.filter(function (el) {
+        return (
+          el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        );
+      });
+    }
+
+    let filterData = filterItems(allCouponData, inputVal);
+    setCouponData(filterData);
+    if (filterData.length === 0) {
+      document.getElementById("noresult").style.display = "block";
+      document.getElementById("todo-task").style.display = "none";
+    } else {
+      document.getElementById("noresult").style.display = "none";
+      document.getElementById("todo-task").style.display = "block";
+    }
   };
 
   const handleDeleteCoupon = async (id) => {
@@ -59,19 +88,22 @@ const Coupons = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   document.title = "Coupons | By Shalin";
 
   return (
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Contents" pageTitle="Content" />
+          <BreadCrumb
+            parent="setup"
+            child="Coupons"
+            grandChild="All Coupons"
+          />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Coupons</h4>
+                  <h4 className="card-title mb-0">All Coupons</h4>
                 </CardHeader>
                 <CardBody>
                   <div id="contentList">
@@ -82,7 +114,8 @@ const Coupons = () => {
                             <input
                               type="text"
                               className="form-control search"
-                              placeholder="Search..."
+                              placeholder="Search by cupon name"
+                              onKeyUp={(e) => searchList(e.target.value)}
                             />
                             <i className="ri-search-line search-icon"></i>
                           </div>
@@ -101,7 +134,10 @@ const Coupons = () => {
                         </div>
                       </Col>
                     </Row>
-                    <div className="table-responsive table-card mt-1 mb-3">
+                    <div
+                      id="todo-task"
+                      className="table-responsive table-card mt-1 mb-3"
+                    >
                       <table
                         className="table align-middle table-nowrap"
                         id="customerTable"
@@ -120,11 +156,11 @@ const Coupons = () => {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {currentItems.map((coupon , key) => (
+                          {currentItems.map((coupon, key) => (
                             <tr key={coupon.id}>
                               <th scope="row">
                                 <div className="form-check">
-                                <td className="product-name">{key+1}</td>
+                                  <td className="product-name">{key + 1}</td>
                                 </div>
                               </th>
                               <td className="product-name">{coupon.name}</td>
@@ -207,6 +243,16 @@ const Coupons = () => {
                         </tbody>
                       </table>
                     </div>
+                    <div
+                      className="py-4 mt-4 text-center"
+                      id="noresult"
+                      style={{ display: "none" }}
+                    >
+                      <h1>
+                        <FeatherIcon icon="search" />
+                      </h1>
+                      <h5 className="mt-4">Sorry! No Result Found</h5>
+                    </div>
                   </div>
                   <Pagination>
                     <PaginationItem>
@@ -252,8 +298,8 @@ const Coupons = () => {
         </Container>
       </div>
 
-       {/* modal Delete Content */}
-       <Modal
+      {/* modal Delete Content */}
+      <Modal
         isOpen={deletemodal}
         role="dialog"
         autoFocus={true}
@@ -304,7 +350,6 @@ const Coupons = () => {
           </div>
         </ModalBody>
       </Modal>
-                                     
     </>
   );
 };
