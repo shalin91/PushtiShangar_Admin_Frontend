@@ -61,7 +61,7 @@ const Content = () => {
     Getcontent();
   }, []);
 
-  document.title = "Contents | By Shalin";
+  document.title = "Contents";
   return (
     <>
       <div className="page-content">
