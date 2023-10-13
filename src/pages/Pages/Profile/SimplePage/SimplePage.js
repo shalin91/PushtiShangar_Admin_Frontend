@@ -234,14 +234,14 @@ const SimplePage = () => {
                                       {UserInfo.email}
                                     </td>
                                   </tr>
-                                  <tr>
+                                  {/* <tr>
                                     <th className="ps-0" scope="row">
                                       Location:
                                     </th>
                                     <td className="text-muted">
                                       California, United States
                                     </td>
-                                  </tr>
+                                  </tr> */}
                                 </tbody>
                               </Table>
                             </div>

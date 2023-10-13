@@ -21,14 +21,7 @@ const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
           </div>
         </div>
         <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-          <button
-            type="button"
-            className="btn w-sm btn-light"
-            data-bs-dismiss="modal"
-            onClick={onCloseClick}
-          >
-            Close
-          </button>
+          
           <button
             type="button"
             className="btn w-sm btn-danger "
@@ -36,6 +29,14 @@ const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
             onClick={onDeleteClick}
           >
             Yes, Delete It!
+          </button>
+          <button
+            type="button"
+            className="btn w-sm btn-light"
+            data-bs-dismiss="modal"
+            onClick={onCloseClick}
+          >
+            Close
           </button>
         </div>
       </ModalBody>

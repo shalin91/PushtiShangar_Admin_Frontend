@@ -1,7 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+  Pagination,
   PaginationLink,
-  PaginationItem, } from "reactstrap";
+  PaginationItem,
+} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
@@ -9,14 +20,13 @@ import AddStocks from "./AddStocks";
 
 const ITEMS_PER_PAGE = 10;
 
-
 function Stocks() {
-  const { GetStocks , DeleteStocks , UpdateStocks  } = useContext(SignContext);
+  const { GetStocks, DeleteStocks } = useContext(SignContext);
   const [ContentData, setContentData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
+  const [UpdatedStocks, setUpdatedStocks] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
@@ -31,7 +41,7 @@ function Stocks() {
       id: index + 1,
     }));
     setContentData(transformedData);
-  }
+  };
 
   const handleDeleteStocks = async (id) => {
     const res = await DeleteStocks(id);
@@ -70,8 +80,6 @@ function Stocks() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
-
   useEffect(() => {
     Getstocks();
   }, []);
@@ -82,151 +90,125 @@ function Stocks() {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Stock Manage Of Products" pageTitle="Stocks" />
-          <Row>
-            <Col lg={12}>
-            <AddStocks refreshTable={Getstocks} UpdateStocks={UpdateStocks} />
-              <Card>
-                <CardBody>
-                  <div id="contentList">
-                    <Row className="g-4 mb-3">
-                      <Col className="col-sm">
-                        <div className="d-flex justify-content-sm-end">
-                          <div className="search-box ms-2">
-                            <input
-                              type="text"
-                              className="form-control search"
-                              placeholder="Search..."
-                            />
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
-                        </div>
-                      </Col>
-                      {/* <Col className="col-sm-auto">
-                        <div>
-                          <Link
-                            to="/addstocks"
-                            className="btn btn-success add-btn me-1"
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add
-                          </Link>
-                        </div>
-                      </Col> */}
-                    </Row>
-                    <div className="table-responsive table-card mt-1 mb-3">
-                      <table
-                        className="table align-middle table-nowrap"
-                        id="customerTable"
-                      >
-                        <thead className="table-light">
-                          <tr>
-                            
-                            <th className="name">Index</th>
-                            <th className="name">Product-Name</th>
-                            <th className="name">Quantity</th>
-                            <th className="name">Price</th>
-                            <th className="action">Action</th>
-                          </tr>
-                        </thead>
 
-                        <tbody className="list form-check-all">
-                          {currentItems.map((content , key) => (
-                            <tr key={content.id}>
-                              
-
-                              <td className="product-name">
-                                {key+1}
-                              </td>
-                              <td className="product-name">
-                                {content.name}
-                              </td>
-                              <td className="product-name">
-                                {content.quantity}
-                              </td>
-                              {/* <td className="product-name">
-                                {content.quantity}
-                              </td> */}
-                              <td className="product-name">
-                                {content.currentPricePerUnit}
-                              </td>
-                              {/* <td className="product-name">
-                                {content.contentType}
-                              </td> */}
-                            
-                              {/* Add other columns here as needed */}
-                              <td>
-                                <div className="d-flex gap-2">
-                                  <div className="edit">
-                                    <Link
-                                      to={`/editstocks/${content._id}`}
-                                      className="btn btn-sm btn-success edit-item-btn"
-                                    >
-                                      Edit
-                                    </Link>
-                                  </div>
-                                  <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteRecordModal"
-                                        onClick={() => {
-                                          toggledeletemodal();
-                                          setContentToDelete(content);
-                                        }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+          <Card>
+            <CardHeader>
+              <Row className="g-1 m-1">
+                <Col className="col-sm">
+                  <div className="d-flex justify-content-sm-end">
+                    <div className="search-box ms-2">
+                      <input
+                        type="text"
+                        className="form-control search"
+                        placeholder="Search..."
+                      />
+                      <i className="ri-search-line search-icon"></i>
                     </div>
                   </div>
-                  <Pagination>
-                    <PaginationItem>
-                      <PaginationLink
-                        previous
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            prev === 1 ? prev : prev - 1
-                          )
-                        }
-                      />
-                    </PaginationItem>
-                    {Array.from({
-                      length: Math.ceil(ContentData.length / ITEMS_PER_PAGE),
-                    }).map((_, index) => (
-                      <PaginationItem
-                        key={index + 1}
-                        active={index + 1 === currentPage}
-                      >
-                        <PaginationLink onClick={() => paginate(index + 1)}>
-                          {index + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                    <PaginationItem>
-                      <PaginationLink
-                        next
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            prev ===
-                            Math.ceil(ContentData.length / ITEMS_PER_PAGE)
-                              ? prev
-                              : prev + 1
-                          )
-                        }
-                      />
-                    </PaginationItem>
-                  </Pagination>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                </Col>
+              </Row>
+            </CardHeader>
+            <CardBody>
+              <AddStocks refreshTable={Getstocks} UpdatedStocks={UpdatedStocks} />
+              <div id="contentList">
+                <div className="table-responsive table-card mt-1 mb-3">
+                  <table
+                    className="table align-middle table-nowrap"
+                    id="customerTable"
+                  >
+                    <thead className="table-light">
+                      <tr>
+                        <th className="name">Index</th>
+                        <th className="name">Product-Name</th>
+                        <th className="name">Quantity</th>
+                        <th className="name">Price</th>
+                        <th className="action">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody className="list form-check-all">
+                      {currentItems.map((content, key) => (
+                        <tr key={content.id}>
+                          <td className="product-name">{key + 1}</td>
+                          <td className="product-name">{content.name}</td>
+                          <td className="product-name">{content.quantity}</td>
+                          {/* <td className="product-name">
+                                {content.quantity}
+                              </td> */}
+                          <td className="product-name">
+                            {content.currentPricePerUnit}
+                          </td>
+                          {/* <td className="product-name">
+                                {content.contentType}
+                              </td> */}
+
+                          {/* Add other columns here as needed */}
+
+                          <td>
+                            <div className="hstack gap-2">
+                              <button
+                                className="btn btn-sm btn-soft-info edit-list"
+                                onClick={() => {
+                                  setUpdatedStocks(content);
+                                 
+                                }}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
+
+                              <button
+                                className="btn btn-sm btn-soft-danger remove-list"
+                                onClick={() => {
+                                  toggledeletemodal();
+                                  setContentToDelete(content);
+                                }}
+                              >
+                                <i className="ri-delete-bin-5-fill align-bottom" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <Pagination>
+                <PaginationItem>
+                  <PaginationLink
+                    previous
+                    onClick={() =>
+                      setCurrentPage((prev) => (prev === 1 ? prev : prev - 1))
+                    }
+                  />
+                </PaginationItem>
+                {Array.from({
+                  length: Math.ceil(ContentData.length / ITEMS_PER_PAGE),
+                }).map((_, index) => (
+                  <PaginationItem
+                    key={index + 1}
+                    active={index + 1 === currentPage}
+                  >
+                    <PaginationLink onClick={() => paginate(index + 1)}>
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationLink
+                    next
+                    onClick={() =>
+                      setCurrentPage((prev) =>
+                        prev === Math.ceil(ContentData.length / ITEMS_PER_PAGE)
+                          ? prev
+                          : prev + 1
+                      )
+                    }
+                  />
+                </PaginationItem>
+              </Pagination>
+            </CardBody>
+          </Card>
         </Container>
       </div>
 
