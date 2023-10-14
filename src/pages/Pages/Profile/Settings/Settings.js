@@ -118,6 +118,7 @@ const Settings = () => {
             <Col xxl={3}>
               <Card className="mt-n5">
                 <CardBody className="p-4">
+                  <Form onSubmit={(e) => handleSubmit(e)}>
                   <div className="text-center">
                     <div className="profile-user position-relative d-inline-block mx-auto  mb-4">
                       <img
@@ -126,23 +127,24 @@ const Settings = () => {
                         alt="user-profile"
                       />
                       <div className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                        <Input
+                        {/* <Input
                           id="profile-img-file-input"
                           type="file"
                           className="profile-img-file-input"
-                        />
-                        <Label
+                        /> */}
+                        {/* <Label
                           htmlFor="profile-img-file-input"
                           className="profile-photo-edit avatar-xs"
                         >
                           <span className="avatar-title rounded-circle bg-light text-body">
                             <i className="ri-camera-fill"></i>
                           </span>
-                        </Label>
+                        </Label> */}
                       </div>
                     </div>
                     <h5 className="fs-16 mb-1">{UserInfo.name}</h5>
                   </div>
+                  </Form>
                 </CardBody>
               </Card>
 
@@ -310,7 +312,7 @@ const Settings = () => {
                               />
                             </div>
                           </Col>
-                          <Col lg={6}>
+                          {/* <Col lg={6}>
                             <div className="mb-3">
                               <Label
                                 htmlFor="phonenumberInput"
@@ -336,7 +338,7 @@ const Settings = () => {
                                 defaultValue="India"
                               />
                             </div>
-                          </Col>
+                          </Col> */}
                           <Col lg={12}>
                             <div className="hstack gap-2 justify-content-end">
                               <button type="submit" className="btn btn-primary">

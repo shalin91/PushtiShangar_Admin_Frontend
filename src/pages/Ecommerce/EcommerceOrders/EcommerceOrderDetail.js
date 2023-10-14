@@ -57,7 +57,7 @@ const EcommerceOrderDetail = (props) => {
     // const gst = parseFloat(item.tax);
   
     const discountedPrice = parseFloat(
-      item.product.prices ? item.product.prices.discounted : null
+      item.product.prices.discounted ? item.product.prices.discounted : item.product.prices.calculatedPrice
     );
     
     if (isNaN(quantity) || isNaN(discountedPrice)) {

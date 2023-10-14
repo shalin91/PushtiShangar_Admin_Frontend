@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import SignContext from '../../contextAPI/Context/SignContext';
 import { Card, Col, Container, Form, Input, Row } from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
@@ -7,6 +8,7 @@ import UiContent from '../../Components/Common/UiContent';
 
 const EditGalleryDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { GetSpecificGalleryDetails, updateGalleryDetails , GetGalleryCat } = useContext(SignContext);
   const [GalleryDetData, setGalleryDetData] = useState({
     imageTitle: "",
@@ -51,6 +53,7 @@ const EditGalleryDetails = () => {
     if (res.success) {
       // Handle success
       // For example, display a success message and reset the form
+      navigate("/gallerycatcontent");
       console.log("Content updated successfully");
       setGalleryDetData({
         imageTitle: "",

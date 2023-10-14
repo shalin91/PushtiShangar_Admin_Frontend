@@ -14,11 +14,14 @@ import {
 } from "../../helpers/backend_helper";
 import { GET_PRODUCTS } from "../../store/product/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
+import { useContext } from "react";
+import SignContext from "../../contextAPI/Context/SignContext";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
   const allProductData = useSelector((state) => state.Product.products);
   const url = `${process.env.REACT_APP_BASE_URL}`;
+
   // const url = `http://localhost:5000`;
   const [IsformActive, setIsformActive] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -64,6 +67,8 @@ const ProductMaster = () => {
             data: productsResponse.products,
           },
         });
+
+        
         setIsFetchingData(false);
       } catch (error) {
         console.error("Error fetching data:", error.message);
