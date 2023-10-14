@@ -101,6 +101,7 @@ import AddProduct from "../pages/products/addProduct";
 import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
 import BannerMaster from "../pages/BannerMaster/bannerMaster.js"
+import BlogMaster from "../pages/BlogMaster/BlogsMaster";
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 const authProtectedRoutes = [
@@ -174,6 +175,9 @@ const authProtectedRoutes = [
   { path: "/apps-projects-overview", component: <ProjectOverview /> },
   { path: "/apps-projects-create", component: <CreateProject /> },
 
+
+  { path: "/blog-master", component: <BlogMaster /> },
+  
 
 
 
