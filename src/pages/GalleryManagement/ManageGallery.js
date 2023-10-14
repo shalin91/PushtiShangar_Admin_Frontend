@@ -60,7 +60,7 @@ const ManageGallery = () => {
     getgalleryDetails();
   }, [ ]);
 
-  document.title = "Gallery | By Shalin";
+  document.title = "Gallery-Details";
   return (
    <>
    <div className="page-content">

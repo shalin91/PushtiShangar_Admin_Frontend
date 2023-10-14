@@ -161,7 +161,7 @@ const NewCustomer = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  document.title = "Customers | By Shalin";
+  document.title = "Customers";
   return (
     <>
       <div className="page-content">

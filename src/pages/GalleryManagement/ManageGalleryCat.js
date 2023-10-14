@@ -79,7 +79,7 @@ const ManageGalleryCat = () => {
     Getgallerycat();
   }, []);
 
-  document.title = "Gallery | By Shalin";
+  document.title = "Gallery";
 
   return (
     <>
