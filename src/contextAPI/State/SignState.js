@@ -49,8 +49,9 @@ export const SignState = (props) => {
       const response = await axios.post(`${url}/api/login`, UserInfo);
       return response;
     } catch (error) {
-      console.error("Error during API call:", error);
-      // return ({ success: false, msg: "server Error" })
+     console.log(error)
+      return error
+      
     }
   };
 

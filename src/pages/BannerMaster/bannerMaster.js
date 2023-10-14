@@ -37,6 +37,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 
 // import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import Nodata from "../../Components/Common/Nodata";
 
 // Register the plugins
 registerPlugin(
@@ -46,7 +47,7 @@ registerPlugin(
 );
 
 const BannerMaster = () => {
-  document.title = "Category Master";
+  document.title = "Banner Master";
   const url = `${process.env.REACT_APP_BASE_URL}`;
   const [deleteModal, setDeleteModal] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -59,20 +60,23 @@ const BannerMaster = () => {
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [buttnLoading, setButtnLoading] = useState(false);
-  const [selectedType, setSelectedType] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
   const fetchData = async () => {
     try {
       const response = await getBanner();
       setTableData(response.data);
-      console.log(response)
+      console.log(response);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
+    setFetchingData(true);
     fetchData();
+    setFetchingData(false);
+
     setFiles([]);
   }, [isEdit]);
 
@@ -86,48 +90,49 @@ const BannerMaster = () => {
 
   const handledeleteProduct = async () => {
     if (valuesForUpdate) {
-      await deleteBanner(valuesForUpdate);
+      await deleteBanner(valuesForUpdate._id);
       fetchData();
       setDeleteModal(false);
     }
   };
 
-  const categoryValidation = Yup.object().shape({
-    name: Yup.string().required("required"),
+  const BannerValidation = Yup.object().shape({
+    bannerTitle: Yup.string().required("required"),
     description: Yup.string().min(5, "Too short"),
   });
 
   const bannerForm = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: (valuesForUpdate && valuesForUpdate.name) || "",
+      bannerTitle: (valuesForUpdate && valuesForUpdate.bannerTitle) || "",
       bannerType: (valuesForUpdate && valuesForUpdate.bannerType) || "",
       bannerText: (valuesForUpdate && valuesForUpdate.bannerText) || "",
       description: (valuesForUpdate && valuesForUpdate.description) || "",
     },
-    validationSchema: categoryValidation,
+    validationSchema: BannerValidation,
     onSubmit: async (values) => {
-      console.log(files[0].file);
+      
       setSubmitted(true);
       const formData = new FormData();
-      formData.append("name", values.name);
+      formData.append("bannerTitle", values.bannerTitle);
       formData.append("bannerType", values.bannerType);
       formData.append("bannerText", values.bannerText);
       formData.append("description", values.description);
-      if (files.length !== 0) {
-        formData.append("image", files[0].file);
+      if (files.length > 0) {
+        formData.append("image",files[0].file);
       }
       setButtnLoading(true);
       if (isEdit) {
+        console.log(valuesForUpdate)
         await updateBanner(formData, valuesForUpdate._id);
       } else {
-        
         await addNewBanner(formData);
       }
       setButtnLoading(false);
       setIsEdit(false);
       setSubmitted(false);
       bannerForm.resetForm();
+      fetchData();
       toggle();
     },
   });
@@ -140,13 +145,17 @@ const BannerMaster = () => {
         onCloseClick={() => setDeleteModal(false)}
       />
       <Container fluid>
-        <BreadCrumb title="Category" pageTitle="Category" />
+        <BreadCrumb
+          grandParent="Content Management System"
+          parent="Banner Master"
+          child="All Banners"
+        />
         <Row>
           <Col lg={12}>
             <Card id="orderList">
               <CardHeader className="card-header border-0">
                 <div className="d-flex align-items-center">
-                  <h5 className="card-title mb-0 flex-grow-1">Category </h5>
+                  <h5 className="card-title mb-0 flex-grow-1">All Banners</h5>
 
                   <div className="flex-shrink-0">
                     <div className="d-flex gap-1 flex-wrap">
@@ -163,7 +172,7 @@ const BannerMaster = () => {
                         }}
                       >
                         <i className="ri-add-line align-bottom me-1"></i> Create
-                        Category
+                        Banner
                       </button>{" "}
                     </div>
                   </div>
@@ -171,21 +180,38 @@ const BannerMaster = () => {
               </CardHeader>
               <CardBody className="pt-0">
                 <div>
+                {tableData.length ? (
                   <table className="table">
                     <thead className="table-active">
                       <tr>
                         <th>index</th>
-                        <th>Category Title</th>
+                        <th>banner image</th>
+                        <th>banner title</th>
+                        <th>banner type</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {tableData.length ? (
+                      {
                         tableData.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
-                            <td>{item.name}</td>
+                            <td>
+                              <img
+                                src={`${url}/banner/${item.image}`}
+                                alt="Banner"
+                                style={{
+                                  width: "100px",
+                                  height: "auto",
+                                  maxHeight: "100px",
+                                  objectFit: "cover",
+                                  borderRadius: "3px",
+                                }}
+                              />
+                            </td>
+                            <td>{item.bannerTitle}</td>
+                            <td>{item.bannerType}</td>
                             <td>
                               {" "}
                               {item.isActive ? (
@@ -226,11 +252,18 @@ const BannerMaster = () => {
                             </td>
                           </tr>
                         ))
-                      ) : (
-                        <Loader error={tableData} />
-                      )}
+                              }
                     </tbody>
                   </table>
+                  ) : fetchingData ? (
+                    <Loader error={tableData} />
+                  ) : (
+                    <Card>
+
+                      <Nodata></Nodata>
+
+                    </Card>
+                  )}
                 </div>
                 <Modal
                   id="showModal"
@@ -239,7 +272,7 @@ const BannerMaster = () => {
                   centered
                 >
                   <ModalHeader className="bg-light p-3" toggle={toggle}>
-                    {!!isEdit ? "Edit Category" : "Add Category"}
+                    {!!isEdit ? "Edit Banner" : "Add Banner"}
                   </ModalHeader>
                   <Form
                     onSubmit={(e) => {
@@ -262,7 +295,7 @@ const BannerMaster = () => {
                         <img
                           src={
                             files.length === 0
-                              ? `${url}/cagtegory/${valuesForUpdate.image}`
+                              ? `${url}/banner/${valuesForUpdate.image}`
                               : null
                           }
                           alt=""
@@ -281,36 +314,36 @@ const BannerMaster = () => {
                       </div>
 
                       <div className="mb-3">
-                        <Label htmlFor="name" className="form-label">
+                        <Label htmlFor="bannerTitle" className="form-label">
                           banner title*
                         </Label>
                         <Input
-                          name="name"
-                          id="name"
+                          name="bannerTitle"
+                          id="bannerTitle"
                           className="form-control"
-                          placeholder="Enter categry titel"
+                          placeholder="Enter Banner titel"
                           type="text"
                           onChange={bannerForm.handleChange}
                           onBlur={bannerForm.handleBlur}
-                          value={bannerForm.values.name || ""}
+                          value={bannerForm.values.bannerTitle || ""}
                           invalid={
-                            bannerForm.touched.name &&
-                            bannerForm.errors.name
+                            bannerForm.touched.bannerTitle &&
+                            bannerForm.errors.bannerTitle
                               ? true
                               : false
                           }
                         />
-                        {bannerForm.touched.name &&
-                        bannerForm.errors.name ? (
+                        {bannerForm.touched.bannerTitle &&
+                        bannerForm.errors.bannerTitle ? (
                           <FormFeedback type="invalid">
-                            {bannerForm.errors.name}
+                            {bannerForm.errors.bannerTitle}
                           </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="mb-3">
                         <Label htmlFor="name" className="form-label">
-                        banner type 
+                          banner type
                         </Label>
                         <select
                           className="form-select"
@@ -320,16 +353,13 @@ const BannerMaster = () => {
                           onChange={bannerForm.handleChange}
                           onBlur={bannerForm.handleBlur}
                           value={bannerForm.values.bannerType || ""}
-                         
                         >
                           <option value="">Select banner type</option>
                           <option value="top-right">top-right</option>
                           <option value="carousel">carousel</option>
                           <option value="bottom">bottom</option>
-                          
                         </select>
-                        {bannerForm.touched.name &&
-                        bannerForm.errors.name ? (
+                        {bannerForm.touched.name && bannerForm.errors.name ? (
                           <FormFeedback type="invalid">
                             {bannerForm.errors.name}
                           </FormFeedback>
@@ -412,7 +442,7 @@ const BannerMaster = () => {
                               className="btn btn-primary"
                               id="addNewTodo"
                             >
-                              {!!isEdit ? "Update" : "Add Category"}
+                              {!!isEdit ? "Update" : "Add Banner"}
                             </button>
                           </React.Fragment>
                         ) : (
