@@ -61,7 +61,7 @@ export const postJwtRegister = (url, data) => {
 //Banner
 export const getBanner = () => api.create(hostedUrl+"/banner/get-banner");
 export const addNewBanner = (data) => api.create(hostedUrl+"/banner/add-new-banner",data);
-export const updateBanner = async(data,id) => await api.create(hostedUrl+"/banner/update-banner"+id, data);
+export const updateBanner = (data,id) => api.create(hostedUrl+"/banner/update-banner"+id, data);
 export const deleteBanner = (id) => api.create(hostedUrl+"/banner/delete-banner/"+id);
 
 

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import {
   Card,
   CardBody,
@@ -8,12 +9,13 @@ import {
   Label,
   Row,
   Button,
-  Form,Spinner,
+  Form,
+  Spinner,
   FormFeedback,
   Alert,
 } from "reactstrap";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
-import logo from '../../assets/images/PushtiShangarLight.png'
+import logo from "../../assets/images/PushtiShangarLight.png";
 
 //redux
 import { Link, useNavigate } from "react-router-dom";
@@ -22,13 +24,14 @@ import withRouter from "../../Components/Common/withRouter";
 import SignContext from "../../contextAPI/Context/SignContext";
 
 const Login = () => {
+  const url = `${process.env.REACT_APP_BASE_URL}`;
+
   const { loginUser } = useContext(SignContext);
   const navigate = useNavigate();
   const [UserInfo, setUserInfo] = useState({
     email: "shalinsheth4915@gmail.com",
     password: "shalin123",
   });
-
 
   const handleChange = (e) => {
     setUserInfo({ ...UserInfo, [e.target.name]: e.target.value });
@@ -38,39 +41,54 @@ const Login = () => {
   const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
   const [buttnLoading, setButtnLoading] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setButtnLoading(true)
-    const res = await loginUser(UserInfo);
-   
-    try{
-      
-      window.localStorage.setItem("loggedIn", true);
-      window.localStorage.setItem("authToken", res.token);
-      window.localStorage.setItem("user", JSON.stringify(res));
-      window.localStorage.setItem("rights", JSON.stringify(res.roles));
-      if (res.roles.role === "Admin") {
-        setSuccess(res.msg);
-        navigate("/dashboard");
-        setTimeout(() => {
-        }, 1000);
-      } else {
-        setSuccess(res.msg);
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1000);
-      }
-    setButtnLoading(false)
+    setButtnLoading(true);
 
-    } catch(error)  {
-      console.log("colleds",error)
-      setError("invalid credentials");
-    setButtnLoading(false)
+    try {
+
+      // const res = await loginUser(UserInfo);
+      const res = await axios.post(`${url}/api/login`, UserInfo);
+     
+      if (res.success) {
+        
+        window.localStorage.setItem("loggedIn", true);
+        window.localStorage.setItem("authToken", res.token);
+        window.localStorage.setItem("user", JSON.stringify(res));
+        window.localStorage.setItem("rights", JSON.stringify(res.roles));
+        if (res.roles.role === "Admin") {
+          setSuccess(res.msg);
+          navigate("/dashboard");
+          
+        } else {
+          setSuccess(res.msg);
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 3000);
+        }
+      }else{
+        setError(res.msg);
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+      }
+      
+      setButtnLoading(false);
+    } catch (error) {
+      const code = error.split(" ")[error.split(" ").length - 1];
+      // console.log("colled",code, error);
+      if (code === "401") {
+        setError("Invalid credentials. Please check your email and password.");
+      } else if (code === "403") {
+        setError("Access denied. You don't have permission to access this resource.");
+      } else {
+        setError("An error occurred. Please try again later.");
+      }
+      setButtnLoading(false);
 
       setTimeout(() => {
         setError("");
-      }, 1000);
+      }, 3000);
     }
   };
 
@@ -84,7 +102,11 @@ const Login = () => {
               <Col lg={12}>
                 <div className="text-center mt-sm-5 mb-4 text-white-50">
                   <div>
-                    <img src={logo} alt="pushti shangar" style={{maxHeight:"200px"}}></img>
+                    <img
+                      src={logo}
+                      alt="pushti shangar"
+                      style={{ maxHeight: "200px" }}
+                    ></img>
                   </div>
                   {/* <p className="mt-3 fs-15 fw-medium">
                     Premium Admin & Dashboard Template
@@ -99,9 +121,7 @@ const Login = () => {
                   <CardBody className="p-4">
                     <div className="text-center mt-2">
                       <h5 className="text-primary">Welcome Back !</h5>
-                      <p className="text-muted">
-                        Sign in to continue.
-                      </p>
+                      <p className="text-muted">Sign in to continue.</p>
                     </div>
                     {Error && Error ? (
                       <Alert color="danger"> {Error} </Alert>
@@ -163,8 +183,6 @@ const Login = () => {
                           </div>
                         </div>
 
-                        
-
                         {/* <div className="form-check">
                           <Input
                             className="form-check-input"
@@ -180,18 +198,16 @@ const Login = () => {
                           </Label>
                         </div> */}
 
-                        
-
                         {!buttnLoading ? (
-                         <div className="mt-4">
-                         <Button
-                           color="success"
-                           className="btn btn-success w-100"
-                           type="submit"
-                         >
-                           Sign In
-                         </Button>
-                       </div>
+                          <div className="mt-4">
+                            <Button
+                              color="success"
+                              className="btn btn-success w-100"
+                              type="submit"
+                            >
+                              Sign In
+                            </Button>
+                          </div>
                         ) : (
                           <Button
                             color="success"
