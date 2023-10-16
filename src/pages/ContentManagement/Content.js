@@ -66,41 +66,44 @@ const Content = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Contents" pageTitle="Content" />
+        <BreadCrumb grandParent="Setup" parent="CDM" child="Contents" />
           <Row>
             <Col lg={12}>
               <Card>
-                <CardHeader>
+                <CardHeader className="d-flex justify-content-between align-items-center">
                   <h4 className="card-title mb-0">Contents</h4>
-                </CardHeader>
-                <CardBody>
-                  <div id="contentList">
-                    <Row className="g-4 mb-3">
-                      <Col className="col-sm">
-                        <div className="d-flex justify-content-sm-end">
-                          <div className="search-box ms-2">
-                            <input
-                              type="text"
-                              className="form-control search"
-                              placeholder="Search..."
-                            />
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
+
+                
+                    <Row className="align-items-center">
+                      <Col className="col-lg-auto">
+                        <div className="search-box">
+                          <input
+                            type="text"
+                            id="searchTaskList"
+                            className="form-control search"
+                            placeholder="Search by product name"
+                            // onKeyUp={(e) => searchList(e.target.value)}
+                          />
+                          <i className="ri-search-line search-icon"></i>
                         </div>
                       </Col>
-                      <Col className="col-sm-auto">
-                        <div>
-                          <Link
+                      <Col className="col-lg-auto">
+                        
+
+                        <Link
                             to="/addcontent"
-                            className="btn btn-success add-btn me-1"
+                            className="btn btn-primary add-btn me-1"
                             id="create-btn"
                           >
                             <i className="ri-add-line align-bottom me-1"></i>{" "}
                             Add
                           </Link>
-                        </div>
                       </Col>
                     </Row>
+                </CardHeader>
+                <CardBody>
+                  <div id="contentList">
+                    
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
                         className="table align-middle table-nowrap"
@@ -128,27 +131,21 @@ const Content = () => {
                                 {content.contentType}
                               </td>
                               <td className="status">
+
+
                                 {content.active === true ? (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#28a745",
-                                      color: "white",
-                                    }}
-                                  >
+                                  <div>
+                                  <span className="badge badge-soft-success badge-border">
                                     Active
                                   </span>
-                                ) : (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#dc3545",
-                                      color: "white",
-                                    }}
-                                  >
-                                    Inactive
+                                </div>
+                              ) : (
+                                <div>
+                                  <span className="badge badge-soft-danger badge-border">
+                                    InActive
                                   </span>
-                                )}
+                                </div>
+                              )}
                               </td>
 
                               {/* Add other columns here as needed */}
@@ -157,14 +154,14 @@ const Content = () => {
                                   <div className="edit">
                                     <Link
                                       to={`/updatecontent/${content._id}`}
-                                      className="btn btn-sm btn-success edit-item-btn"
+                                      className="btn btn-sm btn-soft-success edit-item-btn"
                                     >
-                                      Edit
+                                      <i className="ri-pencil-fill align-bottom" />
                                     </Link>
                                   </div>
                                   <div className="remove">
                                     <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
+                                      className="btn btn-sm btn-soft-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                         onClick={() => {
@@ -172,7 +169,7 @@ const Content = () => {
                                           setContentToDelete(content);
                                         }}
                                     >
-                                      Remove
+                                      <i className="ri-delete-bin-5-fill align-bottom" />
                                     </button>
                                   </div>
                                 </div>

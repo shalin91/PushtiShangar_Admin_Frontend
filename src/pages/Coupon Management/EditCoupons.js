@@ -219,7 +219,7 @@ const EditCoupons = () => {
                                 className="btn btn-success w-sm"
                                 //   onClick={togglesuccessmodal}
                               >
-                                Submit
+                                Update
                               </button>
                             </Col>
                           </Row>

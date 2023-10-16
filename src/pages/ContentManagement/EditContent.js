@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
-import { useParams } from "react-router-dom";
-import { Card, Col, Container, Form, Input, Label, Row } from "reactstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import { Card, CardHeader, Col, Container, Form, Input, Label, Row } from "reactstrap";
 import JoditEditor from "jodit-react";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import UiContent from "../../Components/Common/UiContent";
 
 const EditContent = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { GetSpecificContent, UpdateContent } = useContext(SignContext);
   const [ContentData, setContentData] = useState({
     contentType: "",
@@ -15,7 +16,7 @@ const EditContent = () => {
     active: true,
   });
   const [editorContent, setEditorContent] = useState("");
-  
+
   const getspecificContent = async (id) => {
     const res = await GetSpecificContent(id);
     console.log(res);
@@ -44,7 +45,7 @@ const EditContent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await UpdateContent(ContentData , id);
+    const res = await UpdateContent(ContentData, id);
 
     console.log(res);
     if (res.success) {
@@ -56,6 +57,7 @@ const EditContent = () => {
         content: "",
         active: true,
       });
+      navigate("/contentmanage");
     } else {
       // Handle error
       console.error("Error adding content:", res.msg);
@@ -77,14 +79,17 @@ const EditContent = () => {
 
   return (
     <>
-       <UiContent />
+      <UiContent />
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Update Content" pageTitle="Content" />
+          <BreadCrumb grandParent="Setup" parent="CMS" child="Edit Content" />
           <Row>
             <Col lg={12}>
               <Form onSubmit={handleSubmit}>
                 <Card>
+                  <CardHeader className="d-flex justify-content-between align-items-center">
+                    <h4 className="card-title mb-0">Edit Content</h4>
+                  </CardHeader>
                   <div className="card-body">
                     <div className="live-preview">
                       <Row className="align-items-center g-3">
@@ -143,7 +148,7 @@ const EditContent = () => {
                     className="btn btn-success w-sm"
                     //   onClick={togglesuccessmodal}
                   >
-                    Submit
+                    Update
                   </button>
                 </div>
               </Form>

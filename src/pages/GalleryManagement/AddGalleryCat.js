@@ -2,12 +2,11 @@ import React, { useContext, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import UiContent from "../../Components/Common/UiContent";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
-import { Card, Col, Container, Input, Row } from "reactstrap";
+import { Card, CardHeader, Col, Container, Input, Row } from "reactstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { toast ,ToastContainer  } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
 
 const AddGalleryCat = () => {
   const { createGalleryCat } = useContext(SignContext);
@@ -47,11 +46,10 @@ const AddGalleryCat = () => {
   const handleSavedcat = async (Values) => {
     const res = await createGalleryCat(Values);
 
-
     console.log(res);
     if (res.success) {
       // Handle success
-      navigate("/gallerycatcontent")
+      navigate("/gallerycatcontent");
       console.log("Content added successfully");
     } else {
       // Handle error
@@ -59,15 +57,19 @@ const AddGalleryCat = () => {
     }
   };
 
-  document.title = "Add Gallery-Category | Gallery";
+  document.title = "Add Gallery Category | Gallery";
 
   return (
     <>
       <UiContent />
-      <ToastContainer/>
+      <ToastContainer />
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Add Gallery-Category" pageTitle="Gallery" />
+          <BreadCrumb
+            grandParent="Setup"
+            parent="Gallery"
+            child="Add-Gallery  Category"
+          />
           <Row>
             <Col lg={12}>
               <Formik
@@ -99,6 +101,18 @@ const AddGalleryCat = () => {
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <Card>
+                      <CardHeader>
+                        <Row className="g-1 m-1">
+                          <Col className="col-sm">
+                            <div className="d-flex justify-content-sm-between">
+                              <h2 className="card-title mb-0 justify-content-sm-start">
+                                <strong>Add Gallery Category</strong>
+                              </h2>
+                            
+                            </div>
+                          </Col>
+                        </Row>
+                      </CardHeader>
                       <div className="card-body">
                         <div className="live-preview">
                           <Row className="align-items-center g-3">
@@ -124,10 +138,10 @@ const AddGalleryCat = () => {
                                     value={values.gallaryCategoryTitle}
                                   />
                                   <p className="error text-danger">
-                                  {errors.gallaryCategoryTitle &&
-                                    touched.gallaryCategoryTitle &&
-                                    errors.gallaryCategoryTitle}
-                                </p>
+                                    {errors.gallaryCategoryTitle &&
+                                      touched.gallaryCategoryTitle &&
+                                      errors.gallaryCategoryTitle}
+                                  </p>
                                 </div>
                               </div>
                             </Col>

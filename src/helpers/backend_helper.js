@@ -69,7 +69,7 @@ export const deleteBanner = (id) => api.create(hostedUrl+"/banner/delete-banner/
 //Blog
 export const getBlog = () => api.create(hostedUrl+"/blog/get-blog");
 export const addBlog = (data) => api.create(hostedUrl+"/blog/add-blog",data);
-export const updateBlog = (data,id) => api.create(hostedUrl+"/blog/update-blog"+id, data);
+export const updateBlog = (data,id) => api.create(hostedUrl+"/blog/update-blog/"+id, data);
 export const deleteBlog = (id) => api.create(hostedUrl+"/blog/delete-blog/"+id);
 
 

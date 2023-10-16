@@ -226,26 +226,18 @@ const NewCustomer = () => {
                             <td className="stock">{customer.email}</td>
                             <td className="status">
                               {customer.active === true ? (
-                                <span
-                                  className="badge badge-soft"
-                                  style={{
-                                    backgroundColor: "#28a745",
-                                    color: "white",
-                                  }}
-                                >
+                                <div>
+                                <span className="badge badge-soft-success badge-border">
                                   Active
                                 </span>
-                              ) : (
-                                <span
-                                  className="badge badge-soft"
-                                  style={{
-                                    backgroundColor: "#dc3545",
-                                    color: "white",
-                                  }}
-                                >
-                                  Inactive
+                              </div>
+                            ) : (
+                              <div>
+                                <span className="badge badge-soft-danger badge-border">
+                                  InActive
                                 </span>
-                              )}
+                              </div>
+                            )}
                             </td>
 
                             {/* Add other columns here as needed */}
@@ -263,7 +255,7 @@ const NewCustomer = () => {
                                 </div> */}
                                 <div className="remove">
                                   <button
-                                    className="btn btn-sm btn-danger remove-item-btn"
+                                    className="btn btn-sm btn-soft-danger remove-item-btn"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteRecordModal"
                                     onClick={() => {

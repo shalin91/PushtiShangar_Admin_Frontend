@@ -192,7 +192,7 @@ const CategoryMaster = () => {
                               ) : (
                                 <div>
                                   <span className="badge badge-soft-danger badge-border">
-                                    NotActive
+                                    InActive
                                   </span>
                                 </div>
                               )}

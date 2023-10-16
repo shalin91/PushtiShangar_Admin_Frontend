@@ -137,6 +137,7 @@ const BlogMaster = () => {
 
   const handleAdd = () => {
     setpreviewImage(null);
+    setselectedForUpdate("")
     toggle();
   };
 
@@ -316,12 +317,12 @@ const BlogMaster = () => {
                     <Col md={4}>
                       <div className="mb-3">
                         <Label htmlFor="blogFeedinput" className="form-label">
-                          Blog Feed
+                          Author
                         </Label>
                         <Input
                           type="text"
                           className="form-control"
-                          placeholder="blogFeed"
+                          placeholder="full name ofAuthor"
                           id="blogFeed"
                           name="blogFeed"
                           onChange={formik.handleChange}
@@ -497,8 +498,8 @@ const BlogMaster = () => {
                           <tr>
                             <th scope="col">index</th>
 
-                            <th scope="col">Blog Feed</th>
                             <th scope="col">Blog Title</th>
+                            <th scope="col">Author</th>
                             <th scope="col">Date</th>
                             <th scope="col">Action</th>
                           </tr>
@@ -509,8 +510,8 @@ const BlogMaster = () => {
                             ? BlogData.map((item, key) => (
                                 <tr key={key}>
                                   <td>{key + 1}</td>
-                                  <td>{item.blogFeed}</td>
                                   <td>{item.blogTitle}</td>
+                                  <td>{item.blogFeed}</td>
                                   <td>{convertToYYYYMMDD(item.date)}</td>
 
                                   <td>

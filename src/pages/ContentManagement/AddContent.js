@@ -1,7 +1,16 @@
 import React, { useContext, useMemo, useState } from "react";
 import UiContent from "../../Components/Common/UiContent";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
-import { Card, Col, Container, Input, Label, Row, Form } from "reactstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Input,
+  Label,
+  Row,
+  Form,
+  CardHeader,
+} from "reactstrap";
 import JoditEditor from "jodit-react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -71,10 +80,10 @@ const AddContent = () => {
   return (
     <>
       <UiContent />
-      <ToastContainer/>
+      <ToastContainer />
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Add Content" pageTitle="Content" />
+          <BreadCrumb grandParent="Setup" parent="CMS" child="Add Content" />
           <Row>
             <Col lg={12}>
               <Formik
@@ -102,6 +111,9 @@ const AddContent = () => {
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <Card>
+                      <CardHeader className="d-flex justify-content-between align-items-center">
+                        <h4 className="card-title mb-0">All Content</h4>
+                      </CardHeader>
                       <div className="card-body">
                         <div className="live-preview">
                           <Row className="align-items-center g-3">

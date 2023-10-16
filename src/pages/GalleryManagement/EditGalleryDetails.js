@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import SignContext from '../../contextAPI/Context/SignContext';
-import { Card, Col, Container, Form, Input, Row } from 'reactstrap';
+import { Card, Col, CardHeader,Container, Form, Input, Row } from 'reactstrap';
 import BreadCrumb from '../../Components/Common/BreadCrumb';
 import UiContent from '../../Components/Common/UiContent';
 
@@ -53,7 +53,7 @@ const EditGalleryDetails = () => {
     if (res.success) {
       // Handle success
       // For example, display a success message and reset the form
-      navigate("/gallerycatcontent");
+      navigate("/gallerycontent");
       console.log("Content updated successfully");
       setGalleryDetData({
         imageTitle: "",
@@ -87,13 +87,18 @@ const EditGalleryDetails = () => {
       <UiContent />
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Update Gallery-Category" pageTitle="Gallery" />
+         
+          <BreadCrumb grandParent="Setup" parent="Gallery" child="Edit GalleryDetails" />
           <Row>
             <Col lg={12}>
               <Form 
               onSubmit={handleSubmit}
               >
                 <Card>
+                <CardHeader className="d-flex justify-content-between align-items-center">
+                <h4 className="card-title mb-0">Edit Gallery Details</h4>
+                    
+                </CardHeader>
                   <div className="card-body">
                     <div className="live-preview">
                       <Row className="align-items-center g-3">
@@ -218,7 +223,7 @@ const EditGalleryDetails = () => {
                     className="btn btn-success w-sm"
                     //   onClick={togglesuccessmodal}
                   >
-                    Submit
+                    Update
                   </button>
                 </div>
               </Form>
