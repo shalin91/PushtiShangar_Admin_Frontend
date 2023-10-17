@@ -241,7 +241,7 @@ const NewTeam = () => {
                     <Col className="col-sm-auto">
                       <div>
                         <Link
-                          className="btn btn-success add-btn me-1"
+                          className="btn btn-primary add-btn me-1"
                           id="create-btn"
                           onClick={togglemodal}
                           // to="/adduser"
@@ -307,42 +307,34 @@ const NewTeam = () => {
                             <td className="roles">{user.roles}</td>
                             <td className="status">
                               {user.active === true ? (
-                                <span
-                                  className="badge badge-soft"
-                                  style={{
-                                    backgroundColor: "#28a745",
-                                    color: "white",
-                                  }}
-                                >
-                                  Active
-                                </span>
-                              ) : (
-                                <span
-                                  className="badge badge-soft"
-                                  style={{
-                                    backgroundColor: "#dc3545",
-                                    color: "white",
-                                  }}
-                                >
-                                  Inactive
-                                </span>
-                              )}
+                                 <div>
+                                 <span className="badge badge-soft-success badge-border">
+                                   Active
+                                 </span>
+                               </div>
+                             ) : (
+                               <div>
+                                 <span className="badge badge-soft-danger badge-border">
+                                   InActive
+                                 </span>
+                               </div>
+                             )}
                             </td>
                             <td className="action">
                               <button
-                                className="btn btn-info btn-sm me-2"
+                                className="btn btn-soft-info btn-sm me-2"
                                 onClick={() => toggleEditmodal(user._id)}
                               >
-                                <i className="ri-pencil-line"></i> Edit
+                                <i className="ri-pencil-line"></i> 
                               </button>
                               <button
-                                className="btn btn-danger btn-sm"
+                                className="btn btn-soft-danger btn-sm"
                                 onClick={() => {
                                   toggledeletemodal();
                                   setUserToDelete(user);
                                 }}
                               >
-                                <i className="ri-delete-bin-line"></i> Delete
+                                <i className="ri-delete-bin-line"></i>
                               </button>
                             </td>
                             {/* Add other columns here as needed */}
@@ -697,15 +689,7 @@ const NewTeam = () => {
                 </div>
             
             <ModalFooter>
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={() => {
-                  setEditModal(!EditModal);
-                }}
-              >
-                Close
-              </button>
+              
               <button
                 type="submit"
                 className="btn btn-success"
@@ -714,6 +698,15 @@ const NewTeam = () => {
                 }}
               >
                 Save
+              </button>
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => {
+                  setEditModal(!EditModal);
+                }}
+              >
+                Close
               </button>
             </ModalFooter>
           </form>

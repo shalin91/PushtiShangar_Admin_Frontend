@@ -103,9 +103,9 @@ const SubSubCategoryMaster = () => {
   };
 
   const categoryValidation = Yup.object().shape({
-    name: Yup.string().required("Name is must be required !!!"),
-    Category: Yup.string().required("Please select one"),
-    SubCategory: Yup.string().required("Please select one")
+    name: Yup.string().required("sub sub category title is required"),
+    Category: Yup.string().required("category is required"),
+    SubCategory: Yup.string().required("sub category is required")
   });
   return (
     <React.Fragment>
@@ -208,18 +208,19 @@ const SubSubCategoryMaster = () => {
                             </td>
 
                             <td>
+                            <button
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
+                                onClick={() => handleEdit(item)}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
                               <button
                                 className="btn btn-sm btn-soft-danger remove-list"
                                 onClick={() => handleDelete(item)}
                               >
                                 <i className="ri-delete-bin-5-fill align-bottom" />
                               </button>
-                              <button
-                                className="btn btn-sm btn-soft-info edit-list"
-                                onClick={() => handleEdit(item)}
-                              >
-                                <i className="ri-pencil-fill align-bottom" />
-                              </button>
+                              
                             </td>
                           </tr>
                         ))
