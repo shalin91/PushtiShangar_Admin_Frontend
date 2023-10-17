@@ -18,6 +18,7 @@ import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
 import { addCategory, getCategory, getSubCategory } from "../../helpers/backend_helper";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
 const SubCategoryMaster = () => {
@@ -90,11 +91,12 @@ const SubCategoryMaster = () => {
       />
       <div className="page-content">
         <Container fluid>
+        <BreadCrumb grandParent="Setup" parent="Manage Category" child="Sub Category" />
           <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="hstack mb-4">
                 <h5 className="fw-semibold flex-grow-1 mb-0">
-                  Category Master
+                  Sub Category Master
                 </h5>
                 <div className="hstack gap-2">
                   <div
@@ -159,7 +161,7 @@ const SubCategoryMaster = () => {
                       ? tableData.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
-                            <td>{item.Category}</td>
+                            <td>{item.CategoryTitle}</td>
                             <td>{item.name}</td>
                             <td>
                               {" "}

@@ -14,8 +14,11 @@ import {
   Pagination,
   PaginationLink,
   PaginationItem,
+  CardBody,
+  CardFooter,
 } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
+import FeatherIcon from "feather-icons-react";
 import { Grid } from "gridjs";
 import SignContext from "../../../contextAPI/Context/SignContext";
 import { Link, useParams } from "react-router-dom";
@@ -36,6 +39,7 @@ const NewCustomer = () => {
     deleteCustomer,
   } = useContext(SignContext);
   const [CustomersData, setCustomersData] = useState([]);
+  const [allCustomersData, setAllCustomersData] = useState([]);
   const [CustomerInfo, setCustomerInfo] = useState({
     username: "",
     email: "",
@@ -73,6 +77,7 @@ const NewCustomer = () => {
       id: index + 1,
     }));
     setCustomersData(transformedData);
+    setAllCustomersData(transformedData);
   };
 
   const getspecificCustomer = async (id) => {
@@ -119,6 +124,31 @@ const NewCustomer = () => {
     }
   };
 
+  const searchList = (e) => {
+    let inputVal = e.toLowerCase();
+
+    function filterItems(arr, query) {
+      return arr.filter(function (el) {
+        return (
+          el.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+          el.email.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+          el.phone.toLowerCase().indexOf(query.toLowerCase()) !== -1 
+        
+        );
+      });
+    }
+
+    let filterData = filterItems(allCustomersData, inputVal);
+    setCustomersData(filterData);
+    if (filterData.length === 0) {
+      document.getElementById("noresult").style.display = "block";
+      document.getElementById("todo-task").style.display = "none";
+    } else {
+      document.getElementById("noresult").style.display = "none";
+      document.getElementById("todo-task").style.display = "block";
+    }
+  };
+
   const handleDeleteCustomer = async (customerId) => {
     const res = await deleteCustomer(customerId);
     console.log(res);
@@ -157,7 +187,11 @@ const NewCustomer = () => {
 
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = CustomersData.slice(indexOfFirstItem, indexOfLastItem);
+
+  useEffect(()=>{
+    setCustomersData(CustomersData.slice(indexOfFirstItem, indexOfLastItem))
+    
+  },[currentPage])
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -166,41 +200,32 @@ const NewCustomer = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Customers" pageTitle="Setup" />
+        <BreadCrumb grandParent="Setup" parent="Customers" child="Customers" />
           <Row>
             <Col lg={12}>
               <Card id="customerList">
-                <CardHeader className="border-0">
-                  <Row className="g-4 align-items-center">
-                    <div className="col-sm">
-                      {/* <div>
-                        <h5 className="card-title mb-0">Customer List</h5>
-                      </div> */}
+              <CardHeader className="d-flex justify-content-between align-items-center">
+              <React.Fragment>
+                <h4 className="card-title mb-0">Customers</h4>
+                <Row className="align-items-center">
+                  <Col className="col-lg-auto">
+                    <div className="search-box">
+                      <input
+                        type="text"
+                        id="searchTaskList"
+                        className="form-control search"
+                        placeholder="Search..."
+                        onKeyUp={(e) => searchList(e.target.value)}
+                      />
+                      <i className="ri-search-line search-icon"></i>
                     </div>
-                    <div className="col-sm-auto">
-                      <div>
-                        {/* <button
-                          type="button"
-                          className="btn btn-success add-btn"
-                          id="create-btn"
-                          onClick={togglemodal}
-                        >
-                          <i className="ri-add-line align-bottom me-1"></i> Add
-                          Customer
-                        </button>{" "}
-                        <button
-                          type="button"
-                          className="btn btn-info"
-                          // onClick={() => setIsExportCSV(true)}
-                        >
-                          <i className="ri-file-download-line align-bottom me-1"></i>{" "}
-                          Export
-                        </button> */}
-                      </div>
-                    </div>
-                  </Row>
-
-                  <div className="table-responsive table-card mt-1 mb-3">
+                  </Col>
+                 
+                </Row>
+              </React.Fragment>
+            </CardHeader>
+            <CardBody>
+            <div className="table-responsive table-card mt-1 mb-3" id="todo-task">
                     <table
                       className="table align-middle table-nowrap"
                       id="customerTable"
@@ -210,12 +235,15 @@ const NewCustomer = () => {
                           <th className="name">Index</th>
                           <th className="name">Name</th>
                           <th className="price">email</th>
+                          <th className="price">Contect</th>
+                          <th className="price">Registered At</th>
+
                           <th className="status">Status</th>
                           <th className="action">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="list form-check-all">
-                        {currentItems.map((customer, key) => (
+                      <tbody  className="list form-check-all">
+                        {CustomersData.map((customer, key) => (
                           <tr key={customer.id}>
                             <th scope="row">
                               <td className="product-name">{key + 1}</td>
@@ -224,6 +252,17 @@ const NewCustomer = () => {
                               {customer.username}
                             </td>
                             <td className="stock">{customer.email}</td>
+                            <td className="stock">{customer.phone}</td>
+                            <td className="stock">
+                            {new Date(customer.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              }
+                            )}
+                              </td>
                             <td className="status">
                               {customer.active === true ? (
                                 <div>
@@ -243,16 +282,7 @@ const NewCustomer = () => {
                             {/* Add other columns here as needed */}
                             <td>
                               <div className="d-flex gap-2">
-                                {/* <div className="edit">
-                                  <Link
-                                    onClick={() =>
-                                      toggleEditmodal(customer._id)
-                                    }
-                                    className="btn btn-sm btn-success edit-item-btn"
-                                  >
-                                    Edit
-                                  </Link>
-                                </div> */}
+                               
                                 <div className="remove">
                                   <button
                                     className="btn btn-sm btn-soft-danger remove-item-btn"
@@ -271,9 +301,23 @@ const NewCustomer = () => {
                           </tr>
                         ))}
                       </tbody>
+                      
                     </table>
+                    
                   </div>
-                  <Pagination>
+                  <div
+                className="py-4 mt-4 text-center"
+                id="noresult"
+                style={{ display: "none" }}
+              >
+                <h1>
+                  <FeatherIcon icon="search" />
+                </h1>
+                <h5 className="mt-4">Sorry! No Result Found</h5>
+              </div>
+            </CardBody>
+               <CardFooter>
+               <Pagination>
                     <PaginationItem>
                       <PaginationLink
                         previous
@@ -310,7 +354,8 @@ const NewCustomer = () => {
                       />
                     </PaginationItem>
                   </Pagination>
-                </CardHeader>
+               </CardFooter>
+                  
               </Card>
             </Col>
           </Row>

@@ -103,7 +103,7 @@ export const getGst = async () =>
 //product
 
 export const getProducts = async () =>
-  await api.create(hostedUrl+"/product/getallproducts");
+  await api.create(hostedUrl+"/product/get-products-for-table");
 export const addProduct = async (data) =>
   await api.create(hostedUrl+"/product/addproduct", data);
 export const updateProduct = async (data, id) =>

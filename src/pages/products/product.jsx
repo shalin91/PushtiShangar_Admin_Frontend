@@ -16,6 +16,7 @@ import { GET_PRODUCTS } from "../../store/product/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { useContext } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
@@ -106,6 +107,8 @@ const ProductMaster = () => {
       <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
+        <BreadCrumb grandParent="Setup" parent="Products" child="All Products" />
+
           <Card>
             <CardHeader className="d-flex justify-content-between align-items-center">
               <React.Fragment>
@@ -174,7 +177,6 @@ const ProductMaster = () => {
                       <th scope="col">image</th>
                       <th scope="col">name</th>
                       <th scope="col">category</th>
-                      <th className="stock">Stock</th>
                       <th className="price">Original Price</th>
                       <th className="price">Discounted</th>
                       <th scope="col">actions</th>
@@ -204,8 +206,7 @@ const ProductMaster = () => {
                               <div>{item.name}</div>
                               <div>{`${item.sku}`}</div>
                             </td>
-                            <td>{item.category}</td>
-                            <td>{item.stock ? item.stock.quantity : null}</td>
+                            <td>{item.categoryTitle}</td>
                             <td>{item.prices.calculatedPrice ? item.prices.calculatedPrice : "NA"}</td>
                             <td>
                               {item.prices.discounted ? item.prices.discounted : "NA"}

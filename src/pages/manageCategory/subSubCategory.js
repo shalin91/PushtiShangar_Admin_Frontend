@@ -117,7 +117,7 @@ const SubSubCategoryMaster = () => {
       />
       <div className="page-content">
         <Container fluid>
-        <BreadCrumb grandParent="Setup" parent="CDM" child="Contents" />
+        <BreadCrumb grandParent="Setup" parent="Manage Category" child="Sub Sub Category" />
           <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="hstack mb-4">
