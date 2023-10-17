@@ -77,9 +77,9 @@ const DailyPriceRates = () => {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb
-            parent="setup"
-            child="Inventory"
-            grandChild="Daily Rates"
+          grandParent = "Setup"
+            parent="Inventory"
+            child="Daily Rates"
           />
           <Row>
             <Col lg={12}>

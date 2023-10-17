@@ -153,8 +153,8 @@ const BannerMaster = () => {
         <Row>
           <Col lg={12}>
             <Card id="orderList">
-              <CardHeader className="card-header border-0">
-                <div className="d-flex align-items-center">
+              <CardHeader className="d-flex justify-content-between align-items-center">
+               
                   <h5 className="card-title mb-0 flex-grow-1">All Banners</h5>
 
                   <div className="flex-shrink-0">
@@ -176,9 +176,9 @@ const BannerMaster = () => {
                       </button>{" "}
                     </div>
                   </div>
-                </div>
+                
               </CardHeader>
-              <CardBody className="pt-0">
+              <CardBody className="">
                 <div>
                 {tableData.length ? (
                   <table className="table">
@@ -223,7 +223,7 @@ const BannerMaster = () => {
                               ) : (
                                 <div>
                                   <span className="badge badge-soft-danger badge-border">
-                                    NotActive
+                                    InActive
                                   </span>
                                 </div>
                               )}
@@ -260,7 +260,16 @@ const BannerMaster = () => {
                   ) : (
                     <Card>
 
-                      <Nodata></Nodata>
+                      {/* <Nodata></Nodata> */}
+
+                      <div id="elmLoader">
+                        <div
+                          className="spinner-border text-primary avatar-sm"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
 
                     </Card>
                   )}

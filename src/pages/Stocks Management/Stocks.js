@@ -17,6 +17,7 @@ import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
 import AddStocks from "./AddStocks";
+import FeatherIcon from "feather-icons-react";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -26,7 +27,7 @@ function Stocks() {
   const [allContentData, setAllContentData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
-  const [UpdatedStocks, setUpdatedStocks] = useState(null);
+  const [StockForUpdate, setStockForUpdate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const toggledeletemodal = () => {
@@ -42,19 +43,15 @@ function Stocks() {
       id: index + 1,
     }));
     setContentData(transformedData);
-    setAllContentData(transformedData)
+    setAllContentData(transformedData);
   };
-
-
 
   const searchList = (e) => {
     let inputVal = e.toLowerCase();
 
     function filterItems(arr, query) {
       return arr.filter(function (el) {
-        return (
-          el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        );
+        return el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
       });
     }
 
@@ -115,30 +112,37 @@ function Stocks() {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Stock Manage Of Products" pageTitle="Stocks" />
+          <BreadCrumb grandParent="Setup" parent="Inventory" child="Stocks" />
 
           <Card>
-            <CardHeader>
-              <Row className="g-1 m-1">
-                <Col className="col-sm">
-                  <div className="d-flex justify-content-sm-end">
-                    <div className="search-box ms-2">
-                      <input
-                        type="text"
-                        className="form-control search"
-                        placeholder="Search..."
-                        onKeyUp={(e) => searchList(e.target.value)}
-                      />
-                      <i className="ri-search-line search-icon"></i>
-                    </div>
-                  </div>
-                </Col>
-                
-              </Row>
-            </CardHeader>
+           
+
+            <CardHeader className="d-flex justify-content-between align-items-center">
+             
+                    <h4 className="card-title mb-0">Product Stock Management</h4>
+                    <Row className="align-items-center">
+                      <Col className="col-lg-auto">
+                        <div className="search-box">
+                          <input
+                            type="text"
+                            id="searchTaskList"
+                            className="form-control search"
+                            placeholder="Search by product name"
+                            onKeyUp={(e) => searchList(e.target.value)}
+                          />
+                          <i className="ri-search-line search-icon"></i>
+                        </div>
+                      </Col>
+                     
+                    </Row>
+                  
+                </CardHeader>
             <CardBody>
-              <AddStocks refreshTable={Getstocks} UpdatedStocks={UpdatedStocks} />
-              <div id="contentList">
+              <AddStocks
+                refreshTable={Getstocks}
+                StockForUpdate={StockForUpdate}
+              />
+              <div id="todo-task">
                 <div className="table-responsive table-card mt-1 mb-3">
                   <table
                     className="table align-middle table-nowrap"
@@ -155,7 +159,7 @@ function Stocks() {
                       </tr>
                     </thead>
 
-                    <tbody className="list form-check-all">
+                    <tbody className="list form-check-all" >
                       {currentItems.map((content, key) => (
                         <tr key={content.id}>
                           <td className="product-name">{key + 1}</td>
@@ -168,14 +172,15 @@ function Stocks() {
                             {content.currentPricePerUnit}
                           </td>
                           <td className="product-name">
-                          {new Date(content.date).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  }
-                                )}</td>
+                            {new Date(content.date).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              }
+                            )}
+                          </td>
 
                           {/* <td className="product-name">
                                 {content.contentType}
@@ -188,8 +193,7 @@ function Stocks() {
                               <button
                                 className="btn btn-sm btn-soft-info edit-list"
                                 onClick={() => {
-                                  setUpdatedStocks(content);
-                                 
+                                  setStockForUpdate(content);
                                 }}
                               >
                                 <i className="ri-pencil-fill align-bottom" />
@@ -211,6 +215,16 @@ function Stocks() {
                     </tbody>
                   </table>
                 </div>
+              </div>
+              <div
+                className="py-4 mt-4 text-center"
+                id="noresult"
+                style={{ display: "none" }}
+              >
+                <h1>
+                  <FeatherIcon icon="search" />
+                </h1>
+                <h5 className="mt-4">Sorry! No Result Found</h5>
               </div>
               <Pagination>
                 <PaginationItem>
@@ -283,15 +297,6 @@ function Stocks() {
           <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
             <button
               type="button"
-              className="btn w-sm btn-light"
-              onClick={() => {
-                setDeleteModal(!deletemodal);
-              }}
-            >
-              Close
-            </button>
-            <button
-              type="button"
               className="btn w-sm btn-danger"
               onClick={() => {
                 handleDeleteStocks(ContentToDelete._id);
@@ -299,6 +304,15 @@ function Stocks() {
               }}
             >
               Yes, Delete It!
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
             </button>
           </div>
         </ModalBody>

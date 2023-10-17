@@ -18,7 +18,8 @@ import {
   PaginationItem,
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
-import { Link } from "react-router-dom";
+import FeatherIcon from "feather-icons-react";
+import { Link ,useNavigate} from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
 
 const ITEMS_PER_PAGE = 10;
@@ -29,18 +30,45 @@ const ManageGalleryCat = () => {
   // console.log(url)
   const { GetGalleryCat , DeleteGalleryCat} = useContext(SignContext);
   const [GalleryData, setGalleryData] = useState([]);
+  const [allGalleryData, setAllGalleryData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [CategoryToDelete, setCategoryToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const navigate = useNavigate();
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
+  };
+
+
+  const searchList = (e) => {
+    let inputVal = e.toLowerCase();
+
+    function filterItems(arr, query) {
+      return arr.filter(function (el) {
+        return (
+          el.imageTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1
+         
+        );
+      });
+    }
+
+    let filterData = filterItems(allGalleryData, inputVal);
+    setGalleryData(filterData);
+    if (filterData.length === 0) {
+      document.getElementById("noresult").style.display = "block";
+      document.getElementById("customerTable").style.display = "none";
+    } else {
+      document.getElementById("noresult").style.display = "none";
+      document.getElementById("customerTable").style.display = "block";
+    }
   };
   
 
   const Getgallerycat = async () => {
     const res = await GetGalleryCat();
+   
     console.log(res);
 
     const transformedData = res.GalleryCat.map((gallery, index) => ({
@@ -49,6 +77,7 @@ const ManageGalleryCat = () => {
     }));
     console.log(transformedData);
     setGalleryData(transformedData);
+    setAllGalleryData(transformedData)
   };
 
   const handleDeleteGalleryCategory = async (id) => {
@@ -85,41 +114,44 @@ const ManageGalleryCat = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Gallery" pageTitle="Gallery Category" />
+        <BreadCrumb grandParent="Setup" parent="Gallery" child="Gallery Category" />
           <Row>
             <Col lg={12}>
               <Card>
-                <CardHeader>
-                  <h4 className="card-title mb-0">Gallery-Category</h4>
-                </CardHeader>
-                <CardBody>
-                  <div id="GalleryList">
-                    <Row className="g-4 mb-3">
-                      <Col className="col-sm">
-                        <div className="d-flex justify-content-sm-end">
-                          <div className="search-box ms-2">
-                            <input
-                              type="text"
-                              className="form-control search"
-                              placeholder="Search..."
-                            />
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
+                
+
+                <CardHeader className="d-flex justify-content-between align-items-center">
+                <h4 className="card-title mb-0">Gallery Category</h4>
+                    <Row className="align-items-center">
+                      <Col className="col-lg-auto">
+                        <div className="search-box">
+                          <input
+                            type="text"
+                            id="searchTaskList"
+                            className="form-control search"
+                            placeholder="Search by title"
+                            onKeyUp={(e) => searchList(e.target.value)}
+                          />
+                          <i className="ri-search-line search-icon"></i>
                         </div>
                       </Col>
-                      <Col className="col-sm-auto">
-                        <div>
-                          <Link
-                            to="/creategallery"
-                            className="btn btn-success add-btn me-1"
+                      <Col className="col-lg-auto">
+                        
+
+                      <Link
+                             to="/creategallery"
+                            className="btn btn-primary add-btn me-1"
                             id="create-btn"
                           >
                             <i className="ri-add-line align-bottom me-1"></i>{" "}
                             Add
                           </Link>
-                        </div>
                       </Col>
                     </Row>
+                </CardHeader>
+                <CardBody>
+                  <div id="GalleryList">
+                    
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
                         className="table align-middle table-nowrap"
@@ -143,81 +175,73 @@ const ManageGalleryCat = () => {
                               </td>
                               </th>
                               <td className="Gallery-image">
-                                <div
-                                  style={{
-                                    maxWidth: "50px",
-                                    maxHeight: "50px",
-                                    overflow: "hidden",
-                                    display: "inline-block",
-                                  }}
-                                >
+                               
                                   <img
                                     src={`${url}/gallery-images/${gallery.imagePath}`}
                                     alt="ImagePath"
                                     style={{
-                                      width: "100%",
+                                      width: "100px",
                                       height: "auto",
+                                      maxHeight: "70px",
+                                      objectFit: "cover",
+                                      borderRadius: "3px",
                                     }}
                                   />
-                                </div>
+                                
                               </td>
                               <td className="product-name">
                                 {gallery.gallaryCategoryTitle}
                               </td>
                               <td className="status">
                                 {gallery.active === true ? (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#28a745",
-                                      color: "white",
-                                    }}
-                                  >
-                                    Active
-                                  </span>
-                                ) : (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#dc3545",
-                                      color: "white",
-                                    }}
-                                  >
-                                    Inactive
-                                  </span>
-                                )}
+                                  <span className="badge badge-soft-success badge-border">
+                                  Active
+                                </span>
+                              ) : (
+                                <span className="badge badge-soft-danger badge-border">
+                                  Inactive
+                                </span>
+                              )}
                               </td>
 
                               {/* Add other columns here as needed */}
+                             
                               <td>
-                                <div className="d-flex gap-2">
-                                  <div className="edit">
-                                    <Link
-                                      to={`/editgallerycat/${gallery._id}`}
-                                      className="btn btn-sm btn-success edit-item-btn"
-                                    >
-                                      Edit
-                                    </Link>
-                                  </div>
-                                  <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteRecordModal"
-                                      onClick={() => {
-                                        toggledeletemodal();
-                                        setCategoryToDelete(gallery);
-                                      }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
-                                </div>
-                              </td>
+                            <div className="hstack gap-2">
+                              <button
+                                className="btn btn-sm btn-soft-info edit-list"
+                                onClick={() => {
+                                  navigate(`/editgallerycat/${gallery._id}`)
+                                }}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
+
+                              <button
+                                className="btn btn-sm btn-soft-danger remove-list"
+                                onClick={() => {
+                                  toggledeletemodal();
+                                  setCategoryToDelete(gallery);
+                                }}
+                              >
+                                <i className="ri-delete-bin-5-fill align-bottom" />
+                              </button>
+                            </div>
+                          </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
+                      <div
+                className="py-4 mt-4 text-center"
+                id="noresult"
+                style={{ display: "none" }}
+              >
+                <h1>
+                  <FeatherIcon icon="search" />
+                </h1>
+                <h5 className="mt-4">Sorry! No Result Found</h5>
+              </div>
                     </div>
                   </div>
                   <Pagination>
@@ -289,7 +313,7 @@ const ManageGalleryCat = () => {
             <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
               <h4>Are you sure ?</h4>
               <p className="text-muted mx-4 mb-0">
-                Are you Sure You want to Remove this Gallery-Category ?
+                Are you Sure You want to Remove this Gallery Category ?
               </p>
             </div>
           </div>

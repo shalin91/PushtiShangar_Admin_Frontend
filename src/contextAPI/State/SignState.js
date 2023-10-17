@@ -655,7 +655,7 @@ export const SignState = (props) => {
   };
 
   // Update Stocks
-  const UpdateStocks = async (stocksData, id) => {
+  const UpdateStocks = async (id,stocksData) => {
     try {
       const response = await axios.post(
         `${url}/stocks/updatestock/${id}`,

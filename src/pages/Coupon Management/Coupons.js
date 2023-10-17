@@ -34,9 +34,9 @@ const Coupons = () => {
 
   const Getcoupons = async () => {
     const res = await GetCoupons();
-   
+
     setCouponData(res.coupons);
-    setAllCouponData(res.coupons)
+    setAllCouponData(res.coupons);
   };
 
   const searchList = (e) => {
@@ -44,9 +44,7 @@ const Coupons = () => {
 
     function filterItems(arr, query) {
       return arr.filter(function (el) {
-        return (
-          el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        );
+        return el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
       });
     }
 
@@ -94,46 +92,48 @@ const Coupons = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb
-            parent="setup"
-            child="Coupons"
-            grandChild="All Coupons"
-          />
+         
+          <BreadCrumb grandParent="Setup" parent="Coupons" child="All Coupons" />
+
           <Row>
             <Col lg={12}>
               <Card>
-                <CardHeader>
-                  <h4 className="card-title mb-0">All Coupons</h4>
-                </CardHeader>
-                <CardBody>
-                  <div id="contentList">
-                    <Row className="g-4 mb-3">
-                      <Col className="col-sm">
-                        <div className="d-flex justify-content-sm-end">
-                          <div className="search-box ms-2">
-                            <input
-                              type="text"
-                              className="form-control search"
-                              placeholder="Search by cupon name"
-                              onKeyUp={(e) => searchList(e.target.value)}
-                            />
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
+               
+                <CardHeader className="d-flex justify-content-between align-items-center">
+             
+                    <h4 className="card-title mb-0">All Coupons</h4>
+                    <Row className="align-items-center">
+                      <Col className="col-lg-auto">
+                        <div className="search-box">
+                          <input
+                            type="text"
+                            id="searchTaskList"
+                            className="form-control search"
+                            placeholder="Search by product name"
+                            onKeyUp={(e) => searchList(e.target.value)}
+                          />
+                          <i className="ri-search-line search-icon"></i>
                         </div>
                       </Col>
-                      <Col className="col-sm-auto">
-                        <div>
-                          <Link
+                      <Col className="col-lg-auto">
+                        
+
+                        <Link
                             to="/addcoupon"
-                            className="btn btn-success add-btn me-1"
+                            className="btn btn-primary add-btn me-1"
                             id="create-btn"
                           >
                             <i className="ri-add-line align-bottom me-1"></i>{" "}
                             Add
                           </Link>
-                        </div>
                       </Col>
                     </Row>
+                  
+                </CardHeader>
+
+                <CardBody>
+                  <div id="contentList">
+                   
                     <div
                       id="todo-task"
                       className="table-responsive table-card mt-1 mb-3"
@@ -188,29 +188,22 @@ const Coupons = () => {
                                   }
                                 )}
                               </td>
-                              <td className="status">
-                                {coupon.active === true ? (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#28a745",
-                                      color: "white",
-                                    }}
-                                  >
+                              <td>
+                              {" "}
+                              {coupon.active ? (
+                                <div>
+                                  <span className="badge badge-soft-success badge-border">
                                     Active
                                   </span>
-                                ) : (
-                                  <span
-                                    className="badge badge-soft"
-                                    style={{
-                                      backgroundColor: "#dc3545",
-                                      color: "white",
-                                    }}
-                                  >
-                                    Inactive
+                                </div>
+                              ) : (
+                                <div>
+                                  <span className="badge badge-soft-danger badge-border">
+                                    InActive
                                   </span>
-                                )}
-                              </td>
+                                </div>
+                              )}
+                            </td>
 
                               {/* Add other columns here as needed */}
                               <td>
@@ -218,14 +211,14 @@ const Coupons = () => {
                                   <div className="edit">
                                     <Link
                                       to={`/editcoupon/${coupon._id}`}
-                                      className="btn btn-sm btn-success edit-item-btn"
+                                      className="btn btn-sm btn-soft-info edit-item-btn"
                                     >
-                                      Edit
+                                      <i className="ri-pencil-fill align-bottom" />
                                     </Link>
                                   </div>
                                   <div className="remove">
                                     <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
+                                      className="btn btn-sm btn-soft-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                       onClick={() => {
@@ -233,7 +226,7 @@ const Coupons = () => {
                                         setContentToDelete(coupon);
                                       }}
                                     >
-                                      Remove
+                                      <i className="ri-delete-bin-5-fill align-bottom" />
                                     </button>
                                   </div>
                                 </div>
