@@ -49,7 +49,7 @@ import { useFormik } from "formik";
 import SignContext from "../../../contextAPI/Context/SignContext";
 
 const Team = () => {
-  document.title = "Team | By Shalin";
+  document.title = "Team | Pushtishangar";
   const url = `${process.env.REACT_APP_BASE_URL}`;
   const { registerUser, getSpecificUser, getUsers, deleteUser, updateUser } =
     useContext(SignContext);

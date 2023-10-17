@@ -5,7 +5,7 @@ import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 // import offlineImg from "../../../assets/images/auth-offline.gif";
 
 const Offlinepage = () => {
-    document.title = "Offline Page | Velzon - React Admin & Dashboard Template";
+    document.title = "Offline Page | Pushtishangar";
     return (
         <React.Fragment>
             <div className="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">

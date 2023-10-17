@@ -94,7 +94,7 @@ const EcommerceOrderDetail = (props) => {
   }, [id, customerId]);
 
 
-  document.title ="Order Details | by Barodaweb";
+  document.title ="Order Details | Pushtishangar";
 
 
   return (

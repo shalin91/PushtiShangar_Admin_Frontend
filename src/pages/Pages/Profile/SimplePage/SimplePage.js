@@ -75,7 +75,7 @@ const SimplePage = () => {
     getloggedinUser(authToken);
   }, []);
 
-  document.title = "Profile | by Barodaweb";
+  document.title = "Profile | Pushtishangar";
 
   return (
     <React.Fragment>

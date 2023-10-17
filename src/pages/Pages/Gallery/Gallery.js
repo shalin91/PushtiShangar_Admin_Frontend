@@ -10,7 +10,7 @@ const Gallery = () => {
 
   const [displayCategory, setCategory] = useState("All");
 
-  document.title = "Gallery | Velzon - React Admin & Dashboard Template";
+  document.title = "Gallery | Pushtishangar";
 
   return (
     <React.Fragment>

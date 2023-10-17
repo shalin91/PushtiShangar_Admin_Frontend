@@ -209,7 +209,7 @@ const NewTeam = () => {
     getspecificUser(id);
   }, [id]);
 
-  document.title = "Team | by Shalin";
+  document.title = "Team | Pushtishangar";
 
   return (
     <>
