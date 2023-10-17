@@ -233,7 +233,7 @@ const AddGalleryDetails = () => {
                                     {GalleryCategory.map((category) => (
                                       <option
                                         key={category.gallaryCategoryTitle}
-                                        value={category.gallaryCategoryTitle}
+                                        value={category._id}
                                       >
                                         {category.gallaryCategoryTitle}
                                       </option>
