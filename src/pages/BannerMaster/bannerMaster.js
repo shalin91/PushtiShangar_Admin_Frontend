@@ -38,6 +38,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 // import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import Nodata from "../../Components/Common/Nodata";
+import { Link } from "react-router-dom";
 
 // Register the plugins
 registerPlugin(
@@ -97,8 +98,8 @@ const BannerMaster = () => {
   };
 
   const BannerValidation = Yup.object().shape({
-    bannerTitle: Yup.string().required("required"),
-    description: Yup.string().min(5, "Too short"),
+    bannerTitle: Yup.string().required("banner title required"),
+    bannerType: Yup.string().required("banner type required"),
   });
 
   const bannerForm = useFormik({
@@ -157,25 +158,40 @@ const BannerMaster = () => {
                
                   <h5 className="card-title mb-0 flex-grow-1">All Banners</h5>
 
-                  <div className="flex-shrink-0">
-                    <div className="d-flex gap-1 flex-wrap">
-                      <button
-                        type="button"
-                        className="btn btn-primary add-btn"
-                        id="create-btn"
-                        onClick={() => {
-                          setIsEdit(false);
-                          setValuesForUpdate("");
-                          setFiles([]);
+                  <Row className="g-4 mb-3">
+                    <Col className="col-sm">
+                      <div className="d-flex justify-content-sm-end">
+                        <div className="search-box ms-2">
+                          <input
+                            type="text"
+                            className="form-control search"
+                            placeholder="Search..."
+                            // onKeyUp={(e) => searchList(e.target.value)}
+                          />
+                          <i className="ri-search-line search-icon"></i>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col className="col-sm-auto">
+                      <div>
+                        <Link
+                          className="btn btn-primary add-btn me-1"
+                          id="create-btn"
+                          onClick={() => {
+                            setIsEdit(false);
+                            setValuesForUpdate("");
+                            setFiles([]);
+  
+                            toggle();
+                          }}
+                        >
+                          <i className="ri-add-line align-bottom me-1"></i> Add
+                        </Link>
+                      </div>
+                    </Col>
+                  </Row>
 
-                          toggle();
-                        }}
-                      >
-                        <i className="ri-add-line align-bottom me-1"></i> Create
-                        Banner
-                      </button>{" "}
-                    </div>
-                  </div>
+                  
                 
               </CardHeader>
               <CardBody className="">
@@ -231,7 +247,7 @@ const BannerMaster = () => {
 
                             <td>
                               <button
-                                className="btn btn-sm btn-soft-danger remove-list"
+                                className="btn btn-sm btn-soft-danger remove-list mx-1"
                                 onClick={() => {
                                   setValuesForUpdate(item);
                                   setDeleteModal(true);
@@ -240,7 +256,7 @@ const BannerMaster = () => {
                                 <i className="ri-delete-bin-5-fill align-bottom" />
                               </button>
                               <button
-                                className="btn btn-sm btn-soft-info edit-list"
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
                                 onClick={() => {
                                   setIsEdit(true);
                                   setValuesForUpdate(item);
@@ -352,7 +368,7 @@ const BannerMaster = () => {
 
                       <div className="mb-3">
                         <Label htmlFor="name" className="form-label">
-                          banner type
+                          banner type*
                         </Label>
                         <select
                           className="form-select"
@@ -368,16 +384,16 @@ const BannerMaster = () => {
                           <option value="carousel">carousel</option>
                           <option value="bottom">bottom</option>
                         </select>
-                        {bannerForm.touched.name && bannerForm.errors.name ? (
-                          <FormFeedback type="invalid">
-                            {bannerForm.errors.name}
-                          </FormFeedback>
+                        {bannerForm.touched.bannerType && bannerForm.errors.bannerType ? (
+                          <p style={{ color: "red", fontSize: "12px" }}>
+                          {bannerForm.errors.bannerType && bannerForm.touched.bannerType && bannerForm.errors.bannerType}
+                        </p>
                         ) : null}
                       </div>
 
                       <div className="mb-3">
                         <Label htmlFor="bannerText" className="form-label">
-                          banner text*
+                          banner text
                         </Label>
                         <Input
                           name="bannerText"

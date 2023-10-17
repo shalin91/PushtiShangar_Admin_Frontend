@@ -132,27 +132,34 @@ const AllOrders = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Orders" pageTitle="Orders" />
+        <BreadCrumb grandParent="Setup" parent="Orders" child="new orders" />
           <Row>
             <Col lg={12}>
               <Card>
+              <CardHeader className="d-flex justify-content-between align-items-center">
+             
+             <h4 className="card-title mb-0">All Orders</h4>
+             <Row className="align-items-center">
+               <Col className="col-lg-auto">
+                 <div className="search-box">
+                   <input
+                     type="text"
+                     id="searchTaskList"
+                     className="form-control search"
+                     placeholder="Search by product name"
+                    //  onKeyUp={(e) => searchList(e.target.value)}
+                   />
+                   <i className="ri-search-line search-icon"></i>
+                 </div>
+               </Col>
+              
+             </Row>
+           
+         </CardHeader>
+
                 <CardBody>
                   <div id="contentList">
-                    <Row className="g-4 mb-3">
-                      <Col className="col-sm">
-                        <div className="d-flex justify-content-sm-end">
-                          <div className="search-box ms-2">
-                            <input
-                              type="text"
-                              className="form-control search"
-                              placeholder="Search..."
-                            />
-                            <i className="ri-search-line search-icon"></i>
-                          </div>
-                        </div>
-                      </Col>
-                      
-                    </Row>
+                    
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
                         className="table align-middle table-nowrap"
@@ -198,6 +205,8 @@ const AllOrders = () => {
                                 >
                                   {order.status}
                                 </span>
+
+                                
                               </td>
 
                               {/* Add other columns here as needed */}
@@ -206,7 +215,7 @@ const AllOrders = () => {
                                   <div className="view">
                                     <Link
                                       to={`/vieworder/${order._id}`}
-                                      className="btn btn-sm btn-info view-item-btn"
+                                      className="btn btn-sm btn-soft-info view-item-btn"
                                     >
                                       View
                                     </Link>
@@ -214,14 +223,14 @@ const AllOrders = () => {
                                   <div className="edit">
                                     <Link
                                       onClick={() => toggleEditmodal(order._id)}
-                                      className="btn btn-sm btn-success edit-item-btn"
+                                      className="btn btn-sm btn-soft-success edit-item-btn"
                                     >
                                       <i className="ri-pencil-line"></i>
                                     </Link>
                                   </div>
                                   <div className="remove">
                                     <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
+                                      className="btn btn-sm btn-soft-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                       onClick={() => {

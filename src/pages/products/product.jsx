@@ -213,15 +213,7 @@ const ProductMaster = () => {
                             </td>
                             <td>
                               <div className="hstack gap-2">
-                                <button
-                                  className="btn btn-sm btn-soft-danger remove-list"
-                                  onClick={() => {
-                                    setSelectedForDelete(item._id);
-                                    setDeleteModal(true);
-                                  }}
-                                >
-                                  <i className="ri-delete-bin-5-fill align-bottom" />
-                                </button>
+                                
                                 <button
                                   className="btn btn-sm btn-soft-info edit-list"
                                   onClick={() => {
@@ -230,6 +222,16 @@ const ProductMaster = () => {
                                   }}
                                 >
                                   <i className="ri-pencil-fill align-bottom" />
+                                </button>
+
+                                <button
+                                  className="btn btn-sm btn-soft-danger remove-list"
+                                  onClick={() => {
+                                    setSelectedForDelete(item._id);
+                                    setDeleteModal(true);
+                                  }}
+                                >
+                                  <i className="ri-delete-bin-5-fill align-bottom" />
                                 </button>
                               </div>
                             </td>
