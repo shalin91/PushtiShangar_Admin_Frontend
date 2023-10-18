@@ -15,11 +15,11 @@ const Section = () => {
                 <Col xs={12}>
                     <div className="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div className="flex-grow-1">
-                            <h4 className="fs-16 mb-1">Good Morning, Anna!</h4>
-                            <p className="text-muted mb-0">Here's what's happening with your store today.</p>
+                            <h4 className="fs-16 mb-1">Good Morning, Admin!</h4>
+                            {/* <p className="text-muted mb-0">Here's what's happening with your store today.</p> */}
                         </div>
                         <div className="mt-3 mt-lg-0">
-                            <form action="#">
+                            {/* <form action="#">
                                 <Row className="g-3 mb-0 align-items-center">
                                     <div className="col-sm-auto">
                                         <div className="input-group">
@@ -41,7 +41,7 @@ const Section = () => {
                                         <button type="button" className="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn" onClick={() => sidebar()} ><i className="ri-pulse-line"></i></button>
                                     </div>
                                 </Row>
-                            </form>
+                            </form> */}
                         </div>
                     </div>
                 </Col>

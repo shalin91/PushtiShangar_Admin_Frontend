@@ -11,10 +11,10 @@ import StoreVisits from "./StoreVisits";
 import TopSellers from "./TopSellers";
 
 const DashboardEcommerce = () => {
-  document.title ="Dashboard | by Shalin";
+  document.title ="Dashboard";
   return (
     <React.Fragment>
-      {/* <div className="page-content">
+      <div className="page-content">
         <Container fluid>
           <Row>
             <Col>
@@ -23,26 +23,26 @@ const DashboardEcommerce = () => {
                 <Row>
                   <Widget />
                 </Row>
-                <Row>
+                {/* <Row>
                   <Col xl={8}>
                     <Revenue />
                   </Col>
                   <SalesByLocations />
-                </Row>
-                <Row>
+                </Row> */}
+                {/* <Row>
                   <BestSellingProducts />
                   <TopSellers />
-                </Row>
-                <Row>
+                </Row> */}
+                {/* <Row>
                   <StoreVisits />
                   <RecentOrders />
-                </Row>
+                </Row> */}
               </div>
             </Col>
-            <RecentActivity />
+            {/* <RecentActivity /> */}
           </Row>
         </Container>
-      </div> */}
+      </div>
     </React.Fragment>
   );
 };
