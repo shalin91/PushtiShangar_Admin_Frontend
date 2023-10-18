@@ -58,7 +58,7 @@ const ForgetPasswordPage = (props) => {
     }
   };
 
-  document.title = "Reset Password | By Shalin";
+  document.title = "Pushtishangar";
   return (
     <ParticlesAuth>
       <div className="auth-page-content">

@@ -141,9 +141,10 @@ function Stocks() {
               <AddStocks
                 refreshTable={Getstocks}
                 StockForUpdate={StockForUpdate}
+                setStockForUpdate={setStockForUpdate}
               />
               <div id="todo-task">
-                <div className="table-responsive table-card mt-1 mb-3">
+                <div className="table-responsive table-card mt-3 mb-3">
                   <table
                     className="table align-middle table-nowrap"
                     id="customerTable"

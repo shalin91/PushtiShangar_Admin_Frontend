@@ -65,7 +65,7 @@ const EcommerceAllProducts = () => {
   }, []);
 
 
-  document.title = "Products | By Shalin";
+  document.title = "Products | Pushtishangar";
 
   return (
     <>

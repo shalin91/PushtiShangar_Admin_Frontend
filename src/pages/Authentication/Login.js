@@ -92,7 +92,7 @@ const Login = () => {
     }
   };
 
-  document.title = "SignIn | Barodaweb";
+  document.title = "Pushtishangar";
   return (
     <React.Fragment>
       <ParticlesAuth>

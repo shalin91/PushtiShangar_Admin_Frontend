@@ -11,7 +11,10 @@ import StoreVisits from "./StoreVisits";
 import TopSellers from "./TopSellers";
 
 const DashboardEcommerce = () => {
-  document.title ="Dashboard";
+
+  document.title ="Dashboard | Pushtishangar";
+
+
   return (
     <React.Fragment>
       <div className="page-content">

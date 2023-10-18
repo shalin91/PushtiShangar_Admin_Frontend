@@ -7,7 +7,7 @@ import ParticlesAuth from "../ParticlesAuth";
 import logoLight from "../../../assets/images/logo-light.png";
 
 const BasicLogout = () => {
-    document.title="Log Out | Velzon - React Admin & Dashboard Template";
+    document.title="Pushtishangar";
     return (
         <React.Fragment>
             <div className="auth-page-content">

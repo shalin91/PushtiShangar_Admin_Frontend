@@ -79,7 +79,7 @@ const UserProfile = () => {
     getspecificUser(id);
   }, []);
 
-  document.title = "Profile | Velzon - React Admin & Dashboard Template";
+  document.title = "Pushtishangar";
   return (
     <React.Fragment>
       <div className="page-content">

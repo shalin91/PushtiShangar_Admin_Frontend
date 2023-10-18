@@ -49,7 +49,7 @@ const SearchResults = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
-document.title="Search Results | Velzon - React Admin & Dashboard Template";
+document.title="Search Results | Pushtishangar";
 
     return (
         <React.Fragment>

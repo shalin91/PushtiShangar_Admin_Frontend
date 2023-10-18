@@ -94,7 +94,7 @@ const EcommerceOrderDetail = (props) => {
   }, [id, customerId]);
 
 
-  document.title ="Order Details | by Barodaweb";
+  document.title ="Order Details | Pushtishangar";
 
 
   return (
@@ -110,7 +110,7 @@ const EcommerceOrderDetail = (props) => {
                   <h5 className="card-title flex-grow-1 mb-0">Order {OrderData._id} </h5>
                   <div className="flex-shrink-0">
                     <Link
-                      to="/apps-invoices-details"
+                      to="/invoice"
                       className="btn btn-success btn-sm"
                     >
                       <i className="ri-download-2-fill align-middle me-1"></i>{" "}
