@@ -1,59 +1,63 @@
+
 import React, { useState, useEffect } from "react";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
-import { Card, CardBody, Col, Row } from "reactstrap";
-// import SignContext from "../../contextAPI/Context/SignContext";
-// import { useContext } from "react";
-
-const Widgets = () => {
-//   const { GetDashboardData } = useContext(SignContext);
-//   const [DashboardData, setDashboardData] = useState({});
-
-//   const getDashboardData = async () => {
-//     const res = await GetDashboardData();
-//     console.log(res);
-
-//     // setDashboardData(res.orders);
-//   };
+import { Card, CardBody, Col, Container, Row } from "reactstrap";
+import axios from "axios";
 
 
+const NewDashboard = () => {
+    const [widgetData, setWidgetData] = useState({
+        totalCustomers: 0,
+        totalPendingOrders: 0,
+        totalReturnOrders: 0,
+        totalCancelledOrders: 0,
+        totalProducts: 0,
+        totalShringarProducts: 0,
+        totalSilverVesselsProducts: 0,
+        totalSugandhiProducts: 0,
+        totalPichwaiWallArtProducts: 0,
+        totalVastraProducts: 0,
+        totalFibreItemsProducts: 0,
+        totalSeasonalProducts: 0,
+      });
+    
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get("http://localhost:5002/dashboard/get-dashboard-data");
+            console.log(response)
+            const data = response;
+    
+            setWidgetData({
+              totalCustomers: data.customers,
+              totalPendingOrders: data.orders.pendingOrders,
+              totalReturnOrders: data.orders.returnOrders,
+              totalCancelledOrders: data.orders.cancelledOrders,
+              totalProducts: data.products.totalProducts,
+              totalShringarProducts: data.products.ShringarProducts,
+              totalSilverVesselsProducts: data.products.SilverVesselsProducts,
+              totalSugandhiProducts: data.products.SugandhiProducts,
+              totalPichwaiWallArtProducts: data.products.PichwaiAndWallArtProducts,
+              totalVastraProducts: data.products.Vastra,
+              totalFibreItemsProducts: data.products.FibreItems,
+              totalSeasonalProducts: data.products.SeasonalProducts,
+            });
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+      }, []); 
 
-  // Example state to hold data fetched from the API
-  const [widgetData, setWidgetData] = useState({
-    totalCustomers: 0,
-    totalPendingOrders: 0,
-    totalReturnOrders: 0,
-    totalCancelledOrders: 0,
-    totalProducts: 0,
-    totalShringarProducts: 0,
-    totalSilverVesselsProducts: 0,
-    totalSugandhiProducts: 0,
-    totalPichwaiWallArtProducts: 0,
-    totalVastraProducts: 0,
-    totalFibreItemsProducts: 0,
-    totalSeasonalProducts: 0,
-  });
 
-  useEffect(() => {
-    // getDashboardData();
-    setWidgetData({
-      totalCustomers: 1000,
-      totalPendingOrders: 50,
-      totalReturnOrders: 200,
-      totalCancelledOrders: 30,
-      totalProductCategories: 8,
-      totalShringarProducts: 8,
-      totalSilverVesselsProducts: 8,
-      totalSugandhiProducts: 8,
-      totalPichwaiWallArtProducts: 8,
-      totalVastraProducts: 8,
-      totalFibreItemsProducts: 8,
-      totalSeasonalProducts: 8,
-    });
-  }, []); // Empty dependency array to fetch data only once on component mount
 
+ 
   return (
     <>
+        <div className="page-content">
+        <Container fluid>
       <Row>
         {/* Total Customers Widget */}
         <Col xl={3} md={6}>
@@ -448,8 +452,10 @@ const Widgets = () => {
           </Card>
         </Col>
       </Row>
+      </Container>
+      </div>
     </>
   );
-};
+}
 
-export default Widgets;
+export default NewDashboard

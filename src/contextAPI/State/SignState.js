@@ -854,6 +854,18 @@ export const SignState = (props) => {
     }
   };
 
+  // Dshboard Data
+  // const GetDashboardData = async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:5002/dashboard/get-dashboard-data`);
+  //     // console.log(response)
+  //     return response;
+  //   } catch (error) {
+  //     return { success: false, msg: "server Error" };
+  //   }
+  // };
+
+
 
 
 
@@ -916,7 +928,8 @@ export const SignState = (props) => {
         UpdatePrice,
         DeleteOrder,
         getSpecificOrderbyId,
-        UpdateOrder
+        UpdateOrder,
+        // GetDashboardData,
       }}
     >
       {props.children}
