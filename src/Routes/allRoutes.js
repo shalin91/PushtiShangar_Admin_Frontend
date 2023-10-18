@@ -102,10 +102,11 @@ import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
 import BannerMaster from "../pages/BannerMaster/bannerMaster.js"
 import BlogMaster from "../pages/BlogMaster/BlogsMaster";
+import NewDashboard from "../Dashboard/NewDashboard";
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 const authProtectedRoutes = [
-  { path: "/dashboard", component: <DashboardEcommerce /> },
+  { path: "/dashboard", component: <NewDashboard /> },
   // { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
 
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },
