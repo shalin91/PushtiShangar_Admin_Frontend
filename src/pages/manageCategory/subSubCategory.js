@@ -27,6 +27,7 @@ import {
   getSubSubCategory,
 } from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
 const SubSubCategoryMaster = () => {
@@ -102,9 +103,9 @@ const SubSubCategoryMaster = () => {
   };
 
   const categoryValidation = Yup.object().shape({
-    name: Yup.string().required("Name is must be required !!!"),
-    Category: Yup.string().required("plese select one"),
-    SubCategory: Yup.string().required("plese select one")
+    name: Yup.string().required("sub sub category title is required"),
+    Category: Yup.string().required("category is required"),
+    SubCategory: Yup.string().required("sub category is required")
   });
   return (
     <React.Fragment>
@@ -116,6 +117,7 @@ const SubSubCategoryMaster = () => {
       />
       <div className="page-content">
         <Container fluid>
+        <BreadCrumb grandParent="Setup" parent="Manage Category" child="Sub Sub Category" />
           <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="hstack mb-4">
@@ -134,7 +136,7 @@ const SubSubCategoryMaster = () => {
                           type="text"
                           id="searchTaskList"
                           className="form-control search"
-                          placeholder="Search by Category Title"
+                          placeholder="Search..."
                         />
                         <i className="ri-search-line search-icon"></i>
                       </div>
@@ -185,8 +187,8 @@ const SubSubCategoryMaster = () => {
                       ? tableData.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
-                            <td>{item.Category}</td>
-                            <td>{item.SubCategory}</td>
+                            <td>{item.CategoryTitle}</td>
+                            <td>{item.subCategoryTitle}</td>
                             <td>{item.name}</td>
                             <td>
                               {" "}
@@ -199,25 +201,26 @@ const SubSubCategoryMaster = () => {
                               ) : (
                                 <div>
                                   <span className="badge badge-soft-danger badge-border">
-                                    NotActive
+                                    InActive
                                   </span>
                                 </div>
                               )}
                             </td>
 
                             <td>
+                            <button
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
+                                onClick={() => handleEdit(item)}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
                               <button
                                 className="btn btn-sm btn-soft-danger remove-list"
                                 onClick={() => handleDelete(item)}
                               >
                                 <i className="ri-delete-bin-5-fill align-bottom" />
                               </button>
-                              <button
-                                className="btn btn-sm btn-soft-info edit-list"
-                                onClick={() => handleEdit(item)}
-                              >
-                                <i className="ri-pencil-fill align-bottom" />
-                              </button>
+                              
                             </td>
                           </tr>
                         ))
@@ -240,7 +243,7 @@ const SubSubCategoryMaster = () => {
       >
         <ModalHeader toggle={toggle} className="p-3 bg-soft-success">
           {" "}
-          {!!isEdit ? "Edit Category" : "Create new Category"}{" "}
+          {!!isEdit ? "Edit Category" : "Create new sub sub category"}{" "}
         </ModalHeader>
         <ModalBody>
           {successBanner ? (
@@ -274,7 +277,7 @@ const SubSubCategoryMaster = () => {
                 <div>
                   <Form>
                     <Col md={12}>
-                      <label className="modalLabel">select category</label>
+                      <label className="modalLabel">Category</label>
                       <select
                         name="Category"
                         onChange={(e) => {
@@ -302,7 +305,7 @@ const SubSubCategoryMaster = () => {
                       </p>
                     </Col>
                     <Col md={12}>
-                      <label className="modalLabel">select sub category</label>
+                      <label className="modalLabel">Sub Category </label>
                       <select
                         name="SubCategory"
                         onChange={handleChange}
@@ -328,7 +331,7 @@ const SubSubCategoryMaster = () => {
                     </Col>
 
                     <Col md={12}>
-                      <label className="modalLable">select category</label>
+                      <label className="modalLable">Sub Sub Category Title</label>
                       <input
                         type="text"
                         name="name"

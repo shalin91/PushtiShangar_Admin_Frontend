@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
-import { Card, Col, Container, Form, Input, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Form, Input, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import UiContent from "../../Components/Common/UiContent";
 import { toast, ToastContainer } from "react-toastify";
@@ -82,12 +82,26 @@ const EditGalleryCat = () => {
       <ToastContainer/>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Edit Gallery-Category" pageTitle="Gallery" />
-          <Row>
+        <BreadCrumb grandParent="Setup" parent="Gallery" child="Edit Gallery Category" />
+        <Card>
+        <CardHeader>
+                        <Row className="g-1 m-1">
+                          <Col className="col-sm">
+                            <div className="d-flex justify-content-sm-between">
+                              <h2 className="card-title mb-0 justify-content-sm-start">
+                                <strong>Edit Gallery Category</strong>
+                              </h2>
+                            
+                            </div>
+                          </Col>
+                        </Row>
+                      </CardHeader>
+                      <CardBody>
+                      <Row>
             <Col lg={12}>
               <Form onSubmit={handleSubmit}>
                 <Card>
-                  <div className="card-body">
+
                     <div className="live-preview">
                       <Row className="align-items-center g-3">
                         <Col sm={6}>
@@ -172,7 +186,7 @@ const EditGalleryCat = () => {
                         </Col>
                       </Row>
                     </div>
-                  </div>
+                 
                 </Card>
                 <div className="text-end mb-3">
                   <button
@@ -180,12 +194,15 @@ const EditGalleryCat = () => {
                     className="btn btn-success w-sm"
                     //   onClick={togglesuccessmodal}
                   >
-                    Submit
+                    Update
                   </button>
                 </div>
               </Form>
             </Col>
           </Row>
+                      </CardBody>
+        </Card>
+          
         </Container>
       </div>
     </>

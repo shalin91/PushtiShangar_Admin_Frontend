@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
-import { Card, Col, Container, Form, Input, Row } from "reactstrap";
+import { Card, Col, Container,CardHeader, Form, Input, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import UiContent from "../../Components/Common/UiContent";
 import * as Yup from "yup";
@@ -82,7 +82,7 @@ const AddGalleryDetails = () => {
       <ToastContainer/>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Add Gallery-Category" pageTitle="Gallery" />
+        <BreadCrumb grandParent="Setup" parent="Gallery" child="Add-Gallery Details" />
           <Row>
             <Col lg={12}>
               <Formik
@@ -115,6 +115,10 @@ const AddGalleryDetails = () => {
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <Card>
+                    <CardHeader className="d-flex justify-content-between align-items-center">
+                <h4 className="card-title mb-0">Add Gallery Details</h4>
+                    
+                </CardHeader>
                       <div className="card-body">
                         <div className="live-preview">
                           <Row className="align-items-center g-3">

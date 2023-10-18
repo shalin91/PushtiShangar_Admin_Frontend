@@ -41,7 +41,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
-  FilePondPluginImagePreview,
+  FilePondPluginImagePreview
   // FilePondPluginFilePoster
 );
 
@@ -50,6 +50,7 @@ const CategoryMaster = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
   const [deleteModal, setDeleteModal] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [allTableData, setAllTableData] = useState([]);
   const [recordForSubmit, setrecordForSubmit] = useState(null);
 
   const [submitted, setSubmitted] = useState(false);
@@ -64,14 +65,19 @@ const CategoryMaster = () => {
     try {
       const response = await getCategory();
       setTableData(response);
+      setAllTableData(response);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchData();
-    setFiles([])  }, [isEdit]);
+    if(tableData.length===0){
+
+      fetchData();
+    }
+    setFiles([]);
+  }, []);
 
   const toggle = useCallback(() => {
     if (showModal) {
@@ -80,6 +86,26 @@ const CategoryMaster = () => {
       setShowModal(true);
     }
   }, [showModal]);
+
+  const searchList = (e) => {
+    let inputVal = e.toLowerCase();
+
+    function filterItems(arr, query) {
+      return arr.filter(function (el) {
+        return el.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      });
+    }
+
+    let filterData = filterItems(allTableData, inputVal);
+    setTableData(filterData);
+    if (filterData.length === 0) {
+      document.getElementById("noresult").style.display = "block";
+      document.getElementById("todo-task").style.display = "none";
+    } else {
+      document.getElementById("noresult").style.display = "none";
+      document.getElementById("todo-task").style.display = "block";
+    }
+  };
 
   const handledeleteProduct = async () => {
     if (valuesForUpdate) {
@@ -91,7 +117,7 @@ const CategoryMaster = () => {
 
   const categoryValidation = Yup.object().shape({
     name: Yup.string().required("required"),
-    description: Yup.string().min(5, "Too short"),
+   
   });
 
   const categoryForm = useFormik({
@@ -112,15 +138,16 @@ const CategoryMaster = () => {
       if (files.length !== 0) {
         formData.append("image", files[0].file);
       }
-      setButtnLoading(true)
+      setButtnLoading(true);
       if (isEdit) {
         await updateCategory(formData, valuesForUpdate._id);
       } else {
         await addCategory(formData);
       }
-      setButtnLoading(false)
+      fetchData();
+      setButtnLoading(false);
       setIsEdit(false);
-      setSubmitted(false)
+      setSubmitted(false);
       categoryForm.resetForm();
       toggle();
     },
@@ -134,15 +161,27 @@ const CategoryMaster = () => {
         onCloseClick={() => setDeleteModal(false)}
       />
       <Container fluid>
-        <BreadCrumb title="Category" pageTitle="Category" />
+      <BreadCrumb grandParent="Setup" parent="Manage Category" child="Category" />
         <Row>
           <Col lg={12}>
+            
             <Card id="orderList">
               <CardHeader className="card-header border-0">
                 <div className="d-flex align-items-center">
-
                   <h5 className="card-title mb-0 flex-grow-1">Category </h5>
 
+                  <Col className="col-lg-auto mx-2">
+                    <div className="search-box">
+                      <input
+                        type="text"
+                        id="searchTaskList"
+                        className="form-control search"
+                        placeholder="Search..."
+                        onKeyUp={(e) => searchList(e.target.value)}
+                      />
+                      <i className="ri-search-line search-icon"></i>
+                    </div>
+                  </Col>
                   <div className="flex-shrink-0">
                     <div className="d-flex gap-1 flex-wrap">
                       <button
@@ -151,9 +190,9 @@ const CategoryMaster = () => {
                         id="create-btn"
                         onClick={() => {
                           setIsEdit(false);
-                          setValuesForUpdate("")
-                          setFiles([])
-                          
+                          setValuesForUpdate("");
+                          setFiles([]);
+
                           toggle();
                         }}
                       >
@@ -192,26 +231,15 @@ const CategoryMaster = () => {
                               ) : (
                                 <div>
                                   <span className="badge badge-soft-danger badge-border">
-                                    NotActive
+                                    InActive
                                   </span>
                                 </div>
                               )}
                             </td>
 
                             <td>
-                              <button
-                                className="btn btn-sm btn-soft-danger remove-list"
-                                onClick={() => {
-                                  
-
-                                  setValuesForUpdate(item);
-                                  setDeleteModal(true);
-                                }}
-                              >
-                                <i className="ri-delete-bin-5-fill align-bottom" />
-                              </button>
-                              <button
-                                className="btn btn-sm btn-soft-info edit-list"
+                            <button
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
                                 onClick={() => {
                                   setIsEdit(true);
                                   setValuesForUpdate(item);
@@ -220,6 +248,16 @@ const CategoryMaster = () => {
                               >
                                 <i className="ri-pencil-fill align-bottom" />
                               </button>
+                              <button
+                                className="btn btn-sm btn-soft-danger remove-list"
+                                onClick={() => {
+                                  setValuesForUpdate(item);
+                                  setDeleteModal(true);
+                                }}
+                              >
+                                <i className="ri-delete-bin-5-fill align-bottom" />
+                              </button>
+                             
                             </td>
                           </tr>
                         ))
@@ -272,7 +310,7 @@ const CategoryMaster = () => {
                           }}
                         />
 
-                        {submitted  &&files.length === 0 ? (
+                        {submitted && files.length === 0 ? (
                           <p style={{ color: "red" }}>Please select an image</p>
                         ) : null}
                       </div>
@@ -285,7 +323,7 @@ const CategoryMaster = () => {
                           name="name"
                           id="name"
                           className="form-control"
-                          placeholder="Enter categry titel"
+                          placeholder="Enter categry title"
                           type="text"
                           onChange={categoryForm.handleChange}
                           onBlur={categoryForm.handleBlur}
@@ -374,34 +412,34 @@ const CategoryMaster = () => {
                           Close
                         </button>
 
-                        
-
                         {!buttnLoading ? (
-                        <React.Fragment>
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                            id="addNewTodo"
+                          <React.Fragment>
+                            <button
+                              type="submit"
+                              className="btn btn-primary"
+                              id="addNewTodo"
+                            >
+                              {!!isEdit ? "Update" : "Add Category"}
+                            </button>
+                          </React.Fragment>
+                        ) : (
+                          <Button
+                            color="primary"
+                            className="btn-load"
+                            outline
+                            disabled
                           >
-                            {!!isEdit ? "Update" : "Add Category"}
-                          </button>
-                        </React.Fragment>
-                      ) : (
-                        <Button
-                          color="primary"
-                          className="btn-load"
-                          outline
-                          disabled
-                        >
-                          <span className="d-flex align-items-center">
-                            <Spinner size="sm" className="flex-shrink-0">
-                              {" "}
-                              Loading...{" "}
-                            </Spinner>
-                            <span className="flex-grow-1 ms-2">Loading...</span>
-                          </span>
-                        </Button>
-                      )}
+                            <span className="d-flex align-items-center">
+                              <Spinner size="sm" className="flex-shrink-0">
+                                {" "}
+                                Loading...{" "}
+                              </Spinner>
+                              <span className="flex-grow-1 ms-2">
+                                Loading...
+                              </span>
+                            </span>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </Form>

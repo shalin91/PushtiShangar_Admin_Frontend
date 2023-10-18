@@ -10,42 +10,22 @@ import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 
-const noSortingGroup = [
-  { value: "Madrid", label: "Madrid" },
-  { value: "Toronto", label: "Toronto" },
-  { value: "Vancouver", label: "Vancouver" },
-  { value: "London", label: "London" },
-  { value: "Manchester", label: "Manchester" },
-  { value: "Liverpool", label: "Liverpool" },
-  { value: "Paris", label: "Paris" },
-  { value: "Malaga", label: "Malaga" },
-  { value: "Washington", label: "Washington" },
-  { value: "Lyon", label: "Lyon" },
-  { value: "Marseille", label: "Marseille" },
-  { value: "Hamburg", label: "Hamburg" },
-  { value: "Munich", label: "Munich" },
-  { value: "Barcelona", label: "Barcelona" },
-  { value: "Berlin", label: "Berlin" },
-  { value: "Montreal", label: "Montreal" },
-  { value: "New York", label: "New York" },
-  { value: "Michigan", label: "Michigan" },
-];
-
-const AddStocks = ({ refreshTable, UpdatedStocks }) => {
-  const { AddStocks, getProducts,UpdateStocks } = useContext(SignContext);
+const AddStocks = ({ refreshTable, StockForUpdate }) => {
+  const { AddStocks, getProducts, UpdateStocks } = useContext(SignContext);
 
   const [Product, setProduct] = useState([]);
   const [editingStockId, setEditingStockId] = useState(null);
   const [selectedForUpdate, setSelectedForUpdate] = useState(null);
   const [SelectedProductId, setSelectedProductId] = useState("");
 
-
-
   const handleSavedStocks = async (Values) => {
-    if (UpdatedStocks) {
-      const res = await UpdateStocks(editingStockId, Values);
+    if (StockForUpdate) {
+      const res = await UpdateStocks(StockForUpdate._id, Values);
+      
       if (res.success) {
         refreshTable();
+        setSelectedProductId("");
+
         setEditingStockId(null);
       } else {
         console.error("Error updating stock:", res.msg);
@@ -54,7 +34,7 @@ const AddStocks = ({ refreshTable, UpdatedStocks }) => {
       const res = await AddStocks(Values);
       if (res.success) {
         refreshTable();
-        setSelectedProductId("")
+        setSelectedProductId("");
       } else {
         console.error("Error adding stock:", res.msg);
       }
@@ -63,14 +43,25 @@ const AddStocks = ({ refreshTable, UpdatedStocks }) => {
 
   const Getproducts = async () => {
     const res = await getProducts();
-    setProduct(res.products);
+    setProduct(
+      res.products.map((item) => {
+        return { value: item._id, label: item.sku };
+      })
+    );
   };
 
   useEffect(() => {
     Getproducts();
-    setSelectedForUpdate(UpdatedStocks)
-    console.log(selectedForUpdate)
-  }, [UpdatedStocks]);
+    setSelectedForUpdate(StockForUpdate);
+    const filteredProduct = Product.filter(
+      (item) => item.value === StockForUpdate.ProductId
+    );
+
+    setSelectedProductId(filteredProduct);
+    console.log(filteredProduct);
+    console.log(StockForUpdate);
+    console.log(Product);
+  }, [StockForUpdate]);
 
   const validationSchema = Yup.object().shape({
     ProductId: Yup.string().required("Select a product"),
@@ -85,9 +76,6 @@ const AddStocks = ({ refreshTable, UpdatedStocks }) => {
     date: Yup.date().required("Select a date"),
   });
 
-
-
-
   document.title = "Add Stocks | Stocks";
 
   return (
@@ -95,13 +83,18 @@ const AddStocks = ({ refreshTable, UpdatedStocks }) => {
       <Row>
         <Col lg={12}>
           <Formik
-          //enableReinitialize={true}
+            enableReinitialize={true}
             initialValues={{
-              ProductId: SelectedProductId||"",
-              quantity: (selectedForUpdate&& selectedForUpdate.quantity) ||"",
-              currentPricePerUnit:(selectedForUpdate&& selectedForUpdate.currentPricePerUnit)|| "",
-              date: (selectedForUpdate && new Date(selectedForUpdate.date.split("T")[0])) || null, // Use `null` as a placeholder if date is not provided
-            } }
+              ProductId: SelectedProductId.value || "",
+              quantity: (selectedForUpdate && selectedForUpdate.quantity) || "",
+              currentPricePerUnit:
+                (selectedForUpdate && selectedForUpdate.currentPricePerUnit) ||
+                "",
+              date:
+                (selectedForUpdate &&
+                  new Date(selectedForUpdate.date.split("T")[0])) ||
+                null, // Use `null` as a placeholder if date is not provided
+            }}
             validationSchema={validationSchema}
             onSubmit={async (values, { resetForm }) => {
               await handleSavedStocks(values);
@@ -128,15 +121,11 @@ const AddStocks = ({ refreshTable, UpdatedStocks }) => {
                     </Label>
                     <Select
                       value={SelectedProductId}
-                      onChange={selectedOption => {
+                      onChange={(selectedOption) => {
                         setSelectedProductId(selectedOption);
-                        handleChange("ProductId")(selectedOption.value);
-                        
-                      }
-                    }
-                      options={Product.map((item) => {
-                        return { value: item._id, label: item.sku };
-                      })}
+                        // handleChange("ProductId")(selectedOption);
+                      }}
+                      options={Product}
                     />
                   </Col>
 
@@ -190,7 +179,6 @@ const AddStocks = ({ refreshTable, UpdatedStocks }) => {
                         Submit
                       </button>
                     </div>
-                   
                   </Col>
                 </Row>
               </Form>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Col,
@@ -17,7 +16,16 @@ import { ToastContainer } from "react-toastify";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
-import { addCategory, getCategory, getSubCategory } from "../../helpers/backend_helper";
+import {
+  addCategory,
+  addSubCategory,
+  deleteSubCategory,
+  getCategory,
+  getSubCategory,
+  updateCategory,
+  updateSubCategory,
+} from "../../helpers/backend_helper";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
 const SubCategoryMaster = () => {
@@ -58,11 +66,6 @@ const SubCategoryMaster = () => {
     }
   }, [showModal]);
 
-  const handleEdit = (item) => {
-    setShowModal(true);
-    console.log(item);
-  };
-
   const handleDelete = (selectedCategory) => {
     console.log(selectedCategory);
     setrecordForSubmit(selectedCategory);
@@ -71,14 +74,15 @@ const SubCategoryMaster = () => {
 
   const handleDeleteCategory = async () => {
     if (recordForSubmit) {
+      await deleteSubCategory(recordForSubmit)
       fetchData();
       setDeleteModal(false);
     }
   };
 
   const categoryValidation = Yup.object().shape({
-    name: Yup.string().required("Name is must be required !!!"),
-    Category: Yup.string().required("plese select One"),
+    name: Yup.string().required("sub category is rquiresd."),
+    Category: Yup.string().required("category is required."),
   });
   return (
     <React.Fragment>
@@ -90,11 +94,16 @@ const SubCategoryMaster = () => {
       />
       <div className="page-content">
         <Container fluid>
+          <BreadCrumb
+            grandParent="Setup"
+            parent="Manage Category"
+            child="Sub Category"
+          />
           <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="hstack mb-4">
                 <h5 className="fw-semibold flex-grow-1 mb-0">
-                  Category Master
+                  Sub Category Master
                 </h5>
                 <div className="hstack gap-2">
                   <div
@@ -108,7 +117,7 @@ const SubCategoryMaster = () => {
                           type="text"
                           id="searchTaskList"
                           className="form-control search"
-                          placeholder="Search by Category Title"
+                          placeholder="Search..."
                         />
                         <i className="ri-search-line search-icon"></i>
                       </div>
@@ -148,8 +157,8 @@ const SubCategoryMaster = () => {
                   <thead>
                     <tr>
                       <th>index</th>
-                      <th>CategoryId</th>
-                      <th>Category Title</th>
+                      <th>Category</th>
+                      <th>Sub Category Title</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -159,7 +168,7 @@ const SubCategoryMaster = () => {
                       ? tableData.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
-                            <td>{item.Category}</td>
+                            <td>{item.CategoryTitle}</td>
                             <td>{item.name}</td>
                             <td>
                               {" "}
@@ -172,7 +181,7 @@ const SubCategoryMaster = () => {
                               ) : (
                                 <div>
                                   <span className="badge badge-soft-danger badge-border">
-                                    NotActive
+                                    InActive
                                   </span>
                                 </div>
                               )}
@@ -180,16 +189,22 @@ const SubCategoryMaster = () => {
 
                             <td>
                               <button
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
+                                onClick={() => {
+                                  setShowModal(true);
+                                  setrecordForSubmit(item);
+                                  setIsEdit(true)
+                                  console.log(item);
+                                }}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
+
+                              <button
                                 className="btn btn-sm btn-soft-danger remove-list"
                                 onClick={() => handleDelete(item)}
                               >
                                 <i className="ri-delete-bin-5-fill align-bottom" />
-                              </button>
-                              <button
-                                className="btn btn-sm btn-soft-info edit-list"
-                                onClick={() => handleEdit(item)}
-                              >
-                                <i className="ri-pencil-fill align-bottom" />
                               </button>
                             </td>
                           </tr>
@@ -213,7 +228,7 @@ const SubCategoryMaster = () => {
       >
         <ModalHeader toggle={toggle} className="p-3 bg-soft-success">
           {" "}
-          {!!isEdit ? "Edit Category" : "Create new Category"}{" "}
+          {!!isEdit ? "Edit Category" : "create new sub category"}{" "}
         </ModalHeader>
         <ModalBody>
           {successBanner ? (
@@ -227,11 +242,21 @@ const SubCategoryMaster = () => {
             </div>
           ) : null}
           <Formik
-            initialValues={{ name: "", isActive: null,Category:"" }}
+            initialValues={{
+              name: (recordForSubmit && recordForSubmit.name) || "",
+              isActive: null,
+              Category: (recordForSubmit && recordForSubmit.Category) || "",
+            }}
             validationSchema={categoryValidation}
             onSubmit={async (values, { resetForm }) => {
-              console.log(values);
-              await addCategory(values);
+              if (isEdit) {
+                await updateSubCategory(values,recordForSubmit._id);
+                setIsEdit(false)
+              } else {
+                await addSubCategory(values);
+              }
+              fetchData();
+              toggle();
               resetForm();
             }}
           >
@@ -246,8 +271,8 @@ const SubCategoryMaster = () => {
               <div>
                 <div>
                   <Form>
-                  <Col md={12}>
-                      <label className="modalLabel">Category Title</label>
+                    <Col md={12}>
+                      <label className="modalLabel">category</label>
                       <select
                         name="Category"
                         onChange={handleChange}
@@ -261,11 +286,13 @@ const SubCategoryMaster = () => {
                           --select--
                         </option>
                         {/* Map through your category data to create dropdown options */}
-                        {categoryData ? categoryData.map((category) => (
-                          <option key={category._id} value={category._id}>
-                            {category.name}
-                          </option>
-                        )):null}
+                        {categoryData
+                          ? categoryData.map((category) => (
+                              <option key={category._id} value={category._id}>
+                                {category.name}
+                              </option>
+                            ))
+                          : null}
                       </select>
                       {/* If validation is not passed, show errors */}
                       <p style={{ color: "red", fontSize: "12px" }}>
@@ -273,14 +300,14 @@ const SubCategoryMaster = () => {
                       </p>
                     </Col>
                     <Col md={12}>
-                      <label className="modalLable">category title</label>
+                      <label className="modalLable">sub category title</label>
                       <input
                         type="text"
                         name="name"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.name}
-                        placeholder="Enter category title"
+                        placeholder="Enter sub category title"
                         className="form-control inp_text modalInput"
                         id="name"
                       />
@@ -289,8 +316,6 @@ const SubCategoryMaster = () => {
                         {errors.name && touched.name && errors.name}
                       </p>
                     </Col>
-
-                    
 
                     <Col md={12}>
                       <div className="form-check mb-2">
