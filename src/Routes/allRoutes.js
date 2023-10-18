@@ -102,6 +102,7 @@ import AllOrders from "../pages/Order Managemenr/AllOrders";
 import DailyPriceRates from "../pages/DailyGoldSilverPrice/DailyPriceRates";
 import BannerMaster from "../pages/BannerMaster/bannerMaster.js"
 import BlogMaster from "../pages/BlogMaster/BlogsMaster";
+import InvoiceDetails from "../pages/Order Managemenr/inVoice";
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 const authProtectedRoutes = [
@@ -157,6 +158,8 @@ const authProtectedRoutes = [
   // Orders
   { path: "/orders", component: <SignState><AllOrders/></SignState> },
   { path: "/vieworder/:id", component: <SignState><EcommerceOrderDetail/></SignState> },
+{path:'/invoice',component:<SignState><InvoiceDetails></InvoiceDetails></SignState>},
+  
 
   //Daily Price 
   { path: "/dailyrates", component: <SignState><DailyPriceRates/></SignState> },

@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { Formik } from "formik";
 
-const AddStocks = ({ refreshTable, StockForUpdate }) => {
+const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
   const { AddStocks, getProducts, UpdateStocks } = useContext(SignContext);
 
   const [Product, setProduct] = useState([]);
@@ -170,6 +170,14 @@ const AddStocks = ({ refreshTable, StockForUpdate }) => {
                   </Col>
                   <Col lg={1}>
                     <div className="text-center">
+                    <button
+                       
+                        type="submit"
+                        className="btn btn-soft-danger w-sm mt-4"
+                        onClick={setStockForUpdate(null)}
+                      >
+                        Cancel
+                      </button>
                       <button
                         disabled={isSubmitting || !isValid}
                         type="submit"
