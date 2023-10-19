@@ -6,7 +6,7 @@ import {
   Container,
   Row,
   CardHeader,
-  Collapse
+  Collapse,
 } from "reactstrap";
 
 import classnames from "classnames";
@@ -20,14 +20,14 @@ import SignContext from "../../../contextAPI/Context/SignContext";
 
 const EcommerceOrderDetail = (props) => {
   const { id } = useParams();
-  const { getSpecificOrderbyId , GetSpecificCustomer } = useContext(SignContext);
+  const { getSpecificOrderbyId, GetSpecificCustomer, GetSpecificCouponbyId } =
+    useContext(SignContext);
   const [OrderData, setOrderData] = useState([]);
   const [ProductData, setProductData] = useState([]);
+  const [CouponData, setCouponData] = useState({});
   const [CustomerInfo, setCustomerInfo] = useState({});
   const customerId = OrderData.customer;
   // console.log(customerId)
-
-
 
   const GetspecificOrderbyId = async (id) => {
     const res = await getSpecificOrderbyId(id);
@@ -35,9 +35,17 @@ const EcommerceOrderDetail = (props) => {
     if (res.success) {
       setOrderData(res.orderWithProductDetails.order);
       setProductData(res.orderWithProductDetails.products);
-
     }
   };
+
+  const getspecificCouponbyId = async (id) => {
+    const res = await GetSpecificCouponbyId(id);
+    console.log(res);
+    if (res.success) {
+      setCouponData(res.coupon);
+    }
+  };
+  // console.log(CouponData);
 
   const getSpecificCustomer = async (id) => {
     try {
@@ -45,29 +53,61 @@ const EcommerceOrderDetail = (props) => {
       console.log(res);
       if (res.success) {
         setCustomerInfo(res.customer);
-      } 
+      }
     } catch (error) {
       console.error("Error fetching customer:", error);
     }
   };
 
-  const totalPrice = ProductData ? ProductData.reduce((acc, item) => {
-    
-    const quantity = parseFloat(item.quantity);
-    // const gst = parseFloat(item.tax);
-  
-    const discountedPrice = parseFloat(
-      item.product.prices.discounted ? item.product.prices.discounted : item.product.prices.calculatedPrice
-    );
-    
-    if (isNaN(quantity) || isNaN(discountedPrice)) {
-      return acc; // Skip this item if it has invalid data
-    }
+  const totalPrice = ProductData
+    ? ProductData.reduce((acc, item) => {
+        const quantity = parseFloat(item.quantity);
+        // const gst = parseFloat(item.tax);
 
-    return acc + quantity * discountedPrice;
-  }, 0): null;
+        const discountedPrice = parseFloat(
+          item.product.prices.discounted
+            ? item.product.prices.discounted
+            : item.product.prices.calculatedPrice
+        );
 
+        if (isNaN(quantity) || isNaN(discountedPrice)) {
+          return acc; // Skip this item if it has invalid data
+        }
 
+        return acc + quantity * discountedPrice;
+      }, 0)
+    : null;
+
+    const tPwithGST = ProductData
+    ? ProductData.reduce((acc, item) => {
+        const quantity = parseFloat(item.quantity);
+        const gst = parseFloat(item.product.gst);
+
+        const discountedPrice = parseFloat(
+          item.product.prices.discounted ? item.product.prices.discounted : item.product.prices.calculatedPrice
+        );
+        const totalPriceWithGST =
+          quantity * discountedPrice + (quantity * discountedPrice * gst) / 100;
+
+        if (isNaN(quantity) || isNaN(discountedPrice)) {
+          return acc; 
+        }
+
+        return acc + totalPriceWithGST;
+      }, 0)
+    : null;
+
+    const shpChrg = ProductData
+    ? ProductData.reduce((acc, item) => {
+        // Ensure that item.quantity and item.discountedPrice are valid numbers
+        let quantity = 0;
+        quantity = quantity + parseFloat(item.product.shippingCharge);
+
+        return quantity;
+      }, 0)
+    : null;
+
+ 
   const [col1, setcol1] = useState(true);
   const [col2, setcol2] = useState(true);
   const [col3, setcol3] = useState(true);
@@ -85,21 +125,20 @@ const EcommerceOrderDetail = (props) => {
   }
 
   useEffect(() => {
-    console.log("id:", id);
-    console.log("customerId:", customerId);
+    // console.log("id:", id);
+    // console.log("customerId:", customerId);
     GetspecificOrderbyId(id);
     if (customerId) {
       getSpecificCustomer(customerId);
     }
-  }, [id, customerId]);
+    getspecificCouponbyId(OrderData.couponCode);
+  }, [id, customerId, OrderData.couponCode]);
 
-
-  document.title ="Order Details | Pushtishangar";
-
+  document.title = "Order Details | Pushtishangar";
 
   return (
     <div className="page-content">
-      <Container fluid>        
+      <Container fluid>
         <BreadCrumb title="Order Details" pageTitle="Ecommerce" />
 
         <Row>
@@ -107,10 +146,12 @@ const EcommerceOrderDetail = (props) => {
             <Card>
               <CardHeader>
                 <div className="d-flex align-items-center">
-                  <h5 className="card-title flex-grow-1 mb-0">Order {OrderData._id} </h5>
+                  <h5 className="card-title flex-grow-1 mb-0">
+                    Order {OrderData._id}{" "}
+                  </h5>
                   <div className="flex-shrink-0">
                     <Link
-                      to="/invoice"
+                      to={`/invoice/${OrderData._id}`}
                       className="btn btn-success btn-sm"
                     >
                       <i className="ri-download-2-fill align-middle me-1"></i>{" "}
@@ -147,24 +188,44 @@ const EcommerceOrderDetail = (props) => {
                                 <td className="text-end">₹ {totalPrice}</td>
                               </tr>
                               <tr>
-                                <td>
-                                  Discount{" "}
-                                  <span className="text-muted">()</span>{" "}
-                                  : :
+                                <td>Estimated Tax :</td>
+                                <td className="text-end">
+                                  ₹{" "}
+                                  {(tPwithGST - totalPrice).toFixed(
+                                    2
+                                  )}
                                 </td>
-                                {/* <td className="text-end">-$53.99</td> */}
                               </tr>
                               <tr>
                                 <td>Shipping Charge :</td>
-                                {/* <td className="text-end">$65.00</td> */}
-                              </tr>
+                                <td className="text-end">
+                                  ₹{" "}
+                                  {shpChrg}
+                                </td>
+                                </tr>
                               <tr>
-                                <td>Estimated Tax :</td>
-                                <td className="text-end">₹ {(OrderData.totalAmount-totalPrice).toFixed(2)}</td>
+                                <td>
+                                  Discount{" "}
+                                  <span className="text-muted">
+                                    ({CouponData.name})
+                                  </span>{" "}
+                                  : :
+                                </td>
+                                <td className="text-end">
+                                  -{CouponData.type}
+                                  {CouponData.discount}
+                                </td>
                               </tr>
+                              {/* <tr>
+                                <td>Shipping Charge :</td>
+                                <td className="text-end">$65.00</td>
+                              </tr> */}
+
                               <tr className="border-top border-top-dashed">
                                 <th scope="row">Total (₹) :</th>
-                                <th className="text-end">₹ {OrderData.totalAmount}</th>
+                                <th className="text-end">
+                                  ₹ {OrderData.totalAmount}
+                                </th>
                               </tr>
                             </tbody>
                           </table>
@@ -439,7 +500,9 @@ const EcommerceOrderDetail = (props) => {
                         />
                       </div> */}
                       <div className="flex-grow-1 ms-3">
-                        <h6 className="fs-14 mb-1">{OrderData.FirstName} {OrderData.LastName}</h6>
+                        <h6 className="fs-14 mb-1">
+                          {OrderData.FirstName} {OrderData.LastName}
+                        </h6>
                         <p className="text-muted mb-0">Customer</p>
                       </div>
                     </div>
@@ -483,10 +546,14 @@ const EcommerceOrderDetail = (props) => {
               </CardHeader>
               <CardBody>
                 <ul className="list-unstyled vstack gap-2 fs-13 mb-0">
-                  <li className="fw-medium fs-14">{OrderData.FirstName} {OrderData.LastName}</li>
+                  <li className="fw-medium fs-14">
+                    {OrderData.FirstName} {OrderData.LastName}
+                  </li>
                   <li>+(91) {CustomerInfo.phone} </li>
                   <li>{OrderData.shippingAddress}</li>
-                  <li>{OrderData.state} - {OrderData.postCode}</li>
+                  <li>
+                    {OrderData.state} - {OrderData.postCode}
+                  </li>
                   <li>{OrderData.country}</li>
                 </ul>
               </CardBody>
