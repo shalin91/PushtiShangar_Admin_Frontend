@@ -1,28 +1,29 @@
-import React, { useState } from 'react'
-import { TagsInput } from 'react-tag-input-component';
-import { Col } from 'reactstrap';
+import React, { useState } from "react";
+import { TagsInput } from "react-tag-input-component";
+import { Col } from "reactstrap";
 
 const ProducTags = (props) => {
-    
-
   return (
     <Col md={12}>
-    <div>
-      <label className="form-label" htmlFor="tags">
-        Add tags for searching
-      </label>
+      <div>
+        <label className="form-label" htmlFor="tags">
+          Add tags for searching
+        </label>
 
-      <TagsInput
-        value={props.data}
-        onChange={props.sendTagsToParent}
-        name="tags"
-        placeHolder="enter tags"
-      />
-      {/* <em>press enter or comma to add new tag</em> */}
-    </div>
-  </Col>
+        <TagsInput
+          value={props.data}
+          onChange={(item) => {
+            props.sendTagsToParent(item);
+            console.log(props.data)
 
-  )
-}
+          }}
+          name="tags"
+          placeHolder="enter tags"
+        />
+        {/* <em>press enter or comma to add new tag</em> */}
+      </div>
+    </Col>
+  );
+};
 
-export default ProducTags
+export default ProducTags;

@@ -34,6 +34,7 @@ import ImageUpload from "./imageUpload";
 import ProducTags from "./producTags";
 import Filters from "./filters";
 import { useNavigate, useParams } from "react-router-dom";
+import { TagsInput } from "react-tag-input-component";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -172,8 +173,8 @@ const AddProduct = () => {
       subCategory: (formVAlues && formVAlues.subCategory) || "",
       subSubCategory: (formVAlues && formVAlues.subSubCategory) || null,
 
-      isProductPopular: (formVAlues && formVAlues.isProductPopular) || true,
-      isProductNew: (formVAlues && formVAlues.isProductNew) || true,
+      isProductPopular: (formVAlues && formVAlues.isProductPopular) || false,
+      isProductNew: (formVAlues && formVAlues.isProductNew) || false,
       isActive: (formVAlues && formVAlues.isActive) || true,
       description: (formVAlues && formVAlues.description) || "",
       original:
@@ -227,7 +228,10 @@ const AddProduct = () => {
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("hsnCode", values.hsnCode);
-      formData.append("tags", selectedTags);
+      for (let i=0; i<selectedTags.length; i++){
+        
+        formData.append("tags",selectedTags[i]);
+      }
       formData.append("filters", selectedItems);
       formData.append("color", selectedcolors);
       formData.append("material", selectedmaterials);
@@ -426,6 +430,7 @@ const AddProduct = () => {
                         className="form-check-input"
                         id="isOnWeight"
                         name="isOnWeight"
+                        checked={productForm.values.calculationOnWeight}
                         onChange={(e) => {
                           productForm.setFieldValue(
                             "calculationOnWeight",
@@ -863,6 +868,7 @@ const AddProduct = () => {
                   className="form-check-input"
                   id="isActive"
                   name="isActive"
+                  checked={productForm.values.isActive}
                   onChange={(e) => {
                     productForm.setFieldValue("isActive", e.target.checked);
                   }}
@@ -878,6 +884,7 @@ const AddProduct = () => {
                   className="form-check-input"
                   id="isProductNew"
                   name="isProductNew"
+                  checked={productForm.values.isProductNew}
                   onChange={(e) => {
                     productForm.setFieldValue("isProductNew", e.target.checked);
                   }}
@@ -893,6 +900,7 @@ const AddProduct = () => {
                   className="form-check-input"
                   id="isProductPopular"
                   name="isProductPopular"
+                  checked={productForm.values.isProductPopular}
                   onChange={(e) => {
                     productForm.setFieldValue(
                       "isProductPopular",
