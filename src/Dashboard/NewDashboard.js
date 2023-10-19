@@ -119,7 +119,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/orders/pending"
+                    to="/orders"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -156,7 +156,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/orders/processed"
+                    to="/orders"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -194,7 +194,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/orders/cancelled"
+                    to="/orders"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -231,7 +231,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/product-categories"
+                    to="/allproducts"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -266,7 +266,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/product-categories"
+                    to="/allproducts"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -301,7 +301,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/product-categories"
+                    to="/allproducts"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -336,7 +336,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/product-categories"
+                    to="/allproducts"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -406,7 +406,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/product-categories"
+                    to="/allproducts"
                     className="text-decoration-underline"
                   >
                     View Details
@@ -441,7 +441,7 @@ const NewDashboard = () => {
                     </span>
                   </h4>
                   <Link
-                    to="/product-categories"
+                    to="/allproducts"
                     className="text-decoration-underline"
                   >
                     View Details

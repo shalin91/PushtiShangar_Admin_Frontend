@@ -162,7 +162,7 @@ const authProtectedRoutes = [
   // Orders
   { path: "/orders", component: <SignState><AllOrders/></SignState> },
   { path: "/vieworder/:id", component: <SignState><EcommerceOrderDetail/></SignState> },
-{path:'/invoice',component:<SignState><InvoiceDetails></InvoiceDetails></SignState>},
+{path:'/invoice/:id',component:<SignState><InvoiceDetails/></SignState>},
   
 
   //Daily Price 

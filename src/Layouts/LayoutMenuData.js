@@ -815,16 +815,16 @@ const Navdata = () => {
     //         { id: "highlight", label: "Highlight", link: "/advance-ui-highlight", parentId: "advanceUi" },
     //     ],
     // },
-    {
-        id: "widgets",
-        label: "Widgets",
-        icon: "ri-honour-line",
-        link: "/widgets",
-        click: function (e) {
-            e.preventDefault();
-            setIscurrentState('Widgets');
-        }
-    },
+    // {
+    //     id: "widgets",
+    //     label: "Widgets",
+    //     icon: "ri-honour-line",
+    //     link: "/widgets",
+    //     click: function (e) {
+    //         e.preventDefault();
+    //         setIscurrentState('Widgets');
+    //     }
+    // },
     // {
     //     id: "forms",
     //     label: "Forms",
