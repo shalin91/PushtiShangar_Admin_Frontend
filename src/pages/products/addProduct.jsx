@@ -186,9 +186,9 @@ const AddProduct = () => {
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
       // stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
-
+      shippingCharge: (formVAlues && formVAlues.shippingCharge) || "",
       sku: (formVAlues && formVAlues.sku) || "",
-      sku: (formVAlues && formVAlues.sku) || "",
+      size: (formVAlues && formVAlues.size) || "",
       gst: (formVAlues && formVAlues.gst) || "",
       hsnCode: (formVAlues && formVAlues.hsnCode) || "",
     },
@@ -222,8 +222,7 @@ const AddProduct = () => {
       formData.append("isProductNew", values.isProductNew);
       formData.append("isProductPopular", values.isProductPopular);
       formData.append("description", values.description);
-
-      // formData.append("stock", values.stock);
+      formData.append("shippingCharge", values.shippingCharge);
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("hsnCode", values.hsnCode);
@@ -232,7 +231,7 @@ const AddProduct = () => {
       formData.append("color", selectedcolors);
       formData.append("material", selectedmaterials);
       formData.append("season", selectedseasons);
-      formData.append("size", productSize);
+      formData.append("size", values.size);
       for (let i = 0; i < selectedImages.length; i++) {
         formData.append("imageGallery", selectedImages[i]);
       }
@@ -384,7 +383,7 @@ const AddProduct = () => {
                 </Row>
                 <Row className="align-items-center  g-1 mx-2">
                   {/* Ttile */}
-                  <Col sm={12}>
+                  <Col sm={6}>
                     <div className="mb-3">
                       <label
                         className="form-label"
@@ -396,10 +395,42 @@ const AddProduct = () => {
                         <Input
                           type="text"
                           id="name"
-                          placeholder="Enter Stock"
+                          placeholder="Title"
                           name="name"
                           aria-label="name"
                           value={productForm.values.name}
+                          onChange={productForm.handleChange}
+                          onBlur={productForm.handleBlur}
+                          invalid={
+                            productForm.errors.name && productForm.touched.name
+                              ? true
+                              : false
+                          }
+                        />
+                        {productForm.errors.name && productForm.touched.name ? (
+                          <FormFeedback type="invalid">
+                            {productForm.errors.name}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </div>
+                  </Col>
+                  <Col sm={6}>
+                    <div className="mb-3">
+                      <label
+                        className="form-label"
+                        htmlFor="product-orders-input"
+                      >
+                        Shipping Charge
+                      </label>
+                      <div className="input-group mb-3">
+                        <Input
+                          type="text"
+                          id="name"
+                          placeholder="shipping charge"
+                          name="shippingCharge"
+                          aria-label="name"
+                          value={productForm.values.shippingCharge}
                           onChange={productForm.handleChange}
                           onBlur={productForm.handleBlur}
                           invalid={

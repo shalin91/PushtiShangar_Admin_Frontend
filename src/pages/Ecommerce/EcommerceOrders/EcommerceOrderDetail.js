@@ -97,8 +97,17 @@ const EcommerceOrderDetail = (props) => {
       }, 0)
     : null;
 
+    const shpChrg = ProductData
+    ? ProductData.reduce((acc, item) => {
+        // Ensure that item.quantity and item.discountedPrice are valid numbers
+        let quantity = 0;
+        quantity = quantity + parseFloat(item.product.shippingCharge);
 
+        return quantity;
+      }, 0)
+    : null;
 
+ 
   const [col1, setcol1] = useState(true);
   const [col2, setcol2] = useState(true);
   const [col3, setcol3] = useState(true);
@@ -187,6 +196,13 @@ const EcommerceOrderDetail = (props) => {
                                   )}
                                 </td>
                               </tr>
+                              <tr>
+                                <td>Shipping Charge :</td>
+                                <td className="text-end">
+                                  ₹{" "}
+                                  {shpChrg}
+                                </td>
+                                </tr>
                               <tr>
                                 <td>
                                   Discount{" "}

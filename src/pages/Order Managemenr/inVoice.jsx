@@ -85,22 +85,34 @@ const InvoiceDetails = () => {
       }, 0)
     : null;
 
-    const tPwithGST = ProductData
+  const tPwithGST = ProductData
     ? ProductData.reduce((acc, item) => {
         const quantity = parseFloat(item.quantity);
         const gst = parseFloat(item.product.gst);
 
         const discountedPrice = parseFloat(
-          item.product.prices.discounted ? item.product.prices.discounted : item.product.prices.calculatedPrice
+          item.product.prices.discounted
+            ? item.product.prices.discounted
+            : item.product.prices.calculatedPrice
         );
         const totalPriceWithGST =
           quantity * discountedPrice + (quantity * discountedPrice * gst) / 100;
 
         if (isNaN(quantity) || isNaN(discountedPrice)) {
-          return acc; 
+          return acc;
         }
 
         return acc + totalPriceWithGST;
+      }, 0)
+    : null;
+
+  const shpChrg = ProductData
+    ? ProductData.reduce((acc, item) => {
+        // Ensure that item.quantity and item.discountedPrice are valid numbers
+        let quantity = 0;
+        quantity = quantity + parseFloat(item.product.shippingCharge);
+
+        return quantity;
       }, 0)
     : null;
 
@@ -132,8 +144,8 @@ const InvoiceDetails = () => {
               <Row>
                 <Col lg={12}>
                   <CardHeader className="border-bottom-dashed py-3 px-4">
-                    <div className="d-flex">
-                      <div className="flex-grow-1">
+                    <div className="row text-center" style={{alignItems:"center"}}>
+                      <div className="col-lg-5 place-content-center" style={{alignItems:"-webkit-center"}}>
                         <img
                           src={logoDark}
                           className="card-logo card-logo-dark"
@@ -144,7 +156,7 @@ const InvoiceDetails = () => {
                           src={logoLight}
                           className="card-logo card-logo-light"
                           alt="logo light"
-                          height="60"
+                          height="90"
                         />
                         <div className="mt-sm-5 mt-4">
                           {/* <h6 className="text-muted text-uppercase fw-semibold">
@@ -155,15 +167,15 @@ const InvoiceDetails = () => {
                           </p> */}
                         </div>
                       </div>
-                      <div className="flex-shrink-0 mt-sm-0 mt-3">
+                      <div className="col-lg-7 mt-sm-0 mt-3" style={{textAlign:"right"}}>
                         <h6>
-                          <span id="legal-register-no">Pushti Shangar</span>
+                          <span id="legal-register-no"><b>Pushti Shangar</b></span>
                         </h6>
                         <p className="addressDetails" id="address-details">
                           103, Vrajmadhurya, Lakshmi Colony,
-                          <br />
-                          Behind Govardhannathji Haveli(Alkapuri),<br />
-                          Productivity Road ,<br />Vadodara -390007
+                          Behind Govardhannathji Haveli(Alkapuri),
+                          Productivity Road ,<br />
+                          Vadodara -390007
                         </p>
                         <h6 className="mb-2">
                           <span id="email">sales.pushtishangar@gmail.com</span>
@@ -182,7 +194,7 @@ const InvoiceDetails = () => {
                   <CardBody className="p-4">
                     <Row className="g-3">
                       <Col lg={3} xs={6}>
-                        <p className="text-muted mb-2 text-uppercase fw-semibold">
+                        <p className="text-muted  text-uppercase fw-semibold">
                           Invoice No
                         </p>
                         <h5 className="fs-14 mb-0">
@@ -190,7 +202,7 @@ const InvoiceDetails = () => {
                         </h5>
                       </Col>
                       <Col lg={3} xs={6}>
-                        <p className="text-muted mb-2 text-uppercase fw-semibold">
+                        <p className="text-muted  text-uppercase fw-semibold">
                           Date
                         </p>
                         <h5 className="fs-14 mb-0">
@@ -204,7 +216,7 @@ const InvoiceDetails = () => {
                         </h5>
                       </Col>
                       <Col lg={3} xs={6}>
-                        <p className="text-muted mb-2 text-uppercase fw-semibold">
+                        <p className="text-muted text-uppercase fw-semibold">
                           Payment Status
                         </p>
                         <span className="status" id="payment-status">
@@ -212,14 +224,12 @@ const InvoiceDetails = () => {
                         </span>
                       </Col>
                       <Col lg={3} xs={6}>
-                        <p className="text-muted mb-2 text-uppercase fw-semibold">
+                        <p className="text-muted  text-uppercase fw-semibold">
                           Total Amount
                         </p>
                         <h5 className="fs-14 mb-0">
                           ₹
-                          <span id="total-amount">
-                            {OrderData.totalAmount}
-                          </span>
+                          <span id="total-amount">{OrderData.totalAmount}</span>
                         </h5>
                       </Col>
                     </Row>
@@ -298,9 +308,13 @@ const InvoiceDetails = () => {
                                 <span className="fw-medium">
                                   {product.product.name}
                                 </span>
-                                {/* <p className="text-muted mb-0">
-                        {product.product.description}
-                      </p> */}
+
+                                <p className="text-muted mb-0">
+                                  HSN :{" "}
+                                  {product.product.hsnCode
+                                    ? product.product.hsnCode
+                                    : "NA"}
+                                </p>
                               </td>
                               <td>
                                 {product.product.weight
@@ -347,6 +361,10 @@ const InvoiceDetails = () => {
                             </td>
                           </tr>
                           <tr>
+                            <td>Shipping Charge</td>
+                            <td className="text-end">₹{shpChrg}</td>
+                          </tr>
+                          <tr>
                             <td>
                               Discount{" "}
                               <small className="text-muted">
@@ -358,10 +376,7 @@ const InvoiceDetails = () => {
                               {CouponData.discount}
                             </td>
                           </tr>
-                          {/* <tr>
-                            <td>Shipping Charge</td>
-                            <td className="text-end">$65.00</td>
-                          </tr> */}
+
                           <tr className="border-top border-top-dashed fs-15">
                             <th scope="row">Total Amount</th>
                             <th className="text-end">
@@ -371,7 +386,7 @@ const InvoiceDetails = () => {
                         </tbody>
                       </Table>
                     </div>
-                    <div className="mt-3">
+                    {/* <div className="mt-3">
                       <h6 className="text-muted text-uppercase fw-semibold mb-3">
                         Payment Details:
                       </h6>
@@ -381,25 +396,14 @@ const InvoiceDetails = () => {
                           {OrderData.paymentMethod}
                         </span>
                       </p>
-                      {/* <p className="text-muted mb-1">
-                        Card Holder:{" "}
-                        <span className="fw-medium" id="card-holder-name">
-                          David Nichols
-                        </span>
-                      </p>
-                      <p className="text-muted mb-1">
-                        Card Number:{" "}
-                        <span className="fw-medium" id="card-number">
-                          xxx xxxx xxxx 1234
-                        </span>
-                      </p> */}
+                      
                       <p className="text-muted">
                         Total Amount:{" "}
                         <span className="fw-medium" id="">
                           ₹{OrderData.totalAmount}
                         </span>
                       </p>
-                    </div>
+                    </div> */}
                     {/* <div className="mt-4">
                       <div className="alert alert-info">
                         <p className="mb-0">
