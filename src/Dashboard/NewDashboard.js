@@ -7,6 +7,7 @@ import axios from "axios";
 
 
 const NewDashboard = () => {
+  const url = `${process.env.REACT_APP_BASE_URL}`;
     const [widgetData, setWidgetData] = useState({
         totalCustomers: 0,
         totalPendingOrders: 0,
@@ -25,7 +26,7 @@ const NewDashboard = () => {
       useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get("http://localhost:5002/dashboard/get-dashboard-data");
+            const response = await axios.get(`${url}/dashboard/get-dashboard-data`);
             console.log(response)
             const data = response;
     
