@@ -19,18 +19,18 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
   const [SelectedProductId, setSelectedProductId] = useState("");
 
   const handleSavedStocks = async (Values) => {
-    if (StockForUpdate) {
-      const res = await UpdateStocks(StockForUpdate._id, Values);
+    // if (StockForUpdate) {
+    //   const res = await UpdateStocks(StockForUpdate._id, Values);
       
-      if (res.success) {
-        refreshTable();
-        setSelectedProductId("");
+    //   if (res.success) {
+    //     refreshTable();
+    //     setSelectedProductId("");
 
-        setEditingStockId(null);
-      } else {
-        console.error("Error updating stock:", res.msg);
-      }
-    } else {
+    //     setEditingStockId(null);
+    //   } else {
+    //     console.error("Error updating stock:", res.msg);
+    //   }
+    // } else {
       const res = await AddStocks(Values);
       if (res.success) {
         refreshTable();
@@ -38,7 +38,7 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
       } else {
         console.error("Error adding stock:", res.msg);
       }
-    }
+    
   };
 
   const Getproducts = async () => {
@@ -157,7 +157,7 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
                       onBlur={handleBlur}
                     />
                   </Col>
-                  <Col lg={3}>
+                  <Col lg={2}>
                     <Label className="form-label" htmlFor="category">
                       Date
                     </Label>
@@ -170,14 +170,14 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
                   </Col>
                   <Col lg={1}>
                     <div className="text-center">
-                    <button
+                    {/* <button
                        
                         type="submit"
                         className="btn btn-soft-danger w-sm mt-4"
                         onClick={setStockForUpdate(null)}
                       >
                         Cancel
-                      </button>
+                      </button> */}
                       <button
                         disabled={isSubmitting || !isValid}
                         type="submit"

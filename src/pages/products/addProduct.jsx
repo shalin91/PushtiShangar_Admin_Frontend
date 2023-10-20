@@ -11,6 +11,7 @@ import {
   Button,
   Spinner,
   Label,
+  CardHeader,
 } from "reactstrap";
 import {
   addProduct,
@@ -34,6 +35,8 @@ import ImageUpload from "./imageUpload";
 import ProducTags from "./producTags";
 import Filters from "./filters";
 import { useNavigate, useParams } from "react-router-dom";
+import { TagsInput } from "react-tag-input-component";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -172,8 +175,8 @@ const AddProduct = () => {
       subCategory: (formVAlues && formVAlues.subCategory) || "",
       subSubCategory: (formVAlues && formVAlues.subSubCategory) || null,
 
-      isProductPopular: (formVAlues && formVAlues.isProductPopular) || true,
-      isProductNew: (formVAlues && formVAlues.isProductNew) || true,
+      isProductPopular: (formVAlues && formVAlues.isProductPopular) || false,
+      isProductNew: (formVAlues && formVAlues.isProductNew) || false,
       isActive: (formVAlues && formVAlues.isActive) || true,
       description: (formVAlues && formVAlues.description) || "",
       original:
@@ -226,7 +229,10 @@ const AddProduct = () => {
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("hsnCode", values.hsnCode);
-      formData.append("tags", selectedTags);
+      for (let i=0; i<selectedTags.length; i++){
+        
+        formData.append("tags",selectedTags[i]);
+      }
       formData.append("filters", selectedItems);
       formData.append("color", selectedcolors);
       formData.append("material", selectedmaterials);
@@ -256,7 +262,11 @@ const AddProduct = () => {
 
   return (
     <div className="page-content">
+        <BreadCrumb grandParent="Setup" parent="Products" child="Add Products" />
       <Card>
+      <CardHeader className="d-flex justify-content-between align-items-center">
+                <h4 className="card-title mb-0">Add Product</h4>
+                </CardHeader>
         <CardBody>
           <form onSubmit={productForm.handleSubmit}>
             <Row>
@@ -425,7 +435,7 @@ const AddProduct = () => {
                       </label>
                       <div className="input-group mb-3">
                         <Input
-                          type="text"
+                          type="number"
                           id="name"
                           placeholder="shipping charge"
                           name="shippingCharge"
@@ -457,6 +467,7 @@ const AddProduct = () => {
                         className="form-check-input"
                         id="isOnWeight"
                         name="isOnWeight"
+                        checked={productForm.values.calculationOnWeight}
                         onChange={(e) => {
                           productForm.setFieldValue(
                             "calculationOnWeight",
@@ -525,6 +536,7 @@ const AddProduct = () => {
 
                             <Input
                               placeholder="Enter price"
+                              type="number"
                               id="price"
                               name="original"
                               className="form-control"
@@ -564,6 +576,7 @@ const AddProduct = () => {
                             </span>
                             <Input
                               placeholder="Enter price"
+                              type="number"
                               id="price"
                               name="discounted"
                               className="form-control"
@@ -607,6 +620,7 @@ const AddProduct = () => {
 
                             <Input
                               placeholder="Enter price"
+                              type="number"
                               options={{
                                 numeral: true,
                                 numeralThousandsGroupStyle: "thousand",
@@ -650,6 +664,7 @@ const AddProduct = () => {
                             </span>
                             <Input
                               placeholder="Enter laborCost"
+                              type="number"
                               options={{
                                 numeral: true,
                                 numeralThousandsGroupStyle: "thousand",
@@ -693,6 +708,7 @@ const AddProduct = () => {
                             </span>
                             <Input
                               placeholder="Enter price"
+                              type="number"
                               options={{
                                 numeral: true,
                                 numeralThousandsGroupStyle: "thousand",
@@ -728,7 +744,7 @@ const AddProduct = () => {
                   <Col sm={4}>
                     <div className="mb-3">
                       <label className="form-label" htmlFor="gst">
-                        gst
+                        GST
                       </label>
                       <select
                         className="form-select"
@@ -834,6 +850,7 @@ const AddProduct = () => {
               <Col sm={4}>
                 <ImageUpload
                   getSelectedImages={setSelectedImages}
+                  images = {selectedImages}
                 ></ImageUpload>
               </Col>
             </Row>
@@ -871,8 +888,9 @@ const AddProduct = () => {
               data={selectedTags}
               sendTagsToParent={setSelectedTags}
             ></ProducTags>
-
-            <Filters
+          
+                  <Col className="mt-3">
+            <Filters 
               setSelectedcolors={setSelectedcolors}
               selectedcolors={selectedcolors}
               setSelectedseasons={setSelectedseasons}
@@ -886,6 +904,7 @@ const AddProduct = () => {
               productSize={productSize}
               setProductSize={setProductSize}
             ></Filters>
+</Col>
 
             <Col className="d-flex justify-content-center">
               <div className="m-4 form-check">
@@ -894,6 +913,7 @@ const AddProduct = () => {
                   className="form-check-input"
                   id="isActive"
                   name="isActive"
+                  checked={productForm.values.isActive}
                   onChange={(e) => {
                     productForm.setFieldValue("isActive", e.target.checked);
                   }}
@@ -909,6 +929,7 @@ const AddProduct = () => {
                   className="form-check-input"
                   id="isProductNew"
                   name="isProductNew"
+                  checked={productForm.values.isProductNew}
                   onChange={(e) => {
                     productForm.setFieldValue("isProductNew", e.target.checked);
                   }}
@@ -924,6 +945,7 @@ const AddProduct = () => {
                   className="form-check-input"
                   id="isProductPopular"
                   name="isProductPopular"
+                  checked={productForm.values.isProductPopular}
                   onChange={(e) => {
                     productForm.setFieldValue(
                       "isProductPopular",
