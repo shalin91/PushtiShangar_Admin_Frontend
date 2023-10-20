@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import { Link} from "react-router-dom";
 
-const ImageUpload = ({getSelectedImages}) => {
+const ImageUpload = ({getSelectedImages,images}) => {
   const [selectedFiles, setselectedFiles] = useState([]);
   function handleAcceptedFiles(files) {
     const updatedSelectedFiles = selectedFiles.concat(files);
@@ -24,6 +24,10 @@ const ImageUpload = ({getSelectedImages}) => {
     setselectedFiles(updatedSelectedFiles);
     getSelectedImages(updatedSelectedFiles)
   }
+  useEffect(
+    ()=>{
+      console.log(selectedFiles)
+    },[selectedFiles])
 
   return (
 

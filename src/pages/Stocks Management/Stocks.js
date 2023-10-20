@@ -191,14 +191,15 @@ function Stocks() {
 
                           <td>
                             <div className="hstack gap-2">
-                              <button
+                              {/* <button
                                 className="btn btn-sm btn-soft-info edit-list"
                                 onClick={() => {
                                   setStockForUpdate(content);
+                                  console.log(content)
                                 }}
                               >
                                 <i className="ri-pencil-fill align-bottom" />
-                              </button>
+                              </button> */}
 
                               <button
                                 className="btn btn-sm btn-soft-danger remove-list"
