@@ -62,12 +62,12 @@ const Filters = (props) => {
       <Row>
         <Col lg={4}>
           <div className="mb-3">
-            <Label
+            <label
               htmlFor="choices-multiple-remove-button"
-              className="form-label text-muted"
+              className="form-label" 
             >
               filter by
-            </Label>
+            </label>
             <Select
               value={props.selectedMulti2}
               isMulti={true}
@@ -184,7 +184,7 @@ const Filters = (props) => {
                 type="text"
                 className="form-control"
                 id="productSize"
-                placeholder="Enter HSN code"
+                placeholder="Enter size"
                 name="productSize"
                 aria-label="productSize"
                 aria-describedby="product-orders-addon"
