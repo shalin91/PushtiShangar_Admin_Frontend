@@ -173,6 +173,20 @@ const Navdata = () => {
           parentId: "apps",
           stateVariables: isEcommerce,
           childItems: [
+            
+            {
+              id: 5,
+              label: "All Colors",
+              link: "/allcolors",
+              parentId: "apps",
+            },
+            
+            {
+              id: 6,
+              label: "All Size",
+              link: "/allsizes",
+              parentId: "apps",
+            },
             {
               id: 4,
               label: "All Products",
@@ -180,18 +194,6 @@ const Navdata = () => {
               parentId: "apps",
             },
 
-            // {
-            //   id: 3,
-            //   label: "Create Product New",
-            //   link: "/addproduct",
-            //   parentId: "apps",
-            // },
-            // {
-            //   id: 4,
-            //   label: "Orders",
-            //   link: "/apps-ecommerce-orders",
-            //   parentId: "apps",
-            // },
           ],
         },
         {
@@ -340,22 +342,23 @@ const Navdata = () => {
                 // { id: 3, label: "Create Invoice", link: "/apps-invoices-create" },
             ]
         },
-        // {
-        //     id: "supportTickets",
-        //     label: "Daily Rates Updates",
-        //     link: "/#",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setIsSupportTickets(!isSupportTickets);
-        //     },
-        //     parentId: "apps",
-        //     stateVariables: isSupportTickets,
-        //     childItems: [
-        //         { id: 1, label: "Gold-Silver Rates Updates", link: "/dailyrates" },
-        //         // { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
-        //     ]
-        // },
+        {
+            id: "supportTickets",
+            label: "Reports",
+            link: "/#",
+            isChildItem: true,
+            click: function (e) {
+                e.preventDefault();
+                setIsSupportTickets(!isSupportTickets);
+            },
+            parentId: "apps",
+            stateVariables: isSupportTickets,
+            childItems: [
+                { id: 1, label: "Customers Reports", link: "/customerreports" },
+                { id: 2, label: "Products Reports", link: "/productreport" },
+                // { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
+            ]
+        },
         // {
         //     id: "NFTMarketplace",
         //     label: "NFT Marketplace",

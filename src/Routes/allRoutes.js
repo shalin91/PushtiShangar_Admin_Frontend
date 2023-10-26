@@ -106,6 +106,13 @@ import BlogMaster from "../pages/BlogMaster/BlogsMaster";
 import InvoiceDetails from "../pages/Order Managemenr/inVoice";
 
 import NewDashboard from "../Dashboard/NewDashboard";
+import AddColor from "../pages/ColorMaster/AddColor";
+import AllColors from "../pages/ColorMaster/AllColors";
+import AddSize from "../pages/SizeMaster/AddSize";
+import AllSize from "../pages/SizeMaster/AllSize";
+import AddVariation from "../pages/products/AddVariation";
+import CustomerReports from "../pages/Reports/CustomerReports";
+import ProductsReports from "../pages/Reports/ProductsReports";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -131,6 +138,11 @@ const authProtectedRoutes = [
   // { path: "/product-form", component: <ProductForm /> },
   { path: "/add-product", component: <AddProduct /> },
   { path: "/add-product/:id", component: <AddProduct /> },
+  { path: "/addvariation/:id", component: <AddVariation /> },
+  { path: "/addcolor", component: <SignState><AddColor /></SignState> },
+  { path: "/allcolors", component: <SignState><AllColors /></SignState> },
+  { path: "/addsize", component: <SignState><AddSize /></SignState> },
+  { path: "/allsizes", component: <SignState><AllSize /></SignState> },
 
   //bannner master
   { path: "/banner-master", component: <BannerMaster /> },
@@ -163,6 +175,9 @@ const authProtectedRoutes = [
   { path: "/orders", component: <SignState><AllOrders/></SignState> },
   { path: "/vieworder/:id", component: <SignState><EcommerceOrderDetail/></SignState> },
 {path:'/invoice/:id',component:<SignState><InvoiceDetails/></SignState>},
+{path:'/customerreports',component:<SignState><CustomerReports/></SignState>},
+{path:'/productreport',component:<SignState><ProductsReports/></SignState>},
+// {path:'/invoice/:id',component:<SignState><InvoiceDetails/></SignState>},
   
 
   //Daily Price 

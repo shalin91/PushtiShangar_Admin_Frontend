@@ -80,7 +80,7 @@ const Filters = (props) => {
                 { value: "Color", label: "Color" },
                 { value: "Material", label: "Material" },
                 { value: "Season", label: "Season" },
-                { value: "productSize", label: "product size" },
+                // { value: "productSize", label: "product size" },
               ]}
             />
           </div>
@@ -173,7 +173,7 @@ const Filters = (props) => {
           </Col>
         ) : null}
 
-{props.selectedItems.includes("productSize") ? (
+{/* {props.selectedItems.includes("productSize") ? (
         <Col sm={2}>
           <div className="mb-3">
             <label className="form-label" htmlFor="product-orders-input">
@@ -198,7 +198,7 @@ const Filters = (props) => {
             </div>
           </div>
         </Col>
-) : null}
+) : null} */}
 
       </Row>
     </React.Fragment>

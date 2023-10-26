@@ -7,11 +7,7 @@ import FeatherIcon from "feather-icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import {
-  deleteProduct,
-  getProducts,
-
-} from "../../helpers/backend_helper";
+import { deleteProduct, getProducts } from "../../helpers/backend_helper";
 import { GET_PRODUCTS } from "../../store/product/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { useContext } from "react";
@@ -56,42 +52,37 @@ const ProductMaster = () => {
 
   const dispatch = useDispatch();
   const fetchData = async () => {
+    try {
+      setIsFetchingData(true);
+      const productsResponse = await getProducts();
 
-      try {
-        setIsFetchingData(true);
-        const productsResponse = await getProducts();
+      dispatch({
+        type: GET_PRODUCTS,
+        payload: {
+          actionType: "GET_PRODUCTS",
+          data: productsResponse.products,
+        },
+      });
 
-        dispatch({
-          type: GET_PRODUCTS,
-          payload: {
-            actionType: "GET_PRODUCTS",
-            data: productsResponse.products,
-          },
-        });
-
-        
-        setIsFetchingData(false);
-      } catch (error) {
-        console.error("Error fetching data:", error.message);
-        setIsFetchingData(false);
-      }
-    
+      setIsFetchingData(false);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+      setIsFetchingData(false);
+    }
   };
 
   useEffect(() => {
     fetchData();
-  }, []); 
-  
+  }, []);
+
   useEffect(() => {
     setProductData(allProductData);
   }, [allProductData]);
 
-
-
   const handledeleteProduct = async () => {
     if (selectedForDelete) {
       await deleteProduct(selectedForDelete);
-      console.log(selectedForDelete)
+      console.log(selectedForDelete);
       fetchData();
       setDeleteModal(false);
     }
@@ -107,7 +98,11 @@ const ProductMaster = () => {
       <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
-        <BreadCrumb grandParent="Setup" parent="Products" child="All Products" />
+          <BreadCrumb
+            grandParent="Setup"
+            parent="Products"
+            child="All Products"
+          />
 
           <Card>
             <CardHeader className="d-flex justify-content-between align-items-center">
@@ -173,12 +168,12 @@ const ProductMaster = () => {
                   <thead className="table-active">
                     <tr>
                       <th scope="col">index</th>
-
                       <th scope="col">image</th>
                       <th scope="col">name</th>
                       <th scope="col">category</th>
                       <th className="price">Original Price</th>
                       <th className="price">Discounted</th>
+                      <th className="var">Add Varaition</th>
                       <th scope="col">actions</th>
                     </tr>
                   </thead>
@@ -207,18 +202,36 @@ const ProductMaster = () => {
                               <div>{`${item.sku}`}</div>
                             </td>
                             <td>{item.categoryTitle}</td>
-                            <td>{item.prices.calculatedPrice ? item.prices.calculatedPrice : "NA"}</td>
                             <td>
-                              {item.prices.discounted ? item.prices.discounted : "NA"}
+                              {item.prices.calculatedPrice
+                                ? item.prices.calculatedPrice
+                                : "NA"}
+                            </td>
+                            <td>
+                              {item.prices.discounted
+                                ? item.prices.discounted
+                                : "NA"}
+                            </td>
+                            <td>
+                              <div className="hstack gap-2 text-center">
+                                {!item.isVariant && (
+                                  <button
+                                    className="btn btn-sm btn-soft-warning edit-list"
+                                    onClick={() => {
+                                      navigate(`/addvariation/${item._id}`);
+                                    }}
+                                  >
+                                    <i className="ri-file-edit-fill align-bottom" />
+                                  </button>
+                                )}
+                              </div>
                             </td>
                             <td>
                               <div className="hstack gap-2">
-                                
                                 <button
                                   className="btn btn-sm btn-soft-info edit-list"
                                   onClick={() => {
                                     navigate(`/add-product/${item._id}`);
-                                    
                                   }}
                                 >
                                   <i className="ri-pencil-fill align-bottom" />

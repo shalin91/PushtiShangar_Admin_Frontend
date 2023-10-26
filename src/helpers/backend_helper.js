@@ -102,6 +102,8 @@ export const getSubSubCategory = async () =>
   await api.create(hostedUrl + "/subsubcategory/getsubsubcategories");
 
 export const getGst = async () => await api.create(hostedUrl + "/gst/getGst");
+export const getColors = async () => await api.create(hostedUrl + "/color/getcolors");
+export const getSize = async () => await api.create(hostedUrl + "/size/getSizes");
 
 //product
 
@@ -109,6 +111,8 @@ export const getProducts = async () =>
   await api.create(hostedUrl + "/product/get-products-for-table");
 export const addProduct = async (data) =>
   await api.create(hostedUrl + "/product/addproduct", data);
+export const addVar = async (data) =>
+  await api.create(hostedUrl + "/product/addvar", data);
 export const updateProduct = async (data, id) =>
   await api.create(`${hostedUrl}/product/updateproduct/${id}`, data);
 export const deleteProduct = async (id) =>

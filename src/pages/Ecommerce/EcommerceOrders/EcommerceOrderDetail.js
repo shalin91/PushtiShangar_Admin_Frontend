@@ -200,7 +200,7 @@ const EcommerceOrderDetail = (props) => {
                                 <td>Shipping Charge :</td>
                                 <td className="text-end">
                                   ₹{" "}
-                                  {shpChrg}
+                                  {shpChrg?shpChrg : "0"}
                                 </td>
                                 </tr>
                               <tr>
@@ -583,14 +583,7 @@ const EcommerceOrderDetail = (props) => {
                     <h6 className="mb-0">{OrderData.paymentMethod}</h6>
                   </div>
                 </div>
-                <div className="d-flex align-items-center mb-2">
-                  <div className="flex-shrink-0">
-                    <p className="text-muted mb-0">Card Holder Name:</p>
-                  </div>
-                  <div className="flex-grow-1 ms-2">
-                    {/* <h6 className="mb-0">Joseph Parker</h6> */}
-                  </div>
-                </div>
+                
                 <div className="d-flex align-items-center mb-2">
                   <div className="flex-shrink-0">
                     {/* <p className="text-muted mb-0">Card Number:</p> */}

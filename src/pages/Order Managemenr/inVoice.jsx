@@ -198,7 +198,7 @@ const InvoiceDetails = () => {
                           Invoice No
                         </p>
                         <h5 className="fs-14 mb-0">
-                          <span id="invoice-no">1501035</span>
+                          <span id="invoice-no">{OrderData.invoiceNumber}</span>
                         </h5>
                       </Col>
                       <Col lg={3} xs={6}>
@@ -362,7 +362,7 @@ const InvoiceDetails = () => {
                           </tr>
                           <tr>
                             <td>Shipping Charge</td>
-                            <td className="text-end">₹{shpChrg}</td>
+                            <td className="text-end">₹{shpChrg ? shpChrg : "0"}</td>
                           </tr>
                           <tr>
                             <td>

@@ -5,7 +5,8 @@ import FeatherIcon from "feather-icons-react";
 import {
   CardBody,
   CardHeader,
-  Col,Card,
+  Col,
+  Card,
   Container,
   Input,
   Label,
@@ -98,7 +99,6 @@ const NewTeam = () => {
     setRoles(res);
   };
 
-
   const searchList = (e) => {
     let inputVal = e.toLowerCase();
 
@@ -134,13 +134,13 @@ const NewTeam = () => {
 
   const handleChange = (e) => {
     if (EditModal) {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
+      const { name, value, type, checked } = e.target;
+      const newValue = type === "checkbox" ? checked : value;
 
-    setEditUserInfo({
-      ...editUserInfo,
-      [name]: newValue,
-    });
+      setEditUserInfo({
+        ...editUserInfo,
+        [name]: newValue,
+      });
     }
   };
 
@@ -160,7 +160,7 @@ const NewTeam = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const resUpdate = await updateUser(editUserInfo , profilePhoto);
+    const resUpdate = await updateUser(editUserInfo, profilePhoto);
     console.log(resUpdate);
     if (resUpdate.success) {
       getusers();
@@ -215,149 +215,159 @@ const NewTeam = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb  parent="Profile" child="Team" grandChild ="All users" title pageTitle />
-<Card>
-          <Row>
-            <Col lg={12}>
-              <CardHeader>
-                <h4 className="card-title mb-0">Users</h4>
-              </CardHeader>
-              <CardBody>
-                <div id="">
-                  <Row className="g-4 mb-3">
-                    <Col className="col-sm">
-                      <div className="d-flex justify-content-sm-end">
-                        <div className="search-box ms-2">
-                          <input
-                            type="text"
-                            className="form-control search"
-                            placeholder="Search..."
-                            onKeyUp={(e) => searchList(e.target.value)}
-                          />
-                          <i className="ri-search-line search-icon"></i>
+          <BreadCrumb
+            parent="Profile"
+            child="Team"
+            grandChild="All users"
+            title
+            pageTitle
+          />
+          <Card>
+            <Row>
+              <Col lg={12}>
+                <CardHeader>
+                  <h4 className="card-title mb-0">Users</h4>
+                </CardHeader>
+                <CardBody>
+                  <div id="">
+                    <Row className="g-4 mb-3">
+                      <Col className="col-sm">
+                        <div className="d-flex justify-content-sm-end">
+                          <div className="search-box ms-2">
+                            <input
+                              type="text"
+                              className="form-control search"
+                              placeholder="Search..."
+                              onKeyUp={(e) => searchList(e.target.value)}
+                            />
+                            <i className="ri-search-line search-icon"></i>
+                          </div>
                         </div>
-                      </div>
-                    </Col>
-                    <Col className="col-sm-auto">
-                      <div>
-                        <Link
-                          className="btn btn-primary add-btn me-1"
-                          id="create-btn"
-                          onClick={togglemodal}
-                          // to="/adduser"
-                        >
-                          <i className="ri-add-line align-bottom me-1"></i> Add
-                        </Link>
-                      </div>
-                    </Col>
-                  </Row>
-                  <div id="todo-task" className="table-responsive table-card mt-1 mb-3">
-                    <table
-                      className="table align-middle table-nowrap"
-                      id="customerTable"
+                      </Col>
+                      <Col className="col-sm-auto">
+                        <div>
+                          <Link
+                            className="btn btn-primary add-btn me-1"
+                            id="create-btn"
+                            onClick={togglemodal}
+                            // to="/adduser"
+                          >
+                            <i className="ri-add-line align-bottom me-1"></i>{" "}
+                            Add
+                          </Link>
+                        </div>
+                      </Col>
+                    </Row>
+                    <div
+                      id="todo-task"
+                      className="table-responsive table-card mt-1 mb-3"
                     >
-                      <thead className="table-light">
-                        <tr>
-                          <th scope="col" style={{ width: "40px" }}>
-                            <div className="form-check">
-                            <th className="name">Index</th>
-                            </div>
-                          </th>
-                          <th className="name">Name</th>
-                          <th className="Image">Photo</th>
-                          <th className="Email" style={{ width: "170px" }}>
-                            Email
-                          </th>
-                          <th className="roles">Roles</th>
-                          <th className="status">Status</th>
-                          <th className="action">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className="list form-check-all">
-                        {usersData.map((user , key) => (
-                          <tr key={user._id}>
-                            <th scope="row">
+                      <table
+                        className="table align-middle table-nowrap"
+                        id="customerTable"
+                      >
+                        <thead className="table-light">
+                          <tr>
+                            <th scope="col" style={{ width: "40px" }}>
                               <div className="form-check">
-                              <td className="name">{key+1}</td>
+                                <th className="name">Index</th>
                               </div>
                             </th>
-                            <td className="name">{user.name}</td>
-                            <td className="Image">
-                              <div
-                                style={{
-                                  maxWidth: "50px",
-                                  maxHeight: "50px",
-                                  overflow: "hidden",
-                                  display: "inline-block",
-                                }}
-                              >
-                                <img
-                                  src={`${url}/${user.photo}`}
-                                  alt="userImage"
-                                  style={{
-                                    width: "100%",
-                                    height: "auto",
-                                  }}
-                                />
-                              </div>
-                            </td>
-                            <td className="Email" style={{ width: "170px" }}>
-                              {user.email}
-                            </td>
-                            <td className="roles">{user.roles}</td>
-                            <td className="status">
-                              {user.active === true ? (
-                                 <div>
-                                 <span className="badge badge-soft-success badge-border">
-                                   Active
-                                 </span>
-                               </div>
-                             ) : (
-                               <div>
-                                 <span className="badge badge-soft-danger badge-border">
-                                   InActive
-                                 </span>
-                               </div>
-                             )}
-                            </td>
-                            <td className="action">
-                              <button
-                                className="btn btn-soft-info btn-sm me-2"
-                                onClick={() => toggleEditmodal(user._id)}
-                              >
-                                <i className="ri-pencil-line"></i> 
-                              </button>
-                              <button
-                                className="btn btn-soft-danger btn-sm"
-                                onClick={() => {
-                                  toggledeletemodal();
-                                  setUserToDelete(user);
-                                }}
-                              >
-                                <i className="ri-delete-bin-line"></i>
-                              </button>
-                            </td>
-                            {/* Add other columns here as needed */}
-                            <td>{/* Add edit and remove buttons here */}</td>
+                            <th className="name">Name</th>
+                            <th className="Image">Photo</th>
+                            <th className="Email" style={{ width: "170px" }}>
+                              Email
+                            </th>
+                            <th className="roles">Roles</th>
+                            <th className="status">Status</th>
+                            <th className="action">Action</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="list form-check-all">
+                          {usersData.map((user, key) => (
+                            <tr key={user._id}>
+                              <th scope="row">
+                                <div className="form-check">
+                                  <td className="name">{key + 1}</td>
+                                </div>
+                              </th>
+                              <td className="name">{user.name}</td>
+                              <td className="Image">
+                                <div
+                                  style={{
+                                    maxWidth: "50px",
+                                    maxHeight: "50px",
+                                    overflow: "hidden",
+                                    display: "inline-block",
+                                  }}
+                                >
+                                  <img
+                                    src={`${url}/${user.photo}`}
+                                    alt="userImage"
+                                    style={{
+                                      width: "100%",
+                                      height: "auto",
+                                    }}
+                                  />
+                                </div>
+                              </td>
+                              <td className="Email" style={{ width: "170px" }}>
+                                {user.email}
+                              </td>
+                              <td className="roles">{user.roles}</td>
+                              <td className="status">
+                                {user.active === true ? (
+                                  <div>
+                                    <span className="badge badge-soft-success badge-border">
+                                      Active
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <span className="badge badge-soft-danger badge-border">
+                                      InActive
+                                    </span>
+                                  </div>
+                                )}
+                              </td>
+                              <td className="action">
+                                <button
+                                  className="btn btn-soft-info btn-sm me-2"
+                                  onClick={() => toggleEditmodal(user._id)}
+                                >
+                                  <i className="ri-pencil-line"></i>
+                                </button>
+                                <button
+                                  className="btn btn-soft-danger btn-sm"
+                                  onClick={() => {
+                                    toggledeletemodal();
+                                    setUserToDelete(user);
+                                  }}
+                                >
+                                  <i className="ri-delete-bin-line"></i>
+                                </button>
+                              </td>
+                              {/* Add other columns here as needed */}
+                              <td>{/* Add edit and remove buttons here */}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-                <div
-                className="py-4 mt-4 text-center"
-                id="noresult"
-                style={{ display: "none" }}
-              >
-                <h1>
-                  <FeatherIcon icon="search" />
-                </h1>
-                <h5 className="mt-4">Sorry! No Result Found</h5>
-              </div>
-              </CardBody>
-            </Col>
-          </Row>
+                  <div
+                    className="py-4 mt-4 text-center"
+                    id="noresult"
+                    style={{ display: "none" }}
+                  >
+                    <h1>
+                      <FeatherIcon icon="search" />
+                    </h1>
+                    <h5 className="mt-4">Sorry! No Result Found</h5>
+                  </div>
+                </CardBody>
+              </Col>
+            </Row>
           </Card>
         </Container>
       </div>
@@ -426,7 +436,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     // value={values.photo}
                   />
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.photo && touched.photo && errors.photo}
                   </p>
                 </div>
@@ -457,7 +467,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.name}
                   />
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.name && touched.name && errors.name}
                   </p>
                 </div>
@@ -475,7 +485,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.email}
                   />
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.email && touched.email && errors.email}
                   </p>
                 </div>
@@ -492,7 +502,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.password}
                   />
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.password && touched.password && errors.password}
                   </p>
                 </div>
@@ -509,7 +519,7 @@ const NewTeam = () => {
                     onBlur={handleBlur}
                     value={values.confirmPassword}
                   />
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.confirmPassword &&
                       touched.confirmPassword &&
                       errors.confirmPassword}
@@ -535,7 +545,7 @@ const NewTeam = () => {
                       </option>
                     ))}
                   </Field>
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.roles && touched.roles && errors.roles}
                   </p>
                 </div>
@@ -562,7 +572,7 @@ const NewTeam = () => {
                       </Label>
                     </div>
                   </div>
-                  <p className="error" style={{color:"red"}}>
+                  <p className="error" style={{ color: "red" }}>
                     {errors.active && touched.active && errors.active}
                   </p>
                 </div>
@@ -665,31 +675,27 @@ const NewTeam = () => {
               </select>
             </div>
             <div className="mb-3">
-                  <Label for="status" className="form-label">
-                    Status
+              <Label for="status" className="form-label">
+                Status
+              </Label>
+              <div>
+                <div className="form-check form-check-inline">
+                  <Input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="activeStatus"
+                    name="active"
+                    onChange={handleChange}
+                    checked={editUserInfo.active}
+                  />
+                  <Label className="form-check-label" htmlFor="activeStatus">
+                    Active
                   </Label>
-                  <div>
-                    <div className="form-check form-check-inline">
-                      <Input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="activeStatus"
-                        name="active"
-                        onChange={handleChange}
-                        checked={editUserInfo.active}
-                      />
-                      <Label
-                        className="form-check-label"
-                        htmlFor="activeStatus"
-                      >
-                        Active
-                      </Label>
-                    </div>
-                  </div>
                 </div>
-            
+              </div>
+            </div>
+
             <ModalFooter>
-              
               <button
                 type="submit"
                 className="btn btn-success"

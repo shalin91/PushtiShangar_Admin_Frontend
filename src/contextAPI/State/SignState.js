@@ -49,9 +49,8 @@ export const SignState = (props) => {
       const response = await axios.post(`${url}/api/login`, UserInfo);
       return response;
     } catch (error) {
-     console.log(error)
-      return error
-      
+      console.log(error);
+      return error;
     }
   };
 
@@ -357,7 +356,7 @@ export const SignState = (props) => {
   };
 
   // Update Customer
-  const UpdateCustomer = async (customerInfo , id) => {
+  const UpdateCustomer = async (customerInfo, id) => {
     try {
       const response = await axios.post(`${url}/customer/updatecustomer`, {
         id: id,
@@ -655,7 +654,7 @@ export const SignState = (props) => {
   };
 
   // Update Stocks
-  const UpdateStocks = async (id,stocksData) => {
+  const UpdateStocks = async (id, stocksData) => {
     try {
       const response = await axios.post(
         `${url}/stocks/updatestock/${id}`,
@@ -764,7 +763,7 @@ export const SignState = (props) => {
     }
   };
 
-  // Get Orders 
+  // Get Orders
   const GetAllOrders = async () => {
     try {
       const response = await axios.post(`${url}/orders/getallorders`);
@@ -787,14 +786,14 @@ export const SignState = (props) => {
   // GetspecificPrice By Id
   const GetSpecificPricebyId = async (id) => {
     try {
-      const response = await axios.post(`${url}/dailyrates/getprice/${id}` ,{});
+      const response = await axios.post(`${url}/dailyrates/getprice/${id}`, {});
       return response;
     } catch (error) {
       return { success: false, msg: "server Error" };
     }
   };
 
-  // Update Price by Id 
+  // Update Price by Id
   const UpdatePrice = async (priceData, id) => {
     try {
       const response = await axios.post(
@@ -811,13 +810,10 @@ export const SignState = (props) => {
     }
   };
 
-  // Delete Order 
+  // Delete Order
   const DeleteOrder = async (id) => {
     try {
-      const response = await axios.post(
-        `${url}/orders/deleteorder/${id}`,
-        {}
-      );
+      const response = await axios.post(`${url}/orders/deleteorder/${id}`, {});
       return response;
     } catch (error) {
       return { success: false, msg: "server Error" };
@@ -854,18 +850,146 @@ export const SignState = (props) => {
     }
   };
 
-  // Dshboard Data
-  // const GetDashboardData = async () => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:5002/dashboard/get-dashboard-data`);
-  //     // console.log(response)
-  //     return response;
-  //   } catch (error) {
-  //     return { success: false, msg: "server Error" };
-  //   }
-  // };
+  // Get Colors
+  const GetColors = async () => {
+    try {
+      const response = await axios.post(`${url}/color/getcolors`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
 
+  // Add Colors
+  const addColor = async (ColorData) => {
+    try {
+      const formData = new FormData();
+      formData.append("product", ColorData.product);
+      formData.append("name", ColorData.name);
+      // formData.append("active", GalleryData.active);
+      // formData.append("deleted", GalleryData.deleted);
+      formData.append("photo", ColorData.photo);
 
+      const response = await axios.post(`${url}/color/addcolor`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error("Axios Error:", error);
+    }
+  };
+
+  // GetSpecific Colors
+  const GetSpecificColorbyId =  async (colorId) => {
+    try {
+      const response = await axios.post(
+        `${url}/color/getspecificcolor/${colorId}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // Update Color
+  //  delete Color
+  const deleteColor = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/color/deletecolor/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // Get Size 
+  const Getsize  = async () => {
+    try {
+      const response = await axios.post(`${url}/size/getsizes`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // Add Size 
+  const AddSize = async (SizeData) => {
+    try {
+      const response = await axios.post(
+        `${url}/size/addsize`,
+        SizeData
+      );
+      return response;
+    } catch (error) {
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
+    }
+  };
+
+  // Get SpecificSize by Id
+  const getSpecificSizebyId = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/size/getspecificsize/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // Delete Size 
+  const DeleteSize = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/size/deletesize/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // GethighCustomerdata
+  const GetHighValueCustomersData = async () => {
+    try {
+      const response = await axios.post(`${url}/orders/gethighcustomerdata`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // GetMedCustomersData
+  const GetMedValueCustomersData = async () => {
+    try {
+      const response = await axios.post(`${url}/orders/getmedcustomerdata`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // GetTopSellingProducts
+  const TopSellingProducts = async () => {
+    try {
+      const response = await axios.post(`${url}/orders/gettopsellproducts`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
 
 
 
@@ -929,7 +1053,17 @@ export const SignState = (props) => {
         DeleteOrder,
         getSpecificOrderbyId,
         UpdateOrder,
-        // GetDashboardData,
+        GetColors,
+        addColor,
+        GetSpecificColorbyId,
+        deleteColor,
+        Getsize,
+        AddSize,
+        getSpecificSizebyId,
+        DeleteSize,
+        GetHighValueCustomersData,
+        GetMedValueCustomersData,
+        TopSellingProducts,
       }}
     >
       {props.children}
