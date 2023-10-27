@@ -101,7 +101,7 @@ const AllSize = () => {
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb grandParent="Setup" parent="AllColors" child="Color Details" />
+          <BreadCrumb grandParent="Setup" parent="AllSizes" child="Size Details" />
           <Row>
             <Col lg={12}>
               <Card>

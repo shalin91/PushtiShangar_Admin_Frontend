@@ -119,7 +119,7 @@ const AllColors = () => {
                           type="text"
                           id="searchTaskList"
                           className="form-control search"
-                          placeholder="Search by title"
+                          placeholder="Search by color"
                           // onKeyUp={(e) => searchList(e.target.value)}
                         />
                         <i className="ri-search-line search-icon"></i>
