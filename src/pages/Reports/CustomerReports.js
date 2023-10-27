@@ -20,7 +20,7 @@ const ITEMS_PER_PAGE = 10;
 const CustomerReports = () => {
   const { GetHighValueCustomersData, GetMedValueCustomersData } =
     useContext(SignContext);
-  const [filterOption, setFilterOption] = useState("highValue"); // Default value is "all"
+  const [filterOption, setFilterOption] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
   const [HighValueCustData, setHighValueCustData] = useState([]);
@@ -58,14 +58,25 @@ const CustomerReports = () => {
     }
   };
 
+  const sortDataByTotalAmount = () => {
+    const sortedData = [...filteredData];
+    sortedData.sort((a, b) => b.totalShoppingAmount - a.totalShoppingAmount);
+    setFilteredData(sortedData);
+  };
+
   const GethighValueCustomer = async () => {
     const res = await GetHighValueCustomersData();
     console.log(res);
-    const transformedData = res.highValueCustomers.map((content, index) => ({
-      ...content.customerData,
-      id: index + 1,
-    }));
-    // console.log(transformedData);
+    const transformedData = res.highValueCustomers.map((content) => {
+      const { totalShoppingAmount, ...customerData } = content.customerData;
+  
+      return {
+        ...customerData,
+        totalShoppingAmount: content.totalShoppingAmount,
+      };
+    });
+    
+    console.log(transformedData);
     setHighValueCustData(transformedData);
   };
 
@@ -100,7 +111,7 @@ const CustomerReports = () => {
   }, []);
   // console.log(object)
   useEffect(() => {
-    console.log(filteredData);
+    sortDataByTotalAmount();
   }, [filteredData])
   
 
@@ -119,15 +130,17 @@ const CustomerReports = () => {
                 <CardHeader className="d-flex justify-content-between align-items-center">
                   <h4 className="card-title mb-0">Customer Reports</h4>
                   <div className="filter-dropdown">
-                    <label htmlFor="filterSelect">Filter:</label>
+                    {/* <label htmlFor="filterSelect">Filter:</label> */}
                     <select
+                      className="form-select"
                       id="filterSelect"
                       value={filterOption}
                       onChange={handleFilterChange}
                     >
                       {/* <option value="all">All</option> */}
-                      <option value="highValue">High Value</option>
-                      <option value="medValue">Medium Value</option>
+                      <option value="">Select Value</option>
+                      <option value="medValue">Medium Value(Above 20,000 ₹)</option>
+                      <option value="highValue">High Value(Above 50,000 ₹)</option>
                     </select>
                   </div>
                   <Row className="align-items-center">
