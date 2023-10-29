@@ -113,6 +113,7 @@ import AllSize from "../pages/SizeMaster/AllSize";
 import AddVariation from "../pages/products/AddVariation";
 import CustomerReports from "../pages/Reports/CustomerReports";
 import ProductsReports from "../pages/Reports/ProductsReports";
+import CustomerOrders from "../pages/Ecommerce/EcommerceCustomers/CustomerOrders";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -124,6 +125,7 @@ const authProtectedRoutes = [
   // { path: "/apps-ecommerce-order-details", component: <EcommerceOrderDetail /> },
   { path: "/apps-ecommerce-customers", component: <EcommerceCustomers /> },
   { path: "/customers", component: <SignState><NewCustomer/></SignState> },
+  { path: "/customerorder/:id", component: <SignState><CustomerOrders/></SignState> },
   { path: "/apps-ecommerce-cart", component: <EcommerceCart /> },
   { path: "/apps-ecommerce-checkout", component: <EcommerceCheckout /> },
 

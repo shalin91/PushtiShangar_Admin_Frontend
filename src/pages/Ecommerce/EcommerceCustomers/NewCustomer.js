@@ -282,7 +282,20 @@ const NewCustomer = () => {
                             {/* Add other columns here as needed */}
                             <td>
                               <div className="d-flex gap-2">
-                               
+                              <div className="View">
+                                  <Link
+                                    to={`/customerorder/${customer._id}`}
+                                    className="btn btn-sm btn-soft-info remove-item-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteRecordModal"
+                                    // onClick={() => {
+                                    //   toggledeletemodal();
+                                    //   setCustomerToDelete(customer);
+                                    // }}
+                                  >
+                                    View
+                                  </Link>
+                                </div>
                                 <div className="remove">
                                   <button
                                     className="btn btn-sm btn-soft-danger remove-item-btn"
