@@ -10,7 +10,7 @@ import {
 } from "../../store/product/actionTypes";
 
 const Filters = (props) => {
-  const colorsData = useSelector((state) => state.Product.colors);
+  const colorsData = useSelector((state) => state.Product.productColor);
   const seasonsData = useSelector((state) => state.Product.seasons);
   const materialsData = useSelector((state) => state.Product.materials);
 
