@@ -207,13 +207,13 @@ const EcommerceOrderDetail = (props) => {
                                 <td>
                                   Discount{" "}
                                   <span className="text-muted">
-                                    ({CouponData.name})
+                                    ({CouponData?CouponData.name:null})
                                   </span>{" "}
                                   : :
                                 </td>
                                 <td className="text-end">
-                                  -{CouponData.type}
-                                  {CouponData.discount}
+                                  -{CouponData?CouponData.discount:null}
+                                  {CouponData?CouponData.type:null}
                                 </td>
                               </tr>
                               {/* <tr>
