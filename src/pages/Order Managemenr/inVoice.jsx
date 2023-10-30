@@ -368,12 +368,12 @@ const InvoiceDetails = () => {
                             <td>
                               Discount{" "}
                               <small className="text-muted">
-                                {CouponData.name}
+                                {CouponData?CouponData.name:null}
                               </small>
                             </td>
                             <td className="text-end">
-                              - {CouponData.type}
-                              {CouponData.discount}
+                             - {CouponData?CouponData.discount:null}
+                               {CouponData.type}
                             </td>
                           </tr>
 
@@ -429,10 +429,10 @@ const InvoiceDetails = () => {
                         <i className="ri-printer-line align-bottom me-1"></i>{" "}
                         Print
                       </Link>
-                      <Link to="#" className="btn btn-primary">
+                      {/* <Link to="#" className="btn btn-primary">
                         <i className="ri-download-2-line align-bottom me-1"></i>{" "}
                         Download
-                      </Link>
+                      </Link> */}
                     </div>
                   </CardBody>
                 </Col>
