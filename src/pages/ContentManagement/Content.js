@@ -66,7 +66,7 @@ const Content = () => {
     <>
       <div className="page-content">
         <Container fluid>
-        <BreadCrumb grandParent="Setup" parent="CDM" child="Contents" />
+        <BreadCrumb grandParent="Setup" parent="CMS" child="Contents" />
           <Row>
             <Col lg={12}>
               <Card>
@@ -81,7 +81,7 @@ const Content = () => {
                             type="text"
                             id="searchTaskList"
                             className="form-control search"
-                            placeholder="Search by product name"
+                            placeholder="Search"
                             // onKeyUp={(e) => searchList(e.target.value)}
                           />
                           <i className="ri-search-line search-icon"></i>
@@ -254,15 +254,7 @@ const Content = () => {
             </div>
           </div>
           <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-            <button
-              type="button"
-              className="btn w-sm btn-light"
-              onClick={() => {
-                setDeleteModal(!deletemodal);
-              }}
-            >
-              Close
-            </button>
+           
             <button
               type="button"
               className="btn w-sm btn-danger"
@@ -272,6 +264,15 @@ const Content = () => {
               }}
             >
               Yes, Delete It!
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
             </button>
           </div>
         </ModalBody>

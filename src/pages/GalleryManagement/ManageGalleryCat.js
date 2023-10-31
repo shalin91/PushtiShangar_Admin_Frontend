@@ -318,15 +318,7 @@ const ManageGalleryCat = () => {
             </div>
           </div>
           <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-            <button
-              type="button"
-              className="btn w-sm btn-light"
-              onClick={() => {
-                setDeleteModal(!deletemodal);
-              }}
-            >
-              Close
-            </button>
+            
             <button
               type="button"
               className="btn w-sm btn-danger"
@@ -336,6 +328,15 @@ const ManageGalleryCat = () => {
               }}
             >
               Yes, Delete It!
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
             </button>
           </div>
         </ModalBody>

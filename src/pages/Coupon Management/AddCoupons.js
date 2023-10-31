@@ -1,7 +1,16 @@
 import React, { useContext, useState } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import UiContent from "../../Components/Common/UiContent";
-import { Card, Col, Container,CardHeader, Form, Input, Label, Row } from "reactstrap";
+import {
+  Card,
+  Col,
+  Container,
+  CardHeader,
+  Form,
+  Input,
+  Label,
+  Row,
+} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -216,7 +225,6 @@ const AddCoupons = () => {
                             <Col lg={1}>
                               <div className="mt-2">
                                 <Input
-                               
                                   type="checkbox"
                                   id="isActive"
                                   label="Is Active"
@@ -234,24 +242,26 @@ const AddCoupons = () => {
                                 </Label>
                               </div>
                             </Col>
-                            
-                            <Col lg={1}>
-                            <button
-                                type="button"
-                                className="btn btn-soft-danger"
-                                onClick={()=>{navigate("/coupons");}}
-                              >
-                                Cancel
-                              </button>
-                            </Col>
 
-                              <Col lg={1}>
+                            <Col lg={1}>
                               <button
                                 type="submit"
                                 className="btn btn-success w-sm"
                                 //   onClick={togglesuccessmodal}
                               >
                                 Submit
+                              </button>
+                            </Col>
+
+                            <Col lg={1}>
+                              <button
+                                type="button"
+                                className="btn btn-soft-danger"
+                                onClick={() => {
+                                  navigate("/coupons");
+                                }}
+                              >
+                                Cancel
                               </button>
                             </Col>
                           </Row>

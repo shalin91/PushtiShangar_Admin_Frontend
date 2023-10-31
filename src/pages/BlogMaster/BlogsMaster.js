@@ -230,7 +230,7 @@ const BlogMaster = () => {
                           type="text"
                           id="searchTaskList"
                           className="form-control search"
-                          placeholder="Search by content type"
+                          placeholder="Search"
                           onKeyUp={(e) => searchList(e.target.value)}
                         />
                         <i className="ri-search-line search-icon"></i>
@@ -242,8 +242,8 @@ const BlogMaster = () => {
                         type="button"
                         onClick={() => handleAdd()}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add New
-                        Content
+                        <i className="ri-add-fill align-bottom" /> Add 
+                        
                       </button>
                     </Col>
                   </Row>

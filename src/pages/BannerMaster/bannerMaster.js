@@ -246,15 +246,7 @@ const BannerMaster = () => {
                             </td>
 
                             <td>
-                              <button
-                                className="btn btn-sm btn-soft-danger remove-list mx-1"
-                                onClick={() => {
-                                  setValuesForUpdate(item);
-                                  setDeleteModal(true);
-                                }}
-                              >
-                                <i className="ri-delete-bin-5-fill align-bottom" />
-                              </button>
+                             
                               <button
                                 className="btn btn-sm btn-soft-info edit-list mx-1"
                                 onClick={() => {
@@ -264,6 +256,15 @@ const BannerMaster = () => {
                                 }}
                               >
                                 <i className="ri-pencil-fill align-bottom" />
+                              </button>
+                              <button
+                                className="btn btn-sm btn-soft-danger remove-list mx-1"
+                                onClick={() => {
+                                  setValuesForUpdate(item);
+                                  setDeleteModal(true);
+                                }}
+                              >
+                                <i className="ri-delete-bin-5-fill align-bottom" />
                               </button>
                             </td>
                           </tr>

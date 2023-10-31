@@ -119,7 +119,7 @@ const AllColors = () => {
                           type="text"
                           id="searchTaskList"
                           className="form-control search"
-                          placeholder="Search by color"
+                          placeholder="Search..."
                           // onKeyUp={(e) => searchList(e.target.value)}
                         />
                         <i className="ri-search-line search-icon"></i>
@@ -145,9 +145,7 @@ const AllColors = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            <th scope="col">
-                              Index
-                            </th>
+                            <th scope="col">Index</th>
                             {/* <th className="name">Image</th> */}
                             <th className="name">Color-Name</th>
                             <th className="action">Action</th>
@@ -377,15 +375,6 @@ const AllColors = () => {
           <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
             <button
               type="button"
-              className="btn w-sm btn-light"
-              onClick={() => {
-                setDeleteModal(!deletemodal);
-              }}
-            >
-              Close
-            </button>
-            <button
-              type="button"
               className="btn w-sm btn-danger"
               onClick={() => {
                 handleDeleteGalleryCategory(ColorToDelete._id);
@@ -393,6 +382,15 @@ const AllColors = () => {
               }}
             >
               Yes, Delete It!
+            </button>
+            <button
+              type="button"
+              className="btn w-sm btn-light"
+              onClick={() => {
+                setDeleteModal(!deletemodal);
+              }}
+            >
+              Close
             </button>
           </div>
         </ModalBody>
