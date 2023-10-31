@@ -421,18 +421,7 @@ const BlogMaster = () => {
 
 
                   <div className="hstack gap-2 justify-content-center mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-ghost-danger"
-                      onClick={() => {
-                        toggle();
-                        setIsEdit(false);
-                        setContent("");
-                        setselectedForUpdate("");
-                      }}
-                    >
-                      <i className="ri-close-fill align-bottom"></i> Cancel
-                    </button>
+                    
                     {!buttnLoading ? (
                       <React.Fragment>
                         <button
@@ -459,6 +448,18 @@ const BlogMaster = () => {
                         </span>
                       </Button>
                     )}
+                    <button
+                      type="button"
+                      className="btn btn-ghost-danger"
+                      onClick={() => {
+                        toggle();
+                        setIsEdit(false);
+                        setContent("");
+                        setselectedForUpdate("");
+                      }}
+                    >
+                      <i className="ri-close-fill align-bottom"></i> Cancel
+                    </button>
                   </div>
                 </Form>
               </CardBody>

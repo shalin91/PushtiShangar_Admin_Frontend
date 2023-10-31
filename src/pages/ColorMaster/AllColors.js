@@ -320,6 +320,14 @@ const AllColors = () => {
                   </p>
                 </div>
                 <ModalFooter>
+                 
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={isSubmitting}
+                  >
+                    Save
+                  </button>
                   <button
                     type="button"
                     className="btn btn-light"
@@ -328,13 +336,6 @@ const AllColors = () => {
                     }}
                   >
                     Close
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={isSubmitting}
-                  >
-                    Save
                   </button>
                 </ModalFooter>
               </Form>

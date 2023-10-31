@@ -450,16 +450,7 @@ const BannerMaster = () => {
                     </ModalBody>
                     <div className="modal-footer">
                       <div className="hstack gap-2 justify-content-end">
-                        <button
-                          type="button"
-                          className="btn btn-light"
-                          onClick={() => {
-                            setShowModal(false);
-                            setValuesForUpdate("");
-                          }}
-                        >
-                          Close
-                        </button>
+                        
 
                         {!buttnLoading ? (
                           <React.Fragment>
@@ -489,6 +480,16 @@ const BannerMaster = () => {
                             </span>
                           </Button>
                         )}
+                        <button
+                          type="button"
+                          className="btn btn-light"
+                          onClick={() => {
+                            setShowModal(false);
+                            setValuesForUpdate("");
+                          }}
+                        >
+                          Close
+                        </button>
                       </div>
                     </div>
                   </Form>

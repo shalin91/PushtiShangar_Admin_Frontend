@@ -196,8 +196,8 @@ const CategoryMaster = () => {
                           toggle();
                         }}
                       >
-                        <i className="ri-add-line align-bottom me-1"></i> Create
-                        Category
+                        <i className="ri-add-line align-bottom me-1"></i> Add
+                        
                       </button>{" "}
                     </div>
                   </div>
@@ -401,16 +401,7 @@ const CategoryMaster = () => {
                     </ModalBody>
                     <div className="modal-footer">
                       <div className="hstack gap-2 justify-content-end">
-                        <button
-                          type="button"
-                          className="btn btn-light"
-                          onClick={() => {
-                            setShowModal(false);
-                            setValuesForUpdate("");
-                          }}
-                        >
-                          Close
-                        </button>
+                        
 
                         {!buttnLoading ? (
                           <React.Fragment>
@@ -440,6 +431,16 @@ const CategoryMaster = () => {
                             </span>
                           </Button>
                         )}
+                        <button
+                          type="button"
+                          className="btn btn-light"
+                          onClick={() => {
+                            setShowModal(false);
+                            setValuesForUpdate("");
+                          }}
+                        >
+                          Close
+                        </button>
                       </div>
                     </div>
                   </Form>

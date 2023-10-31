@@ -130,8 +130,8 @@ const SubCategoryMaster = () => {
                           toggle();
                         }}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add Sub
-                        Category
+                        <i className="ri-add-fill align-bottom" /> Add 
+                        
                       </button>
                     </Col>
                   </div>
@@ -335,16 +335,7 @@ const SubCategoryMaster = () => {
                     </Col>
                   </Form>
                   <div className="hstack gap-2 justify-content-end">
-                    <button
-                      type="button"
-                      className="btn btn-ghost-danger"
-                      onClick={() => {
-                        toggle();
-                        setIsEdit(false);
-                      }}
-                    >
-                      <i className="ri-close-fill align-bottom"></i> Cancel
-                    </button>
+                    
 
                     {!buttnLoading ? (
                       <React.Fragment>
@@ -373,6 +364,16 @@ const SubCategoryMaster = () => {
                         </span>
                       </Button>
                     )}
+                    <button
+                      type="button"
+                      className="btn btn-ghost-danger"
+                      onClick={() => {
+                        toggle();
+                        setIsEdit(false);
+                      }}
+                    >
+                      <i className="ri-close-fill align-bottom"></i> Cancel
+                    </button>
                   </div>
                 </div>
               </div>

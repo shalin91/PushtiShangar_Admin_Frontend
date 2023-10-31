@@ -959,16 +959,7 @@ const AddProduct = () => {
               </div>
             </Col>
             <Col className="d-flex justify-content-center">
-              <button
-                type="button"
-                className="btn btn-soft-danger mx-1"
-                id="addNewTodo"
-                onClick={() => {
-                  navigate("/allproducts");
-                }}
-              >
-                cancel
-              </button>
+              
 
               {!productForm.isSubmitting ? (
                 <React.Fragment>
@@ -991,6 +982,16 @@ const AddProduct = () => {
                   </span>
                 </Button>
               )}
+              <button
+                type="button"
+                className="btn btn-soft-danger mx-1"
+                id="addNewTodo"
+                onClick={() => {
+                  navigate("/allproducts");
+                }}
+              >
+                cancel
+              </button>
             </Col>
           </form>
         </CardBody>
