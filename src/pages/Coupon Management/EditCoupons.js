@@ -188,7 +188,7 @@ const EditCoupons = () => {
 
 
                       <Row className="align-items-last justify-content-end mt-4">
-                      <Col lg={2}>
+                      <Col lg={2} style={{alignSelf:"center"}}>
                           <div >
                             <Input
                               type="checkbox"
@@ -202,24 +202,24 @@ const EditCoupons = () => {
                           </div>
                         </Col>
                             
-                            
-                            <Col lg={1}>
+                        
+                            <Col lg={1} style={{marginRight:"30px"}}>
                             <button
-                                type="button"
-                                className="btn btn-soft-danger"
-                                onClick={()=>{navigate("/coupons");}}
-                              >
-                                Cancel
-                              </button>
-                            </Col>
-
-                              <Col lg={1}>
-                              <button
                                 type="submit"
                                 className="btn btn-success w-sm"
                                 //   onClick={togglesuccessmodal}
                               >
                                 Update
+                              </button>
+                            </Col>
+
+                              <Col lg={1}>
+                              <button
+                                type="button"
+                                className="btn btn-soft-danger"
+                                onClick={()=>{navigate("/coupons");}}
+                              >
+                                Cancel
                               </button>
                             </Col>
                           </Row>

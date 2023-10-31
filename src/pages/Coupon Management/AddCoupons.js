@@ -243,7 +243,7 @@ const AddCoupons = () => {
                               </div>
                             </Col>
 
-                            <Col lg={1}>
+                            <Col lg={1} style={{marginRight:'30px'}}>
                               <button
                                 type="submit"
                                 className="btn btn-success w-sm"
