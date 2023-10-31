@@ -104,7 +104,7 @@ const Filters = (props) => {
                 <option value={null}>Select color</option>
                 {colorsData
                   ? colorsData.map((category) => (
-                      <option key={category._id} value={category._id}>
+                      <option key={category._id} value={category.name}>
                         {category.name}
                       </option>
                     ))
