@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo, useEffect } from "react";
 import JoditEditor from "jodit-react";
-import { Card, CardBody, Col, Row, CardHeader, Container } from "reactstrap";
+import { Card, CardBody, Col, Row, CardHeader, Container, PaginationLink, PaginationItem, Pagination } from "reactstrap";
 import { isEmpty } from "lodash";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import FeatherIcon from "feather-icons-react";
@@ -14,6 +14,11 @@ import { useContext } from "react";
 import SignContext from "../../contextAPI/Context/SignContext";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 
+const ITEMS_PER_PAGE = 10;
+
+
+
+
 const ProductMaster = () => {
   const navigate = useNavigate();
   const allProductData = useSelector((state) => state.Product.products);
@@ -26,6 +31,7 @@ const ProductMaster = () => {
   const [isFetchingData, setIsFetchingData] = useState(false);
   const [valuesForUpdate, setValuesForUpdate] = useState("");
   const [selectedForDelete, setSelectedForDelete] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const searchList = (e) => {
     let inputVal = e.toLowerCase();
@@ -79,6 +85,12 @@ const ProductMaster = () => {
     setProductData(allProductData);
   }, [allProductData]);
 
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = productData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const handledeleteProduct = async () => {
     if (selectedForDelete) {
       await deleteProduct(selectedForDelete);
@@ -129,7 +141,7 @@ const ProductMaster = () => {
                         navigate("/add-product");
                       }}
                     >
-                      <i className="ri-add-fill align-bottom" /> Add New Product
+                      <i className="ri-add-fill align-bottom" /> Add 
                     </button>
                   </Col>
                 </Row>
@@ -179,8 +191,8 @@ const ProductMaster = () => {
                   </thead>
 
                   <tbody id="task-list">
-                    {productData
-                      ? productData.map((item, key) => (
+                    {currentItems
+                      ? currentItems.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
                             <td>
@@ -264,6 +276,43 @@ const ProductMaster = () => {
                 </h1>
                 <h5 className="mt-4">Sorry! No Result Found</h5>
               </div>
+              <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(productData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(productData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
             </CardBody>
           </Card>
         </Container>
