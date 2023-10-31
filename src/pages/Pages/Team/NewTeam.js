@@ -15,6 +15,9 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  PaginationLink,
+  PaginationItem,
+  Pagination,
 } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Link, useParams } from "react-router-dom";
@@ -22,6 +25,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { color } from "echarts";
+
+const ITEMS_PER_PAGE = 10;
+
 
 const NewTeam = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -52,7 +58,9 @@ const NewTeam = () => {
   const [Error, setError] = useState("");
   const [Success, setSuccess] = useState("");
   const roles = JSON.parse(localStorage.getItem("rights")).role;
-  console.log(roles);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // console.log(roles);
 
   const addUserValidationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -209,6 +217,12 @@ const NewTeam = () => {
     getspecificUser(id);
   }, [id]);
 
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = usersData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   document.title = "Team | Pushtishangar";
 
   return (
@@ -285,7 +299,7 @@ const NewTeam = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {usersData.map((user, key) => (
+                          {currentItems?currentItems.map((user, key) => (
                             <tr key={user._id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -351,7 +365,7 @@ const NewTeam = () => {
                               {/* Add other columns here as needed */}
                               <td>{/* Add edit and remove buttons here */}</td>
                             </tr>
-                          ))}
+                          )):null}
                         </tbody>
                       </table>
                     </div>
@@ -366,6 +380,43 @@ const NewTeam = () => {
                     </h1>
                     <h5 className="mt-4">Sorry! No Result Found</h5>
                   </div>
+                  <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(usersData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(usersData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                 </CardBody>
               </Col>
             </Row>

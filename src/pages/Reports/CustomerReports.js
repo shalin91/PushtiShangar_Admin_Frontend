@@ -139,8 +139,8 @@ const CustomerReports = () => {
                     >
                       {/* <option value="all">All</option> */}
                       <option value="">Select Value</option>
-                      <option value="medValue">Medium Value(Above 20,000 ₹)</option>
-                      <option value="highValue">High Value(Above 50,000 ₹)</option>
+                      <option value="medValue">Medium Value(₹15,000 - ₹40,000 )</option>
+                      <option value="highValue">High Value(Above ₹50,000 )</option>
                     </select>
                   </div>
                   <Row className="align-items-center">

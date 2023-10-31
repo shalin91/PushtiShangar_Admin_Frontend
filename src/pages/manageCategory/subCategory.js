@@ -10,6 +10,9 @@ import {
   ModalBody,
   ModalHeader,
   Label,
+  PaginationLink,
+  PaginationItem,
+  Pagination,
 } from "reactstrap";
 import { isEmpty } from "lodash";
 import { ToastContainer } from "react-toastify";
@@ -27,6 +30,7 @@ import {
 } from "../../helpers/backend_helper";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
+const ITEMS_PER_PAGE = 10;
 
 const SubCategoryMaster = () => {
   document.title = "sub category Master";
@@ -38,6 +42,15 @@ const SubCategoryMaster = () => {
   const [errorBanner, setErrorBanner] = useState("");
   const [successBanner, setSuccessBanner] = useState("");
   const [buttnLoading, setButtnLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -74,7 +87,7 @@ const SubCategoryMaster = () => {
 
   const handleDeleteCategory = async () => {
     if (recordForSubmit) {
-      await deleteSubCategory(recordForSubmit)
+      await deleteSubCategory(recordForSubmit);
       fetchData();
       setDeleteModal(false);
     }
@@ -84,6 +97,18 @@ const SubCategoryMaster = () => {
     name: Yup.string().required("sub category is rquiresd."),
     Category: Yup.string().required("category is required."),
   });
+
+  const searchSubCategories = (query) => {
+    if (query) {
+      const filtered = tableData.filter((subcategory) => {
+        return subcategory.name.toLowerCase().includes(query.toLowerCase());
+      });
+      setFilteredSubCategories(filtered);
+    } else {
+      setFilteredSubCategories([]);
+    }
+  };
+
   return (
     <React.Fragment>
       <ToastContainer closeButton={false} />
@@ -118,6 +143,11 @@ const SubCategoryMaster = () => {
                           id="searchTaskList"
                           className="form-control search"
                           placeholder="Search..."
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            searchSubCategories(e.target.value);
+                          }}
                         />
                         <i className="ri-search-line search-icon"></i>
                       </div>
@@ -130,8 +160,7 @@ const SubCategoryMaster = () => {
                           toggle();
                         }}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add 
-                        
+                        <i className="ri-add-fill align-bottom" /> Add
                       </button>
                     </Col>
                   </div>
@@ -164,8 +193,8 @@ const SubCategoryMaster = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {tableData
-                      ? tableData.map((item, key) => (
+                    {filteredSubCategories.length > 0
+                      ? filteredSubCategories.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
                             <td>{item.CategoryTitle}</td>
@@ -193,7 +222,7 @@ const SubCategoryMaster = () => {
                                 onClick={() => {
                                   setShowModal(true);
                                   setrecordForSubmit(item);
-                                  setIsEdit(true)
+                                  setIsEdit(true);
                                   console.log(item);
                                 }}
                               >
@@ -209,7 +238,87 @@ const SubCategoryMaster = () => {
                             </td>
                           </tr>
                         ))
-                      : null}
+                      : currentItems.map((item, key) => (
+                          <tr key={key}>
+                            <td>{key + 1}</td>
+                            <td>{item.CategoryTitle}</td>
+                            <td>{item.name}</td>
+                            <td>
+                              {" "}
+                              {item.isActive ? (
+                                <div>
+                                  <span className="badge badge-soft-success badge-border">
+                                    Active
+                                  </span>
+                                </div>
+                              ) : (
+                                <div>
+                                  <span className="badge badge-soft-danger badge-border">
+                                    InActive
+                                  </span>
+                                </div>
+                              )}
+                            </td>
+
+                            <td>
+                              <button
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
+                                onClick={() => {
+                                  setShowModal(true);
+                                  setrecordForSubmit(item);
+                                  setIsEdit(true);
+                                  console.log(item);
+                                }}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
+
+                              <button
+                                className="btn btn-sm btn-soft-danger remove-list"
+                                onClick={() => handleDelete(item)}
+                              >
+                                <i className="ri-delete-bin-5-fill align-bottom" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    <Pagination>
+                      <PaginationItem>
+                        <PaginationLink
+                          previous
+                          onClick={() =>
+                            setCurrentPage((prev) =>
+                              prev === 1 ? prev : prev - 1
+                            )
+                          }
+                        />
+                      </PaginationItem>
+                      {Array.from({
+                        length: Math.ceil(tableData.length / ITEMS_PER_PAGE),
+                      }).map((_, index) => (
+                        <PaginationItem
+                          key={index + 1}
+                          active={index + 1 === currentPage}
+                        >
+                          <PaginationLink onClick={() => paginate(index + 1)}>
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationLink
+                          next
+                          onClick={() =>
+                            setCurrentPage((prev) =>
+                              prev ===
+                              Math.ceil(tableData.length / ITEMS_PER_PAGE)
+                                ? prev
+                                : prev + 1
+                            )
+                          }
+                        />
+                      </PaginationItem>
+                    </Pagination>
                   </tbody>
                 </table>
               </div>
@@ -250,8 +359,8 @@ const SubCategoryMaster = () => {
             validationSchema={categoryValidation}
             onSubmit={async (values, { resetForm }) => {
               if (isEdit) {
-                await updateSubCategory(values,recordForSubmit._id);
-                setIsEdit(false)
+                await updateSubCategory(values, recordForSubmit._id);
+                setIsEdit(false);
               } else {
                 await addSubCategory(values);
               }
@@ -335,8 +444,6 @@ const SubCategoryMaster = () => {
                     </Col>
                   </Form>
                   <div className="hstack gap-2 justify-content-end">
-                    
-
                     {!buttnLoading ? (
                       <React.Fragment>
                         <button

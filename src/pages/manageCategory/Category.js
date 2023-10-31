@@ -15,6 +15,9 @@ import {
   ModalHeader,
   Row,
   Label,
+  PaginationLink,
+  PaginationItem,
+  Pagination,
 } from "reactstrap";
 import Loader from "../../Components/Common/Loader";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
@@ -38,12 +41,16 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 // import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
+
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview
   // FilePondPluginFilePoster
 );
+
+const ITEMS_PER_PAGE = 10;
+
 
 const CategoryMaster = () => {
   document.title = "Category Master";
@@ -60,6 +67,13 @@ const CategoryMaster = () => {
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [buttnLoading, setButtnLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const fetchData = async () => {
     try {
@@ -215,8 +229,8 @@ const CategoryMaster = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {tableData.length ? (
-                        tableData.map((item, key) => (
+                      {currentItems.length ? (
+                        currentItems.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
                             <td>{item.name}</td>
@@ -264,6 +278,43 @@ const CategoryMaster = () => {
                       ) : (
                         <Loader error={tableData} />
                       )}
+                      <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(tableData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(tableData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                     </tbody>
                   </table>
                 </div>

@@ -13,6 +13,9 @@ import {
   Spinner,
   Button,
   Input,
+  PaginationLink,
+  PaginationItem,
+  Pagination,
 } from "reactstrap";
 import FeatherIcon from "feather-icons-react";
 import { isEmpty } from "lodash";
@@ -30,6 +33,9 @@ import {
 } from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
 
+const ITEMS_PER_PAGE = 10;
+
+
 const BlogMaster = () => {
   const [blogContent, setContent] = useState("");
   const [IsformActive, setIsformActive] = useState(false);
@@ -43,6 +49,13 @@ const BlogMaster = () => {
   const [buttnLoading, setButtnLoading] = useState(false);
   const [allBlogData, setallBlogData] = useState([]);
   const [isFetchingData, setIsFetchingData] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = BlogData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   const url = process.env.REACT_APP_BASE_URL
   const BLOG_IMAGE_LINK = `${url}/blog-images/`;
@@ -507,8 +520,8 @@ const BlogMaster = () => {
                         </thead>
 
                         <tbody id="task-list">
-                          {BlogData
-                            ? BlogData.map((item, key) => (
+                          {currentItems
+                            ? currentItems.map((item, key) => (
                                 <tr key={key}>
                                   <td>{key + 1}</td>
                                   <td>{item.blogTitle}</td>
@@ -534,7 +547,45 @@ const BlogMaster = () => {
                                 </tr>
                               ))
                             : null}
+                            <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(BlogData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(BlogData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                         </tbody>
+
                       </table>
                     </div>
                   </div>

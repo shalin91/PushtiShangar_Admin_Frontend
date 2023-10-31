@@ -15,6 +15,9 @@ import {
   ModalHeader,
   Row,
   Label,
+  PaginationLink,
+  PaginationItem,
+  Pagination,
 } from "reactstrap";
 import Loader from "../../Components/Common/Loader";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
@@ -47,6 +50,9 @@ registerPlugin(
   // FilePondPluginFilePoster
 );
 
+const ITEMS_PER_PAGE = 10;
+
+
 const BannerMaster = () => {
   document.title = "Banner Master";
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -62,6 +68,27 @@ const BannerMaster = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [buttnLoading, setButtnLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+const [filteredSubCategories, setFilteredSubCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const searchSubCategories = (query) => {
+    if (query) {
+      const filtered = tableData.filter((subcategory) => {
+        return subcategory.bannerTitle.toLowerCase().includes(query.toLowerCase());
+      });
+      setFilteredSubCategories(filtered);
+    } else {
+      setFilteredSubCategories([]);
+    }
+  };
+  
 
   const fetchData = async () => {
     try {
@@ -165,8 +192,12 @@ const BannerMaster = () => {
                           <input
                             type="text"
                             className="form-control search"
-                            placeholder="Search..."
-                            // onKeyUp={(e) => searchList(e.target.value)}
+                            placeholder="Search by title"
+                            value={searchQuery}
+                            onChange={(e) => {
+                              setSearchQuery(e.target.value);
+                              searchSubCategories(e.target.value);
+                            }}
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -210,7 +241,65 @@ const BannerMaster = () => {
                     </thead>
                     <tbody>
                       {
-                        tableData.map((item, key) => (
+                        filteredSubCategories.length > 0?filteredSubCategories.map((item, key) => (
+                          <tr key={key}>
+                            <td>{key + 1}</td>
+                            <td>
+                              <img
+                                src={`${url}/banner/${item.image}`}
+                                alt="Banner"
+                                style={{
+                                  width: "100px",
+                                  height: "auto",
+                                  maxHeight: "100px",
+                                  objectFit: "cover",
+                                  borderRadius: "3px",
+                                }}
+                              />
+                            </td>
+                            <td>{item.bannerTitle}</td>
+                            <td>{item.bannerType}</td>
+                            <td>
+                              {" "}
+                              {item.isActive ? (
+                                <div>
+                                  <span className="badge badge-soft-success badge-border">
+                                    Active
+                                  </span>
+                                </div>
+                              ) : (
+                                <div>
+                                  <span className="badge badge-soft-danger badge-border">
+                                    InActive
+                                  </span>
+                                </div>
+                              )}
+                            </td>
+
+                            <td>
+                             
+                              <button
+                                className="btn btn-sm btn-soft-info edit-list mx-1"
+                                onClick={() => {
+                                  setIsEdit(true);
+                                  setValuesForUpdate(item);
+                                  setShowModal(true);
+                                }}
+                              >
+                                <i className="ri-pencil-fill align-bottom" />
+                              </button>
+                              <button
+                                className="btn btn-sm btn-soft-danger remove-list mx-1"
+                                onClick={() => {
+                                  setValuesForUpdate(item);
+                                  setDeleteModal(true);
+                                }}
+                              >
+                                <i className="ri-delete-bin-5-fill align-bottom" />
+                              </button>
+                            </td>
+                          </tr>
+                        )):currentItems.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
                             <td>
@@ -271,6 +360,43 @@ const BannerMaster = () => {
                         ))
                               }
                     </tbody>
+                    <Pagination>
+                    <PaginationItem>
+                      <PaginationLink
+                        previous
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev === 1 ? prev : prev - 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({
+                      length: Math.ceil(tableData.length / ITEMS_PER_PAGE),
+                    }).map((_, index) => (
+                      <PaginationItem
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                      >
+                        <PaginationLink onClick={() => paginate(index + 1)}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationLink
+                        next
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            prev ===
+                            Math.ceil(tableData.length / ITEMS_PER_PAGE)
+                              ? prev
+                              : prev + 1
+                          )
+                        }
+                      />
+                    </PaginationItem>
+                  </Pagination>
                   </table>
                   ) : fetchingData ? (
                     <Loader error={tableData} />

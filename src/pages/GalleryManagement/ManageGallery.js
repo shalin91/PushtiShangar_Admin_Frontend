@@ -1,21 +1,44 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+  Pagination,
   PaginationLink,
-  PaginationItem, } from 'reactstrap'
-import BreadCrumb from '../../Components/Common/BreadCrumb'
-import { Link,useNavigate} from 'react-router-dom'
-import SignContext from '../../contextAPI/Context/SignContext'
+  PaginationItem,
+} from "reactstrap";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
+import { Link, useNavigate } from "react-router-dom";
+import SignContext from "../../contextAPI/Context/SignContext";
 
 const ITEMS_PER_PAGE = 10;
 
 const ManageGallery = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
-  const { GetGalleryDetails , DeleteGalleryDetails} = useContext(SignContext);
+  const { GetGalleryDetails, DeleteGalleryDetails } = useContext(SignContext);
   const [GalleryDetData, setGalleryDetData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [GalleryDetToDelete, setGalleryDetToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const searchSubCategories = (query) => {
+    if (query) {
+      const filtered = GalleryDetData.filter((subcategory) => {
+        return subcategory.imageTitle.toLowerCase().includes(query.toLowerCase());
+      });
+      setFilteredSubCategories(filtered);
+    } else {
+      setFilteredSubCategories([]);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -60,49 +83,53 @@ const ManageGallery = () => {
 
   useEffect(() => {
     getgalleryDetails();
-  }, [ ]);
+  }, []);
 
   document.title = "Gallery-Details";
   return (
-   <>
-   <div className="page-content">
+    <>
+      <div className="page-content">
         <Container fluid>
-          <BreadCrumb grandParent="Setup" parent="Gallery" child="Gallery Details" />
+          <BreadCrumb
+            grandParent="Setup"
+            parent="Gallery"
+            child="Gallery Details"
+          />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader className="d-flex justify-content-between align-items-center">
-                <h4 className="card-title mb-0">Gallery Details</h4>
-                    <Row className="align-items-center">
-                      <Col className="col-lg-auto">
-                        <div className="search-box">
-                          <input
-                            type="text"
-                            id="searchTaskList"
-                            className="form-control search"
-                            placeholder="Search by title"
-                            // onKeyUp={(e) => searchList(e.target.value)}
-                          />
-                          <i className="ri-search-line search-icon"></i>
-                        </div>
-                      </Col>
-                      <Col className="col-lg-auto">
-                        
-
+                  <h4 className="card-title mb-0">Gallery Details</h4>
+                  <Row className="align-items-center">
+                    <Col className="col-lg-auto">
+                      <div className="search-box">
+                        <input
+                          type="text"
+                          id="searchTaskList"
+                          className="form-control search"
+                          placeholder="Search by title"
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            searchSubCategories(e.target.value);
+                          }}
+                        />
+                        <i className="ri-search-line search-icon"></i>
+                      </div>
+                    </Col>
+                    <Col className="col-lg-auto">
                       <Link
-                            to="/creategallerydet"
-                            className="btn btn-primary add-btn me-1"
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add
-                          </Link>
-                      </Col>
-                    </Row>
+                        to="/creategallerydet"
+                        className="btn btn-primary add-btn me-1"
+                        id="create-btn"
+                      >
+                        <i className="ri-add-line align-bottom me-1"></i> Add
+                      </Link>
+                    </Col>
+                  </Row>
                 </CardHeader>
                 <CardBody>
                   <div id="GalleryList">
-                    
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
                         className="table align-middle table-nowrap"
@@ -111,7 +138,7 @@ const ManageGallery = () => {
                         <thead className="table-light">
                           <tr>
                             <th scope="col" style={{ width: "50px" }}>
-                           Index
+                              Index
                             </th>
                             <th className="name">Gallery-Image</th>
                             <th className="name">Gallery-Title</th>
@@ -120,33 +147,28 @@ const ManageGallery = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {currentItems.map((galleryDet,key) => (
+                          {filteredSubCategories.length > 0?filteredSubCategories.map((galleryDet, key) => (
                             <tr key={galleryDet.id}>
-                              
-                              <td className="product-name"> {key+1}</td>
+                              <td className="product-name"> {key + 1}</td>
                               <td className="Gallery-image">
-                               
-                                
-                               
-                                  <img
-                                    src={`${url}/gallery-images/${galleryDet.imagePath}`}
-                                    alt="ImagePath"
-                                    style={{
-                                      width: "100px",
-                                      height: "auto",
-                                      maxHeight: "100px",
-                                      objectFit: "cover",
-                                      borderRadius: "3px",
-                                    }}
-                                  />
-                                
+                                <img
+                                  src={`${url}/gallery-images/${galleryDet.imagePath}`}
+                                  alt="ImagePath"
+                                  style={{
+                                    width: "100px",
+                                    height: "auto",
+                                    maxHeight: "100px",
+                                    objectFit: "cover",
+                                    borderRadius: "3px",
+                                  }}
+                                />
                               </td>
                               <td className="product-name">
                                 {galleryDet.imageTitle}
                               </td>
                               <td className="status">
                                 {galleryDet.active === true ? (
-                                   <span className="badge badge-soft-success badge-border">
+                                  <span className="badge badge-soft-success badge-border">
                                     Active
                                   </span>
                                 ) : (
@@ -182,35 +204,119 @@ const ManageGallery = () => {
                                   </div>
                                 </div>
                               </td> */}
-                              
 
                               <td>
-                            <div className="hstack gap-2">
-                              <button
-                                className="btn btn-sm btn-soft-info edit-list"
-                                onClick={() => {
-                                  navigate(`/editgallerydet/${galleryDet._id}`)
-                                }}
-                              >
-                                <i className="ri-pencil-fill align-bottom" />
-                              </button>
+                                <div className="hstack gap-2">
+                                  <button
+                                    className="btn btn-sm btn-soft-info edit-list"
+                                    onClick={() => {
+                                      navigate(
+                                        `/editgallerydet/${galleryDet._id}`
+                                      );
+                                    }}
+                                  >
+                                    <i className="ri-pencil-fill align-bottom" />
+                                  </button>
 
-                              <button
-                                className="btn btn-sm btn-soft-danger remove-list"
-                                onClick={() => {
-                                  toggledeletemodal();
-                                  setGalleryDetToDelete(galleryDet);
-                                }}
-                              >
-                                <i className="ri-delete-bin-5-fill align-bottom" />
-                              </button>
-                            </div>
-                          </td>
+                                  <button
+                                    className="btn btn-sm btn-soft-danger remove-list"
+                                    onClick={() => {
+                                      toggledeletemodal();
+                                      setGalleryDetToDelete(galleryDet);
+                                    }}
+                                  >
+                                    <i className="ri-delete-bin-5-fill align-bottom" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          )):currentItems.map((galleryDet, key) => (
+                            <tr key={galleryDet.id}>
+                              <td className="product-name"> {key + 1}</td>
+                              <td className="Gallery-image">
+                                <img
+                                  src={`${url}/gallery-images/${galleryDet.imagePath}`}
+                                  alt="ImagePath"
+                                  style={{
+                                    width: "100px",
+                                    height: "auto",
+                                    maxHeight: "100px",
+                                    objectFit: "cover",
+                                    borderRadius: "3px",
+                                  }}
+                                />
+                              </td>
+                              <td className="product-name">
+                                {galleryDet.imageTitle}
+                              </td>
+                              <td className="status">
+                                {galleryDet.active === true ? (
+                                  <span className="badge badge-soft-success badge-border">
+                                    Active
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-soft-danger badge-border">
+                                    Inactive
+                                  </span>
+                                )}
+                              </td>
+
+                              {/* Add other columns here as needed */}
+                              {/* <td>
+                                <div className="d-flex gap-2">
+                                  <div className="edit">
+                                    <Link
+                                      to={`/editgallerydet/${galleryDet._id}`}
+                                      className="btn btn-sm btn-success edit-item-btn"
+                                    >
+                                      Edit
+                                    </Link>
+                                  </div>
+                                  <div className="remove">
+                                    <button
+                                      className="btn btn-sm btn-danger remove-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#deleteRecordModal"
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setGalleryDetToDelete(galleryDet);
+                                      }}
+                                    >
+                                      Remove
+                                    </button>
+                                  </div>
+                                </div>
+                              </td> */}
+
+                              <td>
+                                <div className="hstack gap-2">
+                                  <button
+                                    className="btn btn-sm btn-soft-info edit-list"
+                                    onClick={() => {
+                                      navigate(
+                                        `/editgallerydet/${galleryDet._id}`
+                                      );
+                                    }}
+                                  >
+                                    <i className="ri-pencil-fill align-bottom" />
+                                  </button>
+
+                                  <button
+                                    className="btn btn-sm btn-soft-danger remove-list"
+                                    onClick={() => {
+                                      toggledeletemodal();
+                                      setGalleryDetToDelete(galleryDet);
+                                    }}
+                                  >
+                                    <i className="ri-delete-bin-5-fill align-bottom" />
+                                  </button>
+                                </div>
+                              </td>
                             </tr>
                           ))}
                         </tbody>
-                        </table>
-                        </div>
+                      </table>
+                    </div>
                   </div>
                   <Pagination>
                     <PaginationItem>
@@ -286,7 +392,6 @@ const ManageGallery = () => {
             </div>
           </div>
           <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-           
             <button
               type="button"
               className="btn w-sm btn-danger"
@@ -307,12 +412,10 @@ const ManageGallery = () => {
               Close
             </button>
           </div>
-
-
         </ModalBody>
       </Modal>
-   </>
-  )
-}
+    </>
+  );
+};
 
-export default ManageGallery
+export default ManageGallery;

@@ -421,7 +421,7 @@ const NewDashboard = () => {
                         </span>
                       </h4>
                       <Link
-                        to="/product-categories"
+                        to="/allproducts"
                         className="text-decoration-underline"
                       >
                         View Details

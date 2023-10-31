@@ -1,22 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, Modal, ModalBody, ModalHeader, Row , Pagination,
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+  Pagination,
   PaginationLink,
-  PaginationItem, } from "reactstrap";
+  PaginationItem,
+} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import SignContext from "../../contextAPI/Context/SignContext";
 
 const ITEMS_PER_PAGE = 10;
 
-
 const Content = () => {
   const { GetContent, DeleteContent } = useContext(SignContext);
   const [ContentData, setContentData] = useState([]);
   const [deletemodal, setDeleteModal] = useState(false);
   const [ContentToDelete, setContentToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
-
 
   const toggledeletemodal = () => {
     setDeleteModal(!deletemodal);
@@ -56,54 +66,65 @@ const Content = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   useEffect(() => {
     Getcontent();
   }, []);
+
+  const searchSubCategories = (query) => {
+    if (query) {
+      const filtered = ContentData.filter((subcategory) => {
+        return subcategory.contentType
+          .toLowerCase()
+          .includes(query.toLowerCase());
+      });
+      setFilteredSubCategories(filtered);
+    } else {
+      setFilteredSubCategories([]);
+    }
+  };
 
   document.title = "Contents";
   return (
     <>
       <div className="page-content">
         <Container fluid>
-        <BreadCrumb grandParent="Setup" parent="CMS" child="Contents" />
+          <BreadCrumb grandParent="Setup" parent="CMS" child="Contents" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader className="d-flex justify-content-between align-items-center">
                   <h4 className="card-title mb-0">Contents</h4>
 
-                
-                    <Row className="align-items-center">
-                      <Col className="col-lg-auto">
-                        <div className="search-box">
-                          <input
-                            type="text"
-                            id="searchTaskList"
-                            className="form-control search"
-                            placeholder="Search"
-                            // onKeyUp={(e) => searchList(e.target.value)}
-                          />
-                          <i className="ri-search-line search-icon"></i>
-                        </div>
-                      </Col>
-                      <Col className="col-lg-auto">
-                        
-
-                        <Link
-                            to="/addcontent"
-                            className="btn btn-primary add-btn me-1"
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add
-                          </Link>
-                      </Col>
-                    </Row>
+                  <Row className="align-items-center">
+                    <Col className="col-lg-auto">
+                      <div className="search-box">
+                        <input
+                          type="text"
+                          id="searchTaskList"
+                          className="form-control search"
+                          placeholder="Search"
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            searchSubCategories(e.target.value);
+                          }}
+                        />
+                        <i className="ri-search-line search-icon"></i>
+                      </div>
+                    </Col>
+                    <Col className="col-lg-auto">
+                      <Link
+                        to="/addcontent"
+                        className="btn btn-primary add-btn me-1"
+                        id="create-btn"
+                      >
+                        <i className="ri-add-line align-bottom me-1"></i> Add
+                      </Link>
+                    </Col>
+                  </Row>
                 </CardHeader>
                 <CardBody>
                   <div id="contentList">
-                    
                     <div className="table-responsive table-card mt-1 mb-3">
                       <table
                         className="table align-middle table-nowrap"
@@ -111,8 +132,6 @@ const Content = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            
-                            
                             <th className="name">Index</th>
                             <th className="name">Title</th>
                             <th className="name">Status</th>
@@ -121,31 +140,26 @@ const Content = () => {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {currentItems.map((content , key) => (
+                          {filteredSubCategories.length > 0?filteredSubCategories.map((content, key) => (
                             <tr key={content.id}>
-                              
-                              <td className="product-name">
-                                {key+1}
-                              </td>
+                              <td className="product-name">{key + 1}</td>
                               <td className="product-name">
                                 {content.contentType}
                               </td>
                               <td className="status">
-
-
                                 {content.active === true ? (
                                   <div>
-                                  <span className="badge badge-soft-success badge-border">
-                                    Active
-                                  </span>
-                                </div>
-                              ) : (
-                                <div>
-                                  <span className="badge badge-soft-danger badge-border">
-                                    InActive
-                                  </span>
-                                </div>
-                              )}
+                                    <span className="badge badge-soft-success badge-border">
+                                      Active
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <span className="badge badge-soft-danger badge-border">
+                                      InActive
+                                    </span>
+                                  </div>
+                                )}
                               </td>
 
                               {/* Add other columns here as needed */}
@@ -164,10 +178,59 @@ const Content = () => {
                                       className="btn btn-sm btn-soft-danger remove-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
-                                        onClick={() => {
-                                          toggledeletemodal();
-                                          setContentToDelete(content);
-                                        }}
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setContentToDelete(content);
+                                      }}
+                                    >
+                                      <i className="ri-delete-bin-5-fill align-bottom" />
+                                    </button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )):currentItems.map((content, key) => (
+                            <tr key={content.id}>
+                              <td className="product-name">{key + 1}</td>
+                              <td className="product-name">
+                                {content.contentType}
+                              </td>
+                              <td className="status">
+                                {content.active === true ? (
+                                  <div>
+                                    <span className="badge badge-soft-success badge-border">
+                                      Active
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <span className="badge badge-soft-danger badge-border">
+                                      InActive
+                                    </span>
+                                  </div>
+                                )}
+                              </td>
+
+                              {/* Add other columns here as needed */}
+                              <td>
+                                <div className="d-flex gap-2">
+                                  <div className="edit">
+                                    <Link
+                                      to={`/updatecontent/${content._id}`}
+                                      className="btn btn-sm btn-soft-success edit-item-btn"
+                                    >
+                                      <i className="ri-pencil-fill align-bottom" />
+                                    </Link>
+                                  </div>
+                                  <div className="remove">
+                                    <button
+                                      className="btn btn-sm btn-soft-danger remove-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#deleteRecordModal"
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setContentToDelete(content);
+                                      }}
                                     >
                                       <i className="ri-delete-bin-5-fill align-bottom" />
                                     </button>
@@ -254,7 +317,6 @@ const Content = () => {
             </div>
           </div>
           <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-           
             <button
               type="button"
               className="btn w-sm btn-danger"

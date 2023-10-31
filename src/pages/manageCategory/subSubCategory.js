@@ -14,6 +14,9 @@ import {
   ModalHeader,
   Row,
   Label,
+  PaginationLink,
+  PaginationItem,
+  Pagination,
 } from "reactstrap";
 import { isEmpty } from "lodash";
 import { ToastContainer } from "react-toastify";
@@ -30,6 +33,8 @@ import Dropzone from "react-dropzone";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
+const ITEMS_PER_PAGE = 10;
+
 const SubSubCategoryMaster = () => {
   document.title = "Category Master";
 
@@ -45,30 +50,36 @@ const SubSubCategoryMaster = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const fetchData = async () => {
     try {
       const response = await getSubSubCategory();
       setTableData(response);
-      
+
       const res = await getCategory();
       setCategoryData(res);
 
       const res2 = await getSubCategory();
       setSubCategoryData(res2);
-
-     
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const handelCategorySelect = (id) => {
-    console.log(id)
+    console.log(id);
     const data = subCategoryData.filter((item) => item.Category === id);
     setSubCatDropbind(data);
-    console.log(subCategoryData)
-
+    console.log(subCategoryData);
   };
 
   useEffect(() => {
@@ -105,8 +116,19 @@ const SubSubCategoryMaster = () => {
   const categoryValidation = Yup.object().shape({
     name: Yup.string().required("sub sub category title is required"),
     Category: Yup.string().required("category is required"),
-    SubCategory: Yup.string().required("sub category is required")
+    SubCategory: Yup.string().required("sub category is required"),
   });
+
+  const searchSubCategories = (query) => {
+    if (query) {
+      const filtered = tableData.filter((subcategory) => {
+        return subcategory.name.toLowerCase().includes(query.toLowerCase());
+      });
+      setFilteredSubCategories(filtered);
+    } else {
+      setFilteredSubCategories([]);
+    }
+  };
   return (
     <React.Fragment>
       <ToastContainer closeButton={false} />
@@ -117,7 +139,11 @@ const SubSubCategoryMaster = () => {
       />
       <div className="page-content">
         <Container fluid>
-        <BreadCrumb grandParent="Setup" parent="Manage Category" child="Sub Sub Category" />
+          <BreadCrumb
+            grandParent="Setup"
+            parent="Manage Category"
+            child="Sub Sub Category"
+          />
           <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="hstack mb-4">
@@ -137,6 +163,11 @@ const SubSubCategoryMaster = () => {
                           id="searchTaskList"
                           className="form-control search"
                           placeholder="Search..."
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            searchSubCategories(e.target.value);
+                          }}
                         />
                         <i className="ri-search-line search-icon"></i>
                       </div>
@@ -149,7 +180,7 @@ const SubSubCategoryMaster = () => {
                           toggle();
                         }}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add 
+                        <i className="ri-add-fill align-bottom" /> Add
                       </button>
                     </Col>
                   </div>
@@ -183,8 +214,8 @@ const SubSubCategoryMaster = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {tableData
-                      ? tableData.map((item, key) => (
+                    {filteredSubCategories.length > 0
+                      ? filteredSubCategories.map((item, key) => (
                           <tr key={key}>
                             <td>{key + 1}</td>
                             <td>{item.CategoryTitle}</td>
@@ -208,7 +239,7 @@ const SubSubCategoryMaster = () => {
                             </td>
 
                             <td>
-                            <button
+                              <button
                                 className="btn btn-sm btn-soft-info edit-list mx-1"
                                 onClick={() => handleEdit(item)}
                               >
@@ -220,11 +251,85 @@ const SubSubCategoryMaster = () => {
                               >
                                 <i className="ri-delete-bin-5-fill align-bottom" />
                               </button>
-                              
                             </td>
                           </tr>
                         ))
-                      : null}
+                      : currentItems.map((item, key) => (
+                        <tr key={key}>
+                          <td>{key + 1}</td>
+                          <td>{item.CategoryTitle}</td>
+                          <td>{item.subCategoryTitle}</td>
+                          <td>{item.name}</td>
+                          <td>
+                            {" "}
+                            {item.isActive ? (
+                              <div>
+                                <span className="badge badge-soft-success badge-border">
+                                  Active
+                                </span>
+                              </div>
+                            ) : (
+                              <div>
+                                <span className="badge badge-soft-danger badge-border">
+                                  InActive
+                                </span>
+                              </div>
+                            )}
+                          </td>
+
+                          <td>
+                            <button
+                              className="btn btn-sm btn-soft-info edit-list mx-1"
+                              onClick={() => handleEdit(item)}
+                            >
+                              <i className="ri-pencil-fill align-bottom" />
+                            </button>
+                            <button
+                              className="btn btn-sm btn-soft-danger remove-list"
+                              onClick={() => handleDelete(item)}
+                            >
+                              <i className="ri-delete-bin-5-fill align-bottom" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    <Pagination>
+                      <PaginationItem>
+                        <PaginationLink
+                          previous
+                          onClick={() =>
+                            setCurrentPage((prev) =>
+                              prev === 1 ? prev : prev - 1
+                            )
+                          }
+                        />
+                      </PaginationItem>
+                      {Array.from({
+                        length: Math.ceil(tableData.length / ITEMS_PER_PAGE),
+                      }).map((_, index) => (
+                        <PaginationItem
+                          key={index + 1}
+                          active={index + 1 === currentPage}
+                        >
+                          <PaginationLink onClick={() => paginate(index + 1)}>
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationLink
+                          next
+                          onClick={() =>
+                            setCurrentPage((prev) =>
+                              prev ===
+                              Math.ceil(tableData.length / ITEMS_PER_PAGE)
+                                ? prev
+                                : prev + 1
+                            )
+                          }
+                        />
+                      </PaginationItem>
+                    </Pagination>
                   </tbody>
                 </table>
               </div>
@@ -257,7 +362,12 @@ const SubSubCategoryMaster = () => {
             </div>
           ) : null}
           <Formik
-            initialValues={{ name: "",Category:"",SubCategory:"", isActive: null }}
+            initialValues={{
+              name: "",
+              Category: "",
+              SubCategory: "",
+              isActive: null,
+            }}
             validationSchema={categoryValidation}
             onSubmit={async (values, { resetForm }) => {
               console.log(values);
@@ -281,7 +391,7 @@ const SubSubCategoryMaster = () => {
                       <select
                         name="Category"
                         onChange={(e) => {
-                          handleChange(e)
+                          handleChange(e);
                           handelCategorySelect(e.target.value);
                         }}
                         onBlur={handleBlur}
@@ -289,9 +399,7 @@ const SubSubCategoryMaster = () => {
                         className="form-control inp_text modalInput"
                         id="Category"
                       >
-                        <option value="">
-                          --select--
-                        </option>
+                        <option value="">--select--</option>
                         {categoryData
                           ? categoryData.map((category) => (
                               <option key={category._id} value={category._id}>
@@ -314,9 +422,7 @@ const SubSubCategoryMaster = () => {
                         className="form-control inp_text modalInput"
                         id="SubCategory"
                       >
-                        <option value="" >
-                          --select--
-                        </option>
+                        <option value="">--select--</option>
                         {subCatDropbind
                           ? subCatDropbind.map((item) => (
                               <option key={item._id} value={item._id}>
@@ -326,12 +432,16 @@ const SubSubCategoryMaster = () => {
                           : null}
                       </select>
                       <p style={{ color: "red", fontSize: "12px" }}>
-                        {errors.SubCategory && touched.SubCategory && errors.SubCategory}
+                        {errors.SubCategory &&
+                          touched.SubCategory &&
+                          errors.SubCategory}
                       </p>
                     </Col>
 
                     <Col md={12}>
-                      <label className="modalLable">Sub Sub Category Title</label>
+                      <label className="modalLable">
+                        Sub Sub Category Title
+                      </label>
                       <input
                         type="text"
                         name="name"
@@ -366,8 +476,6 @@ const SubSubCategoryMaster = () => {
                     </Col>
                   </Form>
                   <div className="hstack gap-2 justify-content-end">
-                    
-
                     {!buttnLoading ? (
                       <React.Fragment>
                         <button

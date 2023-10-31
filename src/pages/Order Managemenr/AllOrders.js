@@ -41,6 +41,9 @@ const AllOrders = () => {
   const [updatedOrderData, setUpdatedOrderData] = useState({
     status: "",
   });
+  const [searchQuery, setSearchQuery] = useState('');
+const [filteredOrders, setFilteredOrders] = useState([]);
+
 
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
@@ -116,6 +119,18 @@ const AllOrders = () => {
     }
   };
 
+  const searchOrders = (query) => {
+    if (query) {
+      const filtered = OrdersData.filter((order) => {
+        return order.FirstName.toLowerCase().includes(query.toLowerCase());
+      });
+      setFilteredOrders(filtered);
+      setCurrentPage(1); // Reset to the first page when searching
+    } else {
+      setFilteredOrders([]);
+    }
+  };
+
   useEffect(() => {
     GetOrders();
   }, []);
@@ -147,7 +162,11 @@ const AllOrders = () => {
                      id="searchTaskList"
                      className="form-control search"
                      placeholder="Search.."
-                    //  onKeyUp={(e) => searchList(e.target.value)}
+                     value={searchQuery}
+                     onChange={(e) => {
+                       setSearchQuery(e.target.value);
+                       searchOrders(e.target.value);
+                     }}
                    />
                    <i className="ri-search-line search-icon"></i>
                  </div>
@@ -180,7 +199,76 @@ const AllOrders = () => {
                         </thead>
 
                         <tbody className="list form-check-all">
-                          {currentItems.map((order, key) => (
+                          {searchQuery?filteredOrders.map((order, key) => (
+                            <tr key={order.id}>
+                              <th scope="row">
+                                <div className="form-check">
+                                  <td className="product-name">{key + 1}</td>
+                                </div>
+                              </th>
+                              <td className="product-name">{order._id}</td>
+                              <td className="product-name">
+                                {order.FirstName}
+                              </td>
+                              <td className="product-name">{order.LastName}</td>
+                              <td className="product-name">
+                                ₹{order.totalAmount}
+                              </td>
+                              <td className="product-name">
+                                {order.paymentMethod}
+                              </td>
+                              <td className="status">
+                                <span
+                                  className="badge badge-soft"
+                                  style={statusColors[order.status]}
+                                >
+                                  {order.status}
+                                </span>
+
+                                
+                              </td>
+
+                              {/* Add other columns here as needed */}
+                              <td>
+                                <div className="d-flex gap-2">
+                                  <div className="view">
+                                    <Link
+                                      to={`/vieworder/${order._id}`}
+                                      className="btn btn-sm btn-soft-info view-item-btn"
+                                    >
+                                      View
+                                    </Link>
+                                  </div>
+                                  <div className="edit">
+                                    <Link
+                                      onClick={() => toggleEditmodal(order._id)}
+                                      className="btn btn-sm btn-soft-success edit-item-btn"
+                                    >
+                                      <i className="ri-pencil-line"></i>
+                                    </Link>
+                                  </div>
+                                  <div className="remove">
+                                    <button
+                                      className="btn btn-sm btn-soft-danger remove-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#deleteRecordModal"
+                                      onClick={() => {
+                                        toggledeletemodal();
+                                        setOrderToDelete(order);
+                                      }}
+                                    >
+                                      <i className="ri-delete-bin-line"></i>
+                                    </button>
+                                  </div>
+                                  {/* <div className="action">
+                                    <button className="btn btn-sm btn-secondary">
+                                      <i className="ri-settings-3-line"></i>
+                                    </button>
+                                  </div> */}
+                                </div>
+                              </td>
+                            </tr>
+                          )):currentItems.map((order, key) => (
                             <tr key={order.id}>
                               <th scope="row">
                                 <div className="form-check">
