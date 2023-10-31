@@ -216,8 +216,9 @@ const NewTeam = () => {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb
-            parent="Profile"
-            child="Team"
+          grandParent="Profile"
+            parent="Team"
+            child="Users"
             grandChild="All users"
             title
             pageTitle
