@@ -73,47 +73,41 @@ const NewDashboard = () => {
       <div className="page-content">
         <Container fluid>
           <Row>
-          <Col xl={3} md={6}>
-  <Card className="card-animate">
-    <CardBody>
-      <div className="d-flex align-items-center">
-        <div className="flex-grow-1 overflow-hidden">
-          <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
-            Total Earnings
-          </p>
-        </div>
-        <div>
-          <select onChange={handleEarningsViewChange}>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-        </div>
-      </div>
-      <div className="d-flex align-items-end justify-content-between mt-4">
-        <div>
-          <h4 className="fs-22 fw-semibold ff-secondary mb-4">
-            <span
-              className="counter-value"
-              data-target={widgetData.totalEarnings[earningsView]}
-            >
-              ₹
-              
-              <CountUp
-                start={0}
-                end={widgetData.totalEarnings[earningsView]}
-                duration={2}
-              />
-            </span>
-          </h4>
-          <Link to="/orders" className="text-decoration-underline">
-            View Details
-          </Link>
-        </div>
-      </div>
-    </CardBody>
-  </Card>
-</Col>
+            <Col xl={3} md={6}>
+              <Card className="card-animate">
+                <CardBody>
+                  <div className="d-flex align-items-center">
+                    <div className="flex-grow-1 overflow-hidden">
+                      <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                        Total Earnings
+                      </p>
+                    </div>
+                    <div>
+                      <select onChange={handleEarningsViewChange}>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                      <h4 className="fs-22 fw-semibold ff-secondary mb-4">
+                        <span
+                          className="counter-value"
+                          data-target={widgetData.totalEarnings[earningsView]}
+                        >
+                          ₹{widgetData.totalEarnings[earningsView].toFixed(2)}
+                        </span>
+                      </h4>
+                      <Link to="/orders" className="text-decoration-underline">
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
 
             {/* Total Customers Widget */}
             <Col xl={3} md={6}>

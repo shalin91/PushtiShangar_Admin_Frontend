@@ -526,7 +526,14 @@ const BlogMaster = () => {
                                   <td>{key + 1}</td>
                                   <td>{item.blogTitle}</td>
                                   <td>{item.blogFeed}</td>
-                                  <td>{convertToYYYYMMDD(item.date)}</td>
+                                  <td>{new Date(item.date).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  }
+                                )}</td>
 
                                   <td>
                                     <div className="hstack gap-2">

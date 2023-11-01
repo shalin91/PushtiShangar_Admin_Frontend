@@ -131,6 +131,21 @@ const CategoryMaster = () => {
 
   const categoryValidation = Yup.object().shape({
     name: Yup.string().required("required"),
+    image: Yup.mixed()
+    .test("fileSize", "File size is too large", (value) => {
+      if (!value) return true; // No file is selected, so it's valid
+      return value.size <= 5242880; // 5MB maximum file size
+    })
+    .test("fileType", "Invalid file type", (value) => {
+      if (!value) return true; // No file is selected, so it's valid
+      return (
+        ["image/jpeg", "image/jpg", "image/png"].includes(value.type) ||
+        value.image.endsWith(".jpeg") ||
+        value.image.endsWith(".jpg") ||
+        value.image.endsWith(".png")
+      );
+    })
+    .required("Photo is required"),
    
   });
 
@@ -362,7 +377,7 @@ const CategoryMaster = () => {
                         />
 
                         {submitted && files.length === 0 ? (
-                          <p style={{ color: "red" }}>Please select an image</p>
+                          <FormFeedback>{categoryForm.errors.image}</FormFeedback>
                         ) : null}
                       </div>
 
