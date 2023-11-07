@@ -114,6 +114,9 @@ import AddVariation from "../pages/products/AddVariation";
 import CustomerReports from "../pages/Reports/CustomerReports";
 import ProductsReports from "../pages/Reports/ProductsReports";
 import CustomerOrders from "../pages/Ecommerce/EcommerceCustomers/CustomerOrders";
+import StockReports from "../pages/Reports/StockReports.js";
+import CustomersByDate from "../pages/Reports/CustomersByDate.js";
+import BlogCategory from "../pages/BlogMaster/BlogCategory.js";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -178,8 +181,9 @@ const authProtectedRoutes = [
   { path: "/vieworder/:id", component: <SignState><EcommerceOrderDetail/></SignState> },
 {path:'/invoice/:id',component:<SignState><InvoiceDetails/></SignState>},
 {path:'/customerreports',component:<SignState><CustomerReports/></SignState>},
+{path:'/customerbydatereport',component:<SignState><CustomersByDate/></SignState>},
 {path:'/productreport',component:<SignState><ProductsReports/></SignState>},
-// {path:'/invoice/:id',component:<SignState><InvoiceDetails/></SignState>},
+{path:'/stockreport',component:<SignState><StockReports/></SignState>},
   
 
   //Daily Price 
@@ -200,7 +204,8 @@ const authProtectedRoutes = [
   { path: "/apps-projects-create", component: <CreateProject /> },
 
 
-  { path: "/blog-master", component: <BlogMaster /> },
+  { path: "/blog-master", component: <SignState><BlogMaster /></SignState> },
+  { path: "/blog-category", component: <SignState><BlogCategory /></SignState> },
   
 
 

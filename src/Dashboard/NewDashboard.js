@@ -13,7 +13,8 @@ const NewDashboard = () => {
       monthly: 0,
       yearly: 0,
     },
-    totalCustomers: 0,
+    totalCustomers: 0,    
+    totalOrders: 0,
     totalPendingOrders: 0,
     totalReturnOrders: 0,
     totalCancelledOrders: 0,
@@ -48,6 +49,7 @@ const NewDashboard = () => {
           monthlyEarnings: data.monthlyEarnings,
           yearlyEarnings: data.yearlyEarnings,
           totalCustomers: data.customers,
+          totalOrders: data.orders.totalOrders,
           totalPendingOrders: data.orders.pendingOrders,
           totalReturnOrders: data.orders.returnOrders,
           totalCancelledOrders: data.orders.cancelledOrders,
@@ -153,6 +155,40 @@ const NewDashboard = () => {
                   <div className="d-flex align-items-center">
                     <div className="flex-grow-1 overflow-hidden">
                       <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+                        Total Orders
+                      </p>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                      <h4 className="fs-22 fw-semibold ff-secondary mb-4">
+                        <span
+                          className="counter-value"
+                          data-target={widgetData.totalOrders}
+                        >
+                          <CountUp
+                            start={0}
+                            end={widgetData.totalOrders}
+                            duration={2}
+                          />
+                        </span>
+                      </h4>
+                      <Link to="/orders" className="text-decoration-underline">
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+
+            <Col xl={3} md={6}>
+              <Card className="card-animate">
+                <CardBody>
+                  {/* Pending Orders */}
+                  <div className="d-flex align-items-center">
+                    <div className="flex-grow-1 overflow-hidden">
+                      <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
                         Pending Orders
                       </p>
                     </div>
@@ -180,7 +216,12 @@ const NewDashboard = () => {
               </Card>
             </Col>
 
-            <Col xl={3} md={6}>
+            
+
+            
+          </Row>
+          <Row>
+          <Col xl={3} md={6}>
               <Card className="card-animate">
                 <CardBody>
                   {/* Similar structure for other order status widgets */}
@@ -213,10 +254,6 @@ const NewDashboard = () => {
                 </CardBody>
               </Card>
             </Col>
-
-            {/* Cancelled Orders */}
-          </Row>
-          <Row>
             <Col xl={3} md={6}>
               <Card className="card-animate">
                 <CardBody>

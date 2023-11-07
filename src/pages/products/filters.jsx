@@ -22,7 +22,7 @@ const Filters = (props) => {
         type: GET_COLOR,
         payload: {
           actionType: "GET_COLOR",
-          data: colorRes.color,
+          data: colorRes.colors,
         },
       });
       const seasonRes = await getSeason();

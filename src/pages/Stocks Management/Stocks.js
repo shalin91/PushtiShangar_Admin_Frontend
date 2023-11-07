@@ -153,6 +153,8 @@ function Stocks() {
                       <tr>
                         <th className="name">Index</th>
                         <th className="name">Product-Name</th>
+                        <th className="name">Product-Color</th>
+                        <th className="name">Product-Size</th>
                         <th className="name">Quantity</th>
                         <th className="name">Price</th>
                         <th className="name">Date</th>
@@ -165,6 +167,8 @@ function Stocks() {
                         <tr key={content.id}>
                           <td className="product-name">{key + 1}</td>
                           <td className="product-name">{content.name}</td>
+                          <td className="product-name">{content.color || "NA"}</td>
+                          <td className="product-name">{content.size || "NA"}</td>
                           <td className="product-name">{content.quantity}</td>
                           {/* <td className="product-name">
                                 {content.quantity}

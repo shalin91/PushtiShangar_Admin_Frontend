@@ -27,7 +27,7 @@ const EcommerceOrderDetail = (props) => {
   const [CouponData, setCouponData] = useState({});
   const [CustomerInfo, setCustomerInfo] = useState({});
   const customerId = OrderData.customer;
-  // console.log(customerId)
+  const ShippingCharge = 150;
 
   const GetspecificOrderbyId = async (id) => {
     const res = await getSpecificOrderbyId(id);
@@ -188,7 +188,7 @@ const EcommerceOrderDetail = (props) => {
                                 <td className="text-end">₹ {totalPrice}</td>
                               </tr>
                               <tr>
-                                <td>Estimated Tax :</td>
+                                <td>Tax :</td>
                                 <td className="text-end">
                                   ₹{" "}
                                   {(tPwithGST - totalPrice).toFixed(
@@ -200,7 +200,7 @@ const EcommerceOrderDetail = (props) => {
                                 <td>Shipping Charge :</td>
                                 <td className="text-end">
                                   ₹{" "}
-                                  {shpChrg?shpChrg : "0"}
+                                  {ShippingCharge?ShippingCharge : "0"}
                                 </td>
                                 </tr>
                               <tr>

@@ -192,7 +192,7 @@ const [filteredOrders, setFilteredOrders] = useState([]);
                             <th className="name">Last Name</th>
                             <th className="name">Total Amount</th>
                             <th className="name">Payment Method</th>
-                            {/* <th className="name">Expiry</th> */}
+                            <th className="name">Order On</th>
                             <th className="name">Status</th>
                             <th className="action">Action</th>
                           </tr>
@@ -272,19 +272,22 @@ const [filteredOrders, setFilteredOrders] = useState([]);
                             <tr key={order.id}>
                               <th scope="row">
                                 <div className="form-check">
-                                  <td className="product-name">{key + 1}</td>
+                                  <td className="product-name text-center">{key + 1}</td>
                                 </div>
                               </th>
                               <td className="product-name">{order._id}</td>
                               <td className="product-name">
                                 {order.FirstName}
                               </td>
-                              <td className="product-name">{order.LastName}</td>
+                              <td className="product-name text-center">{order.LastName}</td>
                               <td className="product-name">
                                 ₹{order.totalAmount}
                               </td>
-                              <td className="product-name">
+                              <td className="product-name text-center">
                                 {order.paymentMethod}
+                              </td>
+                              <td className="product-name">
+                              {new Date(order.createdAt).toLocaleDateString()}
                               </td>
                               <td className="status">
                                 <span
@@ -400,7 +403,7 @@ const [filteredOrders, setFilteredOrders] = useState([]);
           }}
         >
           <h5 className="modal-title" id="addAddressModalLabel">
-            Edit User
+            Edit Status
           </h5>
         </ModalHeader>
         <ModalBody>

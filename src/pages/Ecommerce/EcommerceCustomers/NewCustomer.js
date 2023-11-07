@@ -153,12 +153,9 @@ const NewCustomer = () => {
     const res = await deleteCustomer(customerId);
     console.log(res);
     if (res.success) {
-      // Product was successfully deleted
-      // Perform any necessary state updates or notifications
-      // Reset productToDelete and close the modal
       setCustomerToDelete(null);
       setDeleteModal(false);
-      // Refresh the product list after deletion
+      
       Getcustomers();
     } else {
       // Handle deletion error, show error message

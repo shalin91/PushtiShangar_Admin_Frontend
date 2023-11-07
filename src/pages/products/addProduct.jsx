@@ -615,11 +615,11 @@ const AddProduct = () => {
                               className="input-group-text"
                               id="product-price-addon"
                             >
-                              ₹
+                              gm
                             </span>
 
                             <Input
-                              placeholder="Enter price"
+                              placeholder="Enter weight"
                               type="number"
                               options={{
                                 numeral: true,
@@ -707,7 +707,7 @@ const AddProduct = () => {
                               ₹
                             </span>
                             <Input
-                              placeholder="Enter price"
+                              placeholder="Enter laborCost"
                               type="number"
                               options={{
                                 numeral: true,

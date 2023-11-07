@@ -56,6 +56,7 @@ const CustomerOrders = () => {
                             <th className="name">Order Id</th>
                             <th className="name">City</th>
                             <th className="name">Total Amount</th>
+                            <th className="name">Order On</th>
                            
                             <th className="action">Action</th>
                           </tr>
@@ -72,6 +73,7 @@ const CustomerOrders = () => {
                               <td className="product-name">{order._id}</td>
                               <td className="product-name">{order.city}</td>
                               <td className="product-name">{order.totalAmount}</td>
+                              <td className="product-name">{new Date(order.createdAt).toLocaleDateString()}</td>
                             
                         
 

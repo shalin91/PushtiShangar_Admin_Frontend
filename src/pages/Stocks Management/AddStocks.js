@@ -128,6 +128,7 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
                       options={Product}
                     />
                   </Col>
+                
 
                   <Col lg={2}>
                     <Label className="form-label" htmlFor="category">

@@ -231,7 +231,7 @@ export const SignState = (props) => {
   // Get Categories
   const getCategories = async () => {
     try {
-      const response = await axios.post(`${url}/api/getcategories`);
+      const response = await axios.post(`${url}/category/getcategories`);
       return response;
     } catch (error) {
       return { success: false, msg: "server Error" };
@@ -1001,6 +1001,104 @@ export const SignState = (props) => {
     }
   };
 
+  // categorywise stock
+  const getStockbyCategoryId = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/stocks/getstocksbycategory/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+
+  // weighttype by stock
+  const getStockbyweightTypeId = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/stocks/getstocksbyweighttype/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // GetblogCategories
+  const GetblogCategories  = async () => {
+    try {
+      const response = await axios.post(`${url}/blogcategory/getblogcategory`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  // Add BlogCategory
+  const AddBlogCategory = async (BlogCategoryData) => {
+    try {
+      const response = await axios.post(
+        `${url}/blogcategory/addblogcategory`,
+        BlogCategoryData
+      );
+      return response;
+    } catch (error) {
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
+    }
+  };
+
+  // Get Specific BlogCategory
+  const getSpecificBlogCategorybyId = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/blogcategory/getspecificcategory/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      console.error("Error during API call:", error);
+    }
+  };
+
+  // Update BlogCategory
+  const UpdateBlogCateogry = async (BlogCategoryData, id) => {
+    try {
+      const response = await axios.post(
+        `${url}/blogcategory/updateblogcategory/${id}`,
+        BlogCategoryData
+      );
+      return response;
+    } catch (error) {
+      console.error("Error adding content:", error);
+      return {
+        success: false,
+        msg: "An error occurred while adding the category.",
+      };
+    }
+  };
+
+  // Delete BlogCategory
+  const DeleteBlogCategory = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/blogcategory/deletecategory/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+
 
 
   return (
@@ -1075,6 +1173,13 @@ export const SignState = (props) => {
         GetMedValueCustomersData,
         TopSellingProducts,
         GetorderHistorybyId,
+        getStockbyCategoryId,
+        getStockbyweightTypeId,
+        GetblogCategories,
+        AddBlogCategory,
+        getSpecificBlogCategorybyId,
+        UpdateBlogCateogry,
+        DeleteBlogCategory,
       }}
     >
       {props.children}

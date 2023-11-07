@@ -289,7 +289,7 @@ const Navdata = () => {
           },
           parentId: "apps",
           stateVariables: isCRM,
-          childItems: [{ id: 1, label: "Content", link: "/contentmanage" },{ id: 1, label: "Banner Master", link: "/banner-master" },{ id: 3, label: "Blogs Master", link: "/blog-master" }],
+          childItems: [{ id: 1, label: "Content", link: "/contentmanage" },{ id: 1, label: "Banner Master", link: "/banner-master" },{ id: 3, label: "Blogs Category", link: "/blog-category" },{ id: 4, label: "Blogs Master", link: "/blog-master" }],
         },
         {
           id: "NFTMarketplace",
@@ -355,8 +355,9 @@ const Navdata = () => {
             stateVariables: isSupportTickets,
             childItems: [
                 { id: 1, label: "Customers Reports", link: "/customerreports" },
+                { id: 1, label: "Date wise Reports", link: "/customerbydatereport" },
                 { id: 2, label: "Products Reports", link: "/productreport" },
-                // { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
+                { id: 3, label: "Stock Reports", link: "/stockreport" },
             ]
         },
         // {

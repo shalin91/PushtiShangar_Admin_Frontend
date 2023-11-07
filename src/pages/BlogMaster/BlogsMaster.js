@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useMemo, useEffect } from "react";
+import React, {
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+  useContext,
+} from "react";
 import JoditEditor from "jodit-react";
 import {
   Card,
@@ -32,11 +38,13 @@ import {
   deleteBlog,
 } from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
+import SignContext from "../../contextAPI/Context/SignContext";
 
 const ITEMS_PER_PAGE = 10;
 
-
 const BlogMaster = () => {
+  const { GetblogCategories } = useContext(SignContext);
+  const [CategoryData, setCategoryData] = useState([]);
   const [blogContent, setContent] = useState("");
   const [IsformActive, setIsformActive] = useState(false);
   const [selectedForUpdate, setselectedForUpdate] = useState("");
@@ -55,10 +63,16 @@ const BlogMaster = () => {
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = BlogData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const url = process.env.REACT_APP_BASE_URL
+  const url = process.env.REACT_APP_BASE_URL;
   const BLOG_IMAGE_LINK = `${url}/blog-images/`;
+
+  const getCategories = async () => {
+    const res = await GetblogCategories();
+    // console.log(res);
+    setCategoryData(res.blogCategories);
+  };
 
   const config = useMemo(
     () => ({
@@ -109,6 +123,7 @@ const BlogMaster = () => {
     if (!BlogData.length) {
       fetchData();
     }
+    getCategories();
   }, [getBlog]);
 
   const handleDeleteModal = (itemForDelete) => {
@@ -150,7 +165,7 @@ const BlogMaster = () => {
 
   const handleAdd = () => {
     setpreviewImage(null);
-    setselectedForUpdate("")
+    setselectedForUpdate("");
     toggle();
   };
 
@@ -165,6 +180,8 @@ const BlogMaster = () => {
         blogFeed: valuesForUpdate.blogFeed,
         blogTitle: valuesForUpdate.blogTitle,
         blog: valuesForUpdate.blog,
+        blogCategory: valuesForUpdate.blogCategory,
+
         date: valuesForUpdate.date,
         active: valuesForUpdate.active,
         description: valuesForUpdate.description,
@@ -184,6 +201,7 @@ const BlogMaster = () => {
       blogTitle: (selectedForUpdate && selectedForUpdate.blogTitle) || "",
       date: (selectedForUpdate && selectedForUpdate.date) || "",
       blog: (selectedForUpdate && selectedForUpdate.blog) || "",
+      blogCategory: (selectedForUpdate && selectedForUpdate.blogCategory) || "",
       description: (selectedForUpdate && selectedForUpdate.description) || "",
       imagePath: previewImage || "",
     },
@@ -201,6 +219,7 @@ const BlogMaster = () => {
       formData.append("blogTitle", values.blogTitle);
       formData.append("date", values.date);
       formData.append("blog", values.blog);
+      formData.append("blogCategory", values.blogCategory);
       formData.append("description", values.description);
       formData.append("active", values.active);
       if (selectedFile.length !== 0) {
@@ -255,8 +274,7 @@ const BlogMaster = () => {
                         type="button"
                         onClick={() => handleAdd()}
                       >
-                        <i className="ri-add-fill align-bottom" /> Add 
-                        
+                        <i className="ri-add-fill align-bottom" /> Add
                       </button>
                     </Col>
                   </Row>
@@ -277,57 +295,58 @@ const BlogMaster = () => {
                   }}
                 >
                   <Row>
-                  <Col md={12}>
-                    <Dropzone
-                      className="mt=10"
-                      onDrop={(acceptedFiles) => {
-                        const file = acceptedFiles[0];
-                        setselectedFile(file);
-                        setpreviewImage(URL.createObjectURL(file));
-                      }}
-                    >
-                      {({ getRootProps, getInputProps }) => (
-                        <div className="dropzone dz-clickable">
-                          <div
-                            className="dz-message needsclick"
-                            {...getRootProps()}
-                          >
-                            <input
-                              {...getInputProps()}
-                              accept="image/*"
-                              multiple="false"
-                            />
+                    <Col md={12}>
+                      <Dropzone
+                        className="mt=10"
+                        onDrop={(acceptedFiles) => {
+                          const file = acceptedFiles[0];
+                          setselectedFile(file);
+                          setpreviewImage(URL.createObjectURL(file));
+                        }}
+                      >
+                        {({ getRootProps, getInputProps }) => (
+                          <div className="dropzone dz-clickable">
+                            <div
+                              className="dz-message needsclick"
+                              {...getRootProps()}
+                            >
+                              <input
+                                {...getInputProps()}
+                                accept="image/*"
+                                multiple="false"
+                              />
 
-                            <div>
-                              {previewImage ? (
-                                <div
-                                  style={{
-                                    maxWidth: "100%",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                  }}
-                                >
-                                  <img
-                                    src={previewImage}
-                                    alt="Selected"
-                                    style={{ maxWidth: "300px" }}
-                                  />
-                                </div>
-                              ) : (
-                                <div>
-                                  <div className="mb-3">
-                                    <i className="display-4 text-muted ri-upload-cloud-2-fill" />
+                              <div>
+                                {previewImage ? (
+                                  <div
+                                    style={{
+                                      maxWidth: "100%",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <img
+                                      src={previewImage}
+                                      alt="Selected"
+                                      style={{ maxWidth: "300px" }}
+                                    />
                                   </div>
-                                  <h4>Drop files here or click to upload.</h4>
-                                </div>
-                              )}
+                                ) : (
+                                  <div>
+                                    <div className="mb-3">
+                                      <i className="display-4 text-muted ri-upload-cloud-2-fill" />
+                                    </div>
+                                    <h4>Drop files here or click to upload.</h4>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </Dropzone>
-                  </Col>
-                    <Col md={4}>
+                        )}
+                      </Dropzone>
+                    </Col>
+
+                    <Col md={3}>
                       <div className="mb-3">
                         <Label htmlFor="blogFeedinput" className="form-label">
                           Author
@@ -350,7 +369,7 @@ const BlogMaster = () => {
                       </div>
                     </Col>
 
-                    <Col md={4}>
+                    <Col md={3}>
                       <div className="mb-3">
                         <Label htmlFor="dateinput" className="form-label">
                           Date
@@ -373,7 +392,7 @@ const BlogMaster = () => {
                       </div>
                     </Col>
 
-                    <Col md={4}>
+                    <Col md={3}>
                       <div className="mb-3">
                         <Label htmlFor="blogTitleinput" className="form-label">
                           Title
@@ -393,6 +412,29 @@ const BlogMaster = () => {
                             {formik.errors.blogTitle}
                           </FormFeedback>
                         ) : null}
+                      </div>
+                    </Col>
+
+                    <Col md={3}>
+                      <div className="mb-3">
+                        <Label htmlFor="blogCategory" className="form-label">
+                          Category
+                        </Label>
+                        <select
+                          className="form-select"
+                          id="blogCategory"
+                          name="blogCategory"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.blogCategory || ""}
+                        >
+                          <option value="">Select a category</option>
+                          {CategoryData.map((category) => (
+                            <option key={category._id} value={category._id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </Col>
                   </Row>
@@ -432,9 +474,7 @@ const BlogMaster = () => {
                     />
                   </div>
 
-
                   <div className="hstack gap-2 justify-content-center mt-3">
-                    
                     {!buttnLoading ? (
                       <React.Fragment>
                         <button
@@ -511,7 +551,7 @@ const BlogMaster = () => {
                         <thead className="table-active">
                           <tr>
                             <th scope="col">index</th>
-
+                            <th scope="col">Blog Category</th>
                             <th scope="col">Blog Title</th>
                             <th scope="col">Author</th>
                             <th scope="col">Date</th>
@@ -524,16 +564,19 @@ const BlogMaster = () => {
                             ? currentItems.map((item, key) => (
                                 <tr key={key}>
                                   <td>{key + 1}</td>
+                                  <td>{item.blogCategoryObject.name}</td>
                                   <td>{item.blogTitle}</td>
                                   <td>{item.blogFeed}</td>
-                                  <td>{new Date(item.date).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  }
-                                )}</td>
+                                  <td>
+                                    {new Date(item.date).toLocaleDateString(
+                                      "en-US",
+                                      {
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "numeric",
+                                      }
+                                    )}
+                                  </td>
 
                                   <td>
                                     <div className="hstack gap-2">
@@ -554,45 +597,48 @@ const BlogMaster = () => {
                                 </tr>
                               ))
                             : null}
-                            <Pagination>
-                    <PaginationItem>
-                      <PaginationLink
-                        previous
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            prev === 1 ? prev : prev - 1
-                          )
-                        }
-                      />
-                    </PaginationItem>
-                    {Array.from({
-                      length: Math.ceil(BlogData.length / ITEMS_PER_PAGE),
-                    }).map((_, index) => (
-                      <PaginationItem
-                        key={index + 1}
-                        active={index + 1 === currentPage}
-                      >
-                        <PaginationLink onClick={() => paginate(index + 1)}>
-                          {index + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                    <PaginationItem>
-                      <PaginationLink
-                        next
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            prev ===
-                            Math.ceil(BlogData.length / ITEMS_PER_PAGE)
-                              ? prev
-                              : prev + 1
-                          )
-                        }
-                      />
-                    </PaginationItem>
-                  </Pagination>
+                          <Pagination>
+                            <PaginationItem>
+                              <PaginationLink
+                                previous
+                                onClick={() =>
+                                  setCurrentPage((prev) =>
+                                    prev === 1 ? prev : prev - 1
+                                  )
+                                }
+                              />
+                            </PaginationItem>
+                            {Array.from({
+                              length: Math.ceil(
+                                BlogData.length / ITEMS_PER_PAGE
+                              ),
+                            }).map((_, index) => (
+                              <PaginationItem
+                                key={index + 1}
+                                active={index + 1 === currentPage}
+                              >
+                                <PaginationLink
+                                  onClick={() => paginate(index + 1)}
+                                >
+                                  {index + 1}
+                                </PaginationLink>
+                              </PaginationItem>
+                            ))}
+                            <PaginationItem>
+                              <PaginationLink
+                                next
+                                onClick={() =>
+                                  setCurrentPage((prev) =>
+                                    prev ===
+                                    Math.ceil(BlogData.length / ITEMS_PER_PAGE)
+                                      ? prev
+                                      : prev + 1
+                                  )
+                                }
+                              />
+                            </PaginationItem>
+                          </Pagination>
                         </tbody>
-
                       </table>
                     </div>
                   </div>

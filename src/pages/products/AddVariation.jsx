@@ -125,8 +125,10 @@ const AddVariation = () => {
         },
       });
       const colorRes = await getColors();
+      console.log(colorRes)
       setColors(colorRes.colors);
       const sizeRes = await getSize();
+      console.log(sizeRes)
       setSizes(sizeRes.sizes);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -632,7 +634,7 @@ const AddVariation = () => {
                                 className="input-group-text"
                                 id="product-price-addon"
                               >
-                                ₹
+                                gm
                               </span>
 
                               <Input
@@ -722,7 +724,7 @@ const AddVariation = () => {
                                 ₹
                               </span>
                               <Input
-                                placeholder="Enter price"
+                                placeholder="Enter laborCost"
                                 options={{
                                   numeral: true,
                                   numeralThousandsGroupStyle: "thousand",

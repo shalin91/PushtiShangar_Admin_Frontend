@@ -30,6 +30,7 @@ const InvoiceDetails = () => {
   const [CouponData, setCouponData] = useState({});
   const [CustomerInfo, setCustomerInfo] = useState({});
   const customerId = OrderData.customer;
+  const ShippingCharge = 150;
 
   //Print the Invoice
   const printInvoice = () => {
@@ -362,7 +363,7 @@ const InvoiceDetails = () => {
                           </tr>
                           <tr>
                             <td>Shipping Charge</td>
-                            <td className="text-end">₹{shpChrg ? shpChrg : "0"}</td>
+                            <td className="text-end">₹{ShippingCharge ? ShippingCharge : "0"}</td>
                           </tr>
                           <tr>
                             <td>
