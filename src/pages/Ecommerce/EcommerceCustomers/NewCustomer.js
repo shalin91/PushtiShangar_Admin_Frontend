@@ -290,7 +290,7 @@ const NewCustomer = () => {
                                     //   setCustomerToDelete(customer);
                                     // }}
                                   >
-                                    View
+                                    <i className="ri-eye-fill align-bottom" />
                                   </Link>
                                 </div>
                                 <div className="remove">
@@ -303,7 +303,7 @@ const NewCustomer = () => {
                                       setCustomerToDelete(customer);
                                     }}
                                   >
-                                    Remove
+                                    <i className="ri-delete-bin-5-fill align-bottom" />
                                   </button>
                                 </div>
                               </div>

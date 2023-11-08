@@ -360,41 +360,18 @@ const Navdata = () => {
                 { id: 3, label: "Stock Reports", link: "/stockreport" },
             ]
         },
-        // {
-        //     id: "NFTMarketplace",
-        //     label: "NFT Marketplace",
-        //     link: "/#",
-        //     isChildItem: true,
-        //     click: function (e) {
-        //         e.preventDefault();
-        //         setIsNFTMarketplace(!isNFTMarketplace);
-        //     },
-        //     parentId: "apps",
-        //     stateVariables: isNFTMarketplace,
-        //     childItems: [
-        //         { id: 1, label: "Marketplace", link: "/apps-nft-marketplace" },
-        //         { id: 2, label: "Explore Now", link: "/apps-nft-explore" },
-        //         { id: 3, label: "Live Auction", link: "/apps-nft-auction" },
-        //         { id: 4, label: "Item Details", link: "/apps-nft-item-details" },
-        //         { id: 5, label: "Collections", link: "/apps-nft-collections" },
-        //         { id: 6, label: "Creators", link: "/apps-nft-creators" },
-        //         { id: 7, label: "Ranking", link: "/apps-nft-ranking" },
-        //         { id: 8, label: "Wallet Connect", link: "/apps-nft-wallet" },
-        //         { id: 9, label: "Create NFT", link: "/apps-nft-create" },
-        //     ]
-        // },
-        // {
-        //     id: "filemanager",
-        //     label: "File Manager",
-        //     link: "/apps-file-manager",
-        //     parentId: "apps",
-        // },
-        // {
-        //     id: "todo",
-        //     label: "To Do",
-        //     link: "/apps-todo",
-        //     parentId: "apps",
-        // },
+        {
+            id: "filemanager",
+            label: "Subscription",
+            link: "/subscription",
+            parentId: "apps",
+        },
+        {
+            id: "todo",
+            label: "Contact Us",
+            link: "/contactus",
+            parentId: "apps",
+        },
         // {
         //     id: "job",
         //     label: "Jobs",

@@ -308,7 +308,7 @@ const [filteredOrders, setFilteredOrders] = useState([]);
                                       to={`/vieworder/${order._id}`}
                                       className="btn btn-sm btn-soft-info view-item-btn"
                                     >
-                                      View
+                                      <i className="ri-eye-fill align-bottom" />
                                     </Link>
                                   </div>
                                   <div className="edit">

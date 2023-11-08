@@ -117,6 +117,8 @@ import CustomerOrders from "../pages/Ecommerce/EcommerceCustomers/CustomerOrders
 import StockReports from "../pages/Reports/StockReports.js";
 import CustomersByDate from "../pages/Reports/CustomersByDate.js";
 import BlogCategory from "../pages/BlogMaster/BlogCategory.js";
+import SubScribe from "../pages/Subscribe/SubScribe.js";
+import Contact from "../pages/Contact/Contact.js";
 
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
@@ -207,6 +209,9 @@ const authProtectedRoutes = [
   { path: "/blog-master", component: <SignState><BlogMaster /></SignState> },
   { path: "/blog-category", component: <SignState><BlogCategory /></SignState> },
   
+  { path: "/subscription", component: <SignState><SubScribe /></SignState> },
+  { path: "/contactus", component: <SignState><Contact /></SignState> },
+
 
 
 

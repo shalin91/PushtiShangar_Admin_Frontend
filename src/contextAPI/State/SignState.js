@@ -1098,6 +1098,58 @@ export const SignState = (props) => {
     }
   };
 
+  const GetSubscribes  = async () => {
+    try {
+      const response = await axios.post(`${url}/subscribe/getsubscribe`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  const GetContacts  = async () => {
+    try {
+      const response = await axios.post(`${url}/contact/getcontacts`);
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  const GetContactbyId  = async (id) => {
+    try {
+      const response = await axios.post(`${url}/contact/getcontact/${id}`,
+      {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  const DeleteSubscribe = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/subscribe/deletesubscribe/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
+
+  const Deletecontact = async (id) => {
+    try {
+      const response = await axios.post(
+        `${url}/contact/deletecontact/${id}`,
+        {}
+      );
+      return response;
+    } catch (error) {
+      return { success: false, msg: "server Error" };
+    }
+  };
 
 
 
@@ -1180,6 +1232,11 @@ export const SignState = (props) => {
         getSpecificBlogCategorybyId,
         UpdateBlogCateogry,
         DeleteBlogCategory,
+        GetSubscribes,
+        GetContacts,
+        GetContactbyId,
+        DeleteSubscribe,
+        Deletecontact
       }}
     >
       {props.children}
