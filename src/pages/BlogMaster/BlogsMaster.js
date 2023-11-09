@@ -564,7 +564,7 @@ const BlogMaster = () => {
                             ? currentItems.map((item, key) => (
                                 <tr key={key}>
                                   <td>{key + 1}</td>
-                                  <td>{item.blogCategoryObject.name}</td>
+                                  <td>{item.blogCategory}</td>
                                   <td>{item.blogTitle}</td>
                                   <td>{item.blogFeed}</td>
                                   <td>

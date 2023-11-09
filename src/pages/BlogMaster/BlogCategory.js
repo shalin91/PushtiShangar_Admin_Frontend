@@ -120,8 +120,8 @@ const BlogCategory = () => {
 
   useEffect(() => {
     getCategories();
-    getspecificCategory(updatedCategoryData._id)
-  }, [updatedCategoryData._id]);
+    
+  }, []);
 
 
   
