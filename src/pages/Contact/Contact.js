@@ -355,7 +355,7 @@ const Contact = () => {
             setViewModal(!viewModal);
           }}
         >
-          View Content
+          View Contact
         </ModalHeader>
         <ModalBody>
           {viewedContent && (

@@ -13,6 +13,10 @@ import {
   PaginationLink,
   PaginationItem,
   Pagination,
+  Row,
+  Card,
+  CardHeader,
+  CardBody,
 } from "reactstrap";
 import { isEmpty } from "lodash";
 import { ToastContainer } from "react-toastify";
@@ -124,8 +128,12 @@ const SubCategoryMaster = () => {
             parent="Manage Category"
             child="Sub Category"
           />
-          <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
-            <div className="file-manager-content w-100 p-4 pb-0">
+          <Row>
+          <Col lg={12}>
+          <Card id="orderList">
+          
+          
+          <CardHeader className="card-header border-0">
               <div className="hstack mb-4">
                 <h5 className="fw-semibold flex-grow-1 mb-0">
                   Sub Category Master
@@ -166,7 +174,8 @@ const SubCategoryMaster = () => {
                   </div>
                 </div>
               </div>
-
+            </CardHeader>
+            <CardBody className="pt-0">
               <div
                 className="todo-content position-relative px-4 mx-n4"
                 id="todo-content"
@@ -322,8 +331,10 @@ const SubCategoryMaster = () => {
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
+              </CardBody>
+          </Card>
+          </Col>
+          </Row>
         </Container>
       </div>
 

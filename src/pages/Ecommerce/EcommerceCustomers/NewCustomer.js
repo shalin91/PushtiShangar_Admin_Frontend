@@ -232,7 +232,7 @@ const NewCustomer = () => {
                           <th className="name">Index</th>
                           <th className="name">Name</th>
                           <th className="price">email</th>
-                          <th className="price">Contect</th>
+                          <th className="price">Contact</th>
                           <th className="price">Registered At</th>
 
                           <th className="status">Status</th>

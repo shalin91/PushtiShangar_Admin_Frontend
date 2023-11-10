@@ -77,7 +77,7 @@ const SubScribe = () => {
             <Col lg={12}>
               <Card>
                 <CardHeader className="d-flex justify-content-between align-items-center">
-                  <h4 className="card-title mb-0">Contents</h4>
+                  <h4 className="card-title mb-0">Subscribe</h4>
 
                   <Row className="align-items-center">
                     <Col className="col-lg-auto">
@@ -109,7 +109,7 @@ const SubScribe = () => {
                         <thead className="table-light">
                           <tr>
                             <th className="name">Index</th>
-                            <th className="name">Title</th>
+                            <th className="name">Email</th>
                             <th className="name">Subscribe At</th>
                             <th className="action">Action</th>
                           </tr>
