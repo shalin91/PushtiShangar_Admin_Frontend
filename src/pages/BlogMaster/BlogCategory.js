@@ -123,7 +123,7 @@ const BlogCategory = () => {
     
   }, []);
 
-
+  document.title = "Blog Category"
   
 
 

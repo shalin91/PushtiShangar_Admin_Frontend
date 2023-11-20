@@ -86,7 +86,7 @@ const Coupons = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  document.title = "Coupons | Pushtishangar";
+  document.title = "Coupons";
 
   return (
     <>

@@ -76,7 +76,7 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
     date: Yup.date().required("Select a date"),
   });
 
-  document.title = "Add Stocks | Stocks";
+  document.title = "Stocks";
 
   return (
     <>

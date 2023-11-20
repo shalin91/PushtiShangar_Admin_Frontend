@@ -240,6 +240,8 @@ const BlogMaster = () => {
     },
   });
 
+  document.title = "Blogs";
+
   return (
     <React.Fragment>
       <DeleteModal

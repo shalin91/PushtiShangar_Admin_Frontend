@@ -55,6 +55,8 @@ const ProductsReports = () => {
     GettopSellingProducts();
   }, []);
 
+  document.title = "Product Report";
+
   return (
     <>
       <div className="page-content">

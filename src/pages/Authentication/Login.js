@@ -92,7 +92,7 @@ const Login = () => {
     }
   };
 
-  document.title = "Pushtishangar";
+  document.title = "Pushtishangar | Admin Login";
   return (
     <React.Fragment>
       <ParticlesAuth>

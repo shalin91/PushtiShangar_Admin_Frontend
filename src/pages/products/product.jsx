@@ -100,6 +100,8 @@ const ProductMaster = () => {
     }
   };
 
+  document.title = "Products";
+
   return (
     <React.Fragment>
       <DeleteModal

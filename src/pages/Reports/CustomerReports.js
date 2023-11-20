@@ -113,6 +113,8 @@ const CustomerReports = () => {
   useEffect(() => {
     sortDataByTotalAmount();
   }, [filteredData])
+
+  document.title = "Customer Report";
   
 
   return (

@@ -107,7 +107,7 @@ function Stocks() {
     Getstocks();
   }, []);
 
-  document.title = "Stocks | pushti shangar";
+  document.title = "Stocks";
   return (
     <>
       <div className="page-content">

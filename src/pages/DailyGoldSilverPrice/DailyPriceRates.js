@@ -68,7 +68,7 @@ const DailyPriceRates = () => {
     // getspecificUser(id);
   }, []);
 
-  document.title = "Daily Rates | Pushtishangar";
+  document.title = "Daily Rates";
 
   return (
     <>

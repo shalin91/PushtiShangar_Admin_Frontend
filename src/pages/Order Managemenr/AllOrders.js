@@ -143,6 +143,8 @@ const [filteredOrders, setFilteredOrders] = useState([]);
     return: { backgroundColor: "#6c757d", color: "white" },
   };
 
+  document.title = "Orders";
+
   return (
     <>
       <div className="page-content">

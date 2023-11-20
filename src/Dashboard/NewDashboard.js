@@ -70,6 +70,8 @@ const NewDashboard = () => {
     fetchData();
   }, []);
 
+  document.title = "Dashboard";
+
   return (
     <>
       <div className="page-content">

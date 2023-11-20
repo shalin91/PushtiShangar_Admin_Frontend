@@ -95,6 +95,8 @@ const CustomersByDate = () => {
     }
   };
 
+  document.title = "Customer Report by Date";
+
   return (
     <>
       <div className="page-content">

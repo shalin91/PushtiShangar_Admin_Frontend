@@ -96,7 +96,8 @@ const StockReports = () => {
     }
   }, [selectedCategory, selectedPriceUpdate]);
 
-  console.log(stockData)
+  // console.log(stockData)
+  document.title = "Stocks Report";
 
   return (
     <>
