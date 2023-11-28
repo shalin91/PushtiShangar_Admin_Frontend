@@ -3,6 +3,17 @@ import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import axios from "axios";
+import { FaRupeeSign } from 'react-icons/fa';
+import { FaUsers } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
+import { FaHourglassHalf } from 'react-icons/fa';
+import { FaUndo } from 'react-icons/fa';
+import { FaBan } from 'react-icons/fa';
+import { FaShoppingBag } from 'react-icons/fa';
+
+
+
+
 
 const NewDashboard = () => {
   const url = `${process.env.REACT_APP_BASE_URL}`;
@@ -104,10 +115,15 @@ const NewDashboard = () => {
                           ₹{widgetData.totalEarnings[earningsView].toFixed(2)}
                         </span>
                       </h4>
-                      <Link to="/orders" className="text-decoration-underline">
+                      <Link to="/orders" className="text-decoration-none" style={{fontWeight : "500",color : "royalblue"}}>
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                <span className="avatar-title bg-soft-success text-success rounded-circle fs-3">
+                <FaRupeeSign />
+                </span>
+              </div>
                   </div>
                 </CardBody>
               </Card>
@@ -140,20 +156,26 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/customers"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                <span className="avatar-title bg-soft-success text-success rounded-circle fs-3">
+                <FaUsers />
+                </span>
+              </div>
                   </div>
                 </CardBody>
               </Card>
             </Col>
 
+                  {/* Total Orders */}
             <Col xl={3} md={6}>
               <Card className="card-animate">
                 <CardBody>
-                  {/* Pending Orders */}
                   <div className="d-flex align-items-center">
                     <div className="flex-grow-1 overflow-hidden">
                       <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
@@ -175,19 +197,24 @@ const NewDashboard = () => {
                           />
                         </span>
                       </h4>
-                      <Link to="/orders" className="text-decoration-underline">
+                      <Link to="/orders" className="text-decoration-none" style={{fontWeight : "500",color : "royalblue"}}>
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                <span className="avatar-title bg-soft-success text-success rounded-circle fs-3">
+                <FaShoppingCart />
+                </span>
+              </div>
                   </div>
                 </CardBody>
               </Card>
             </Col>
 
+                  {/* Pending Orders */}
             <Col xl={3} md={6}>
               <Card className="card-animate">
                 <CardBody>
-                  {/* Pending Orders */}
                   <div className="d-flex align-items-center">
                     <div className="flex-grow-1 overflow-hidden">
                       <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
@@ -209,10 +236,15 @@ const NewDashboard = () => {
                           />
                         </span>
                       </h4>
-                      <Link to="/orders" className="text-decoration-underline">
+                      <Link to="/orders" className="text-decoration-none" style={{fontWeight : "500",color : "royalblue"}}>
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                <span className="avatar-title bg-soft-warning text-warning rounded-circle fs-3">
+                <FaHourglassHalf />
+                </span>
+              </div>
                   </div>
                 </CardBody>
               </Card>
@@ -248,10 +280,15 @@ const NewDashboard = () => {
                           />
                         </span>
                       </h4>
-                      <Link to="/orders" className="text-decoration-underline">
+                      <Link to="/orders" className="text-decoration-none" style={{fontWeight : "500",color : "royalblue"}}>
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                <span className="avatar-title bg-soft-danger text-danger rounded-circle fs-3">
+                <FaUndo />
+                </span>
+              </div>
                   </div>
                 </CardBody>
               </Card>
@@ -281,10 +318,15 @@ const NewDashboard = () => {
                           />
                         </span>
                       </h4>
-                      <Link to="/orders" className="text-decoration-underline">
+                      <Link to="/orders" className="text-decoration-none" style={{fontWeight : "500",color : "royalblue"}}>
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+          <span className="avatar-title bg-soft-danger text-danger rounded-circle fs-3">
+            <FaBan />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -315,11 +357,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                    <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#2bb2be"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -350,11 +398,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                    <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#c83351"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -385,11 +439,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                    <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#2482f2"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -420,11 +480,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                    <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#3bc684"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -455,11 +521,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+                    <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#dc6828"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -490,11 +562,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+          <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#7c5fdc"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>
@@ -525,11 +603,17 @@ const NewDashboard = () => {
                       </h4>
                       <Link
                         to="/allproducts"
-                        className="text-decoration-underline"
+                        className="text-decoration-none"
+                        style={{fontWeight : "500",color : "royalblue"}}
                       >
                         View Details
                       </Link>
                     </div>
+                    <div className="avatar-sm flex-shrink-0">
+          <span className="avatar-title bg-soft  rounded-circle fs-3" style={{backgroundColor:"#dcae5f"}}>
+            <FaShoppingBag />
+          </span>
+        </div>
                   </div>
                 </CardBody>
               </Card>

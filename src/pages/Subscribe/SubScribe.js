@@ -21,8 +21,11 @@ const SubScribe = () => {
 
   const Getcontent = async () => {
     const res = await GetSubscribes();
-    console.log(res);
-    setContentData(res);
+    const transformedData = res.map((content, index) => ({
+      ...content,
+      id: index + 1,
+    }));
+    setContentData(transformedData);
   };
 
   const handleDeleteContent = async (id) => {
