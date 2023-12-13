@@ -141,9 +141,9 @@ const Navdata = () => {
  
     {
       id: "ecommerce",
-      label: "Form",
-      icon: "ri-form-2-line",
-      link: "/form",
+      label: "Dashboard",
+      icon: "ri-home-2-line",
+      link: "/dashboard",
       stateVariables: isDashboard,
 
     },

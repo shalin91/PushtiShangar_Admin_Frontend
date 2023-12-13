@@ -185,7 +185,7 @@ const EditGalleryDetails = () => {
                                 value={GalleryDetData.galleryCategory}
                                 onChange={handleChange}
                               >
-                                <option value="">Select a Category</option>
+                                
                                 {GalleryCategory.map((category) => (
                                   <option
                                     key={category.gallaryCategoryTitle}

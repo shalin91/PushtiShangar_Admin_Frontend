@@ -174,9 +174,9 @@ const [filteredSubCategories, setFilteredSubCategories] = useState([]);
       />
       <Container fluid>
         <BreadCrumb
-          grandParent="Content Management System"
-          parent="Banner Master"
-          child="All Banners"
+          grandParent="Setup"
+          parent="CMS"
+          child="Banner Master"
         />
         <Row>
           <Col lg={12}>
@@ -192,7 +192,7 @@ const [filteredSubCategories, setFilteredSubCategories] = useState([]);
                           <input
                             type="text"
                             className="form-control search"
-                            placeholder="Search by title"
+                            placeholder="Search..."
                             value={searchQuery}
                             onChange={(e) => {
                               setSearchQuery(e.target.value);

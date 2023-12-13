@@ -31,6 +31,7 @@ const SubScribe = () => {
   const handleDeleteContent = async (id) => {
     const res = await DeleteSubscribe(id);
     console.log(res);
+    Getcontent();
     if (res.success) {
       // Product was successfully deleted
       // Perform any necessary state updates or notifications
@@ -38,7 +39,7 @@ const SubScribe = () => {
       setContentToDelete(null);
       setDeleteModal(false);
       // Refresh the product list after deletion
-      Getcontent();
+      
     } else {
       // Handle deletion error, show error message
       // You might want to display an error notification
@@ -75,12 +76,12 @@ const SubScribe = () => {
     <>
         <div className="page-content">
         <Container fluid>
-          <BreadCrumb grandParent="Setup" parent="CMS" child="Contents" />
+          <BreadCrumb grandParent="Setup" parent="Subscription" child="Subscribers" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader className="d-flex justify-content-between align-items-center">
-                  <h4 className="card-title mb-0">Subscribe</h4>
+                  <h4 className="card-title mb-0">Subscribers</h4>
 
                   <Row className="align-items-center">
                     <Col className="col-lg-auto">

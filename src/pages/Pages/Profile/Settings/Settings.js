@@ -18,6 +18,8 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
+import { toast, ToastContainer } from "react-toastify";
+
 
 //import images
 import progileBg from "../../../../assets/images/profile-bg.jpg";
@@ -61,9 +63,7 @@ const Settings = () => {
     // console.log(res);
     if (res.success) {
       // setSuccess(res.msg);
-      setTimeout(() => {
-        setSuccess("");
-      }, 2000);
+      toast.success("Updated Successfully", { autoClose: 3000 });
     } else {
       setError(res.msg);
       setTimeout(() => {
@@ -107,6 +107,7 @@ const Settings = () => {
 
   return (
     <React.Fragment>
+      <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
           <div className="position-relative mx-n4 mt-n4">

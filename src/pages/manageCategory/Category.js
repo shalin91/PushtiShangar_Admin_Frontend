@@ -24,7 +24,7 @@ import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { ToastContainer } from "react-toastify";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
-import { Formik, useFormik } from "formik";
+import { Field, Formik, useFormik } from "formik";
 import {
   addCategory,
   deleteCategory,
@@ -131,21 +131,7 @@ const CategoryMaster = () => {
 
   const categoryValidation = Yup.object().shape({
     name: Yup.string().required("required"),
-    image: Yup.mixed()
-    .test("fileSize", "File size is too large", (value) => {
-      if (!value) return true; // No file is selected, so it's valid
-      return value.size <= 5242880; // 5MB maximum file size
-    })
-    .test("fileType", "Invalid file type", (value) => {
-      if (!value) return true; // No file is selected, so it's valid
-      return (
-        ["image/jpeg", "image/jpg", "image/png"].includes(value.type) ||
-        value.image.endsWith(".jpeg") ||
-        value.image.endsWith(".jpg") ||
-        value.image.endsWith(".png")
-      );
-    })
-    .required("Photo is required"),
+    // image: Yup.mixed().required("Photo is required"),
    
   });
 
@@ -155,6 +141,7 @@ const CategoryMaster = () => {
       name: (valuesForUpdate && valuesForUpdate.name) || "",
       noOfProducts: (valuesForUpdate && valuesForUpdate.noOfProducts) || "",
       description: (valuesForUpdate && valuesForUpdate.description) || "",
+      isActive: (valuesForUpdate && valuesForUpdate.isActive) || true,
     },
     validationSchema: categoryValidation,
     onSubmit: async (values) => {
@@ -164,12 +151,14 @@ const CategoryMaster = () => {
       formData.append("name", values.name);
       formData.append("description", values.description);
       formData.append("noOfProducts", values.noOfProducts);
+      formData.append("isActive", values.isActive);
       if (files.length !== 0) {
         formData.append("image", files[0].file);
       }
       setButtnLoading(true);
       if (isEdit) {
         await updateCategory(formData, valuesForUpdate._id);
+        console.log("Update is called" , valuesForUpdate)
       } else {
         await addCategory(formData);
       }
@@ -237,8 +226,8 @@ const CategoryMaster = () => {
                   <table className="table">
                     <thead className="table-active">
                       <tr>
-                        <th>index</th>
-                        <th>Category Title</th>
+                        <th style={{width : "100px"}}>index</th>
+                        <th style={{width : "400px"}}>Category Title</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -376,9 +365,7 @@ const CategoryMaster = () => {
                           }}
                         />
 
-                        {submitted && files.length === 0 ? (
-                          <FormFeedback>{categoryForm.errors.image}</FormFeedback>
-                        ) : null}
+
                       </div>
 
                       <div className="mb-3">
@@ -464,6 +451,27 @@ const CategoryMaster = () => {
                           </FormFeedback>
                         ) : null}
                       </div>
+
+                      <div className="mt-2">
+                                <Input
+                                  type="checkbox"
+                                  id="isActive"
+                                  label="Is Active"
+                                  name="active"
+                                  checked={categoryForm.values.isActive || ""}
+                          onChange={categoryForm.handleChange}
+                          onBlur={categoryForm.handleBlur}
+
+                                />
+
+                                <Label
+                                  className="form-label g-2"
+                                  htmlFor="active"
+                                >
+                                  Is Active
+                                </Label>
+                              </div>
+                  
                     </ModalBody>
                     <div className="modal-footer">
                       <div className="hstack gap-2 justify-content-end">

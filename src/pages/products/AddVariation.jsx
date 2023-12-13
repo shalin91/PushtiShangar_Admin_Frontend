@@ -51,8 +51,8 @@ const AddVariation = () => {
   );
   const [formVAlues, setFormVAlues] = useState(null);
   const [showSilverGoldDropdown, setShowSilverGoldDropdown] = useState(false);
-  const [subCatDropbind, setSubCatDropbind] = useState([]);
-  const [subSubCatDropbind, setSubSubCatDropbind] = useState([]);
+  // const [subCatDropbind, setSubCatDropbind] = useState([]);
+  // const [subSubCatDropbind, setSubSubCatDropbind] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedFilters, setselectedFilters] = useState([]);
@@ -95,7 +95,7 @@ const AddVariation = () => {
         },
       });
 
-      setSubCatDropbind(res2);
+      // setSubCatDropbind(res2);
       const res3 = await getSubSubCategory();
       dispatch({
         type: GET_SUB_SUB_CATEGORY,
@@ -105,7 +105,7 @@ const AddVariation = () => {
         },
       });
 
-      setSubSubCatDropbind(res3);
+      // setSubSubCatDropbind(res3);
 
       const getDP = await getDailyPrice();
       dispatch({
@@ -139,14 +139,14 @@ const AddVariation = () => {
     const data = subCategoryData.filter(
       (item) => item.Category === e.target.value
     );
-    setSubCatDropbind(data);
+    // setSubCatDropbind(data);
   };
 
   const handelSubCategorySelect = (event) => {
     const data = subSubCategoryData.filter(
       (item) => item.SubCategory === event.target.value
     );
-    setSubSubCatDropbind(data);
+    // setSubSubCatDropbind(data);
   };
 
   useEffect(() => {
@@ -198,7 +198,7 @@ const AddVariation = () => {
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
       // stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
-      shippingCharge: (formVAlues && formVAlues.shippingCharge) || "",
+      // shippingCharge: (formVAlues && formVAlues.shippingCharge) || "",
       sku: (formVAlues && formVAlues.sku) || "",
       size: (formVAlues && formVAlues.size) || "",
       gst: (formVAlues && formVAlues.gst) || "",
@@ -236,7 +236,7 @@ const AddVariation = () => {
       formData.append("isProductNew", values.isProductNew);
       formData.append("isProductPopular", values.isProductPopular);
       formData.append("description", values.description);
-      formData.append("shippingCharge", values.shippingCharge);
+      // formData.append("shippingCharge", values.shippingCharge);/
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("hsnCode", values.hsnCode);
@@ -344,13 +344,13 @@ const AddVariation = () => {
                         >
                           {/* Populate the options dynamically */}
                           <option value={null}>--select--</option>
-                          {subCatDropbind
-                            ? subCatDropbind.map((item) => (
-                                <option key={item._id} value={item._id}>
-                                  {item.name}
-                                </option>
-                              ))
-                            : null}
+                          {subCategoryData
+                          ? subCategoryData.map((item) => (
+                            productForm.values.category  === item.Category&& <option key={item._id} value={item._id}>
+                                {item.name}
+                              </option>
+                            ))
+                          : null}
                         </select>
                         {productForm.touched.subCategory &&
                         productForm.errors.subCategory ? (
@@ -386,13 +386,14 @@ const AddVariation = () => {
                           {/* Populate the options dynamically */}
                           <option value="">--select--</option>
 
-                          {subSubCatDropbind
-                            ? subSubCatDropbind.map((item) => (
-                                <option key={item._id} value={item._id}>
-                                  {item.name}
-                                </option>
-                              ))
-                            : null}
+                          {subSubCategoryData
+                          ? subSubCategoryData.map((item) => (
+                            productForm.values.subCategory === item.SubCategory&&
+                              <option key={item._id} value={item._id}>
+                                {item.name}
+                              </option>
+                            ))
+                          : null}
                         </select>
                         {productForm.touched.subSubCategory &&
                         productForm.errors.subSubCategory ? (
@@ -405,7 +406,7 @@ const AddVariation = () => {
                   </Row>
                   <Row className="align-items-center  g-1 mx-2">
                     {/* Ttile */}
-                    <Col sm={6}>
+                    <Col sm={12}>
                       <div className="mb-3">
                         <label
                           className="form-label"
@@ -439,7 +440,7 @@ const AddVariation = () => {
                         </div>
                       </div>
                     </Col>
-                    <Col sm={6}>
+                    {/* <Col sm={6}>
                       <div className="mb-3">
                         <label
                           className="form-label"
@@ -472,7 +473,7 @@ const AddVariation = () => {
                           ) : null}
                         </div>
                       </div>
-                    </Col>
+                    </Col> */}
                   </Row>
 
                   <Row className="align-items-center  g-1 mx-2">

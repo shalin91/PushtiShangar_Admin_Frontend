@@ -30,6 +30,7 @@ import {
   getSubSubCategory,
 } from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
+import Loader from "../../Components/Common/Loader";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 // import { Category_IMAGE_LINK, USER_IMAGE_LINK } from "../../helpers/url_helper";
 
@@ -53,6 +54,7 @@ const SubSubCategoryMaster = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  
 
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
@@ -187,10 +189,7 @@ const SubSubCategoryMaster = () => {
                 </div>
               </div>
 
-              <div
-                className="todo-content position-relative px-4 mx-n4"
-                id="todo-content"
-              >
+              <div>
                 {isEmpty(tableData) && (
                   <div id="elmLoader">
                     {/* <div
@@ -199,13 +198,13 @@ const SubSubCategoryMaster = () => {
                     >
                       <span className="visually-hidden">Loading...</span>
                     </div> */}
-                    <h1>no data ...</h1>
+                  <Loader error={tableData}/>
                   </div>
                 )}
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>index</th>
+                      <th style={{width : "100px"}}>index</th>
                       <th>category</th>
                       <th>sub category</th>
                       <th>sub sub category</th>

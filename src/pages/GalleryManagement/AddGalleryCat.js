@@ -223,6 +223,8 @@ const AddGalleryCat = () => {
                         </div>
                       </div>
                     </Card>
+                    <Row className="align-items-last justify-content-end">
+                    <Col lg={1} style={{marginRight:'20px'}}>
                     <div className="text-end mb-3">
                       <button
                         type="submit"
@@ -232,6 +234,21 @@ const AddGalleryCat = () => {
                         Submit
                       </button>
                     </div>
+                    </Col>
+                    <Col lg={1}>
+                    <div className="text-end mb-3" style={{marginRight:'20px'}}>
+                      <button
+                        type="button"
+                        className="btn btn-danger w-sm"
+                        onClick={() => {
+                          navigate("/gallerycatcontent");
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                    </Col>
+                    </Row>
                   </Form>
                 )}
               </Formik>

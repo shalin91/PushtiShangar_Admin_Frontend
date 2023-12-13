@@ -178,7 +178,7 @@ const ProductMaster = () => {
                     </div>
                   ))}
 
-                <table className="table align-middle position-relative">
+                <table className="table">
                   <thead className="table-active">
                     <tr>
                       <th scope="col">index</th>

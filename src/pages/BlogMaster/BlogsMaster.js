@@ -39,6 +39,7 @@ import {
 } from "../../helpers/backend_helper";
 import Dropzone from "react-dropzone";
 import SignContext from "../../contextAPI/Context/SignContext";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -252,6 +253,11 @@ const BlogMaster = () => {
       <ToastContainer closeButton={false} />
       <div className="page-content">
         <Container fluid>
+        <BreadCrumb
+          grandParent="Setup"
+          parent="CMS"
+          child="Blog Master"
+        />
           <Card>
             <CardHeader className="d-flex justify-content-between align-items-center">
               {!IsformActive ? (

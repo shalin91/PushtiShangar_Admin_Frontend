@@ -36,7 +36,7 @@ const ImageUpload = ({getSelectedImages,images}) => {
           <Col sm={12}>
             <div>
               <h5 className="fs-14 mb-1">Product Gallery</h5>
-              <p className="text-muted">Add Product Gallery Images.</p>
+              <p className="text-muted">Add Atleast 4 Product Images.</p>
 
               <Dropzone
                 onDrop={(acceptedFiles) => {

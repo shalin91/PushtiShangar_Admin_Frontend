@@ -19,6 +19,7 @@ import {
   CardBody,
 } from "reactstrap";
 import { isEmpty } from "lodash";
+import Loader from "../../Components/Common/Loader";
 import { ToastContainer } from "react-toastify";
 import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
@@ -98,7 +99,7 @@ const SubCategoryMaster = () => {
   };
 
   const categoryValidation = Yup.object().shape({
-    name: Yup.string().required("sub category is rquiresd."),
+    name: Yup.string().required("sub category is required."),
     Category: Yup.string().required("category is required."),
   });
 
@@ -176,10 +177,7 @@ const SubCategoryMaster = () => {
               </div>
             </CardHeader>
             <CardBody className="pt-0">
-              <div
-                className="todo-content position-relative px-4 mx-n4"
-                id="todo-content"
-              >
+              <div>
                 {isEmpty(tableData) && (
                   <div id="elmLoader">
                     {/* <div
@@ -188,13 +186,13 @@ const SubCategoryMaster = () => {
                     >
                       <span className="visually-hidden">Loading...</span>
                     </div> */}
-                    <h1>no data ...</h1>
+                    <Loader error={tableData}/>
                   </div>
                 )}
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>index</th>
+                      <th style={{width : "100px"}}>index</th>
                       <th>Category</th>
                       <th>Sub Category Title</th>
                       <th>Status</th>

@@ -123,8 +123,8 @@ import Contact from "../pages/Contact/Contact.js";
 
 // import customerNew from "../pages/Ecommerce/EcommerceCustomers/customerNew";
 const authProtectedRoutes = [
-  // { path: "/dashboard", component: <NewDashboard /> },
-  { path: "/form", component: <NewDashboard /> },
+  { path: "/dashboard", component: <NewDashboard /> },
+  // { path: "/form", component: <NewDashboard /> },
   // { path: "/addproduct", component: <SignState><EcommerceNewAddProduct /></SignState> },
 
   { path: "/apps-ecommerce-orders", component: <EcommerceOrders /> },

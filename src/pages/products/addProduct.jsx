@@ -92,7 +92,7 @@ const AddProduct = () => {
         },
       });
 
-      setSubCatDropbind(res2);
+ 
       const res3 = await getSubSubCategory();
       dispatch({
         type: GET_SUB_SUB_CATEGORY,
@@ -189,7 +189,7 @@ const AddProduct = () => {
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
       // stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
-      shippingCharge: (formVAlues && formVAlues.shippingCharge) || "",
+      // shippingCharge: (formVAlues && formVAlues.shippingCharge) || "",
       sku: (formVAlues && formVAlues.sku) || "",
       size: (formVAlues && formVAlues.size) || "",
       gst: (formVAlues && formVAlues.gst) || "",
@@ -225,7 +225,7 @@ const AddProduct = () => {
       formData.append("isProductNew", values.isProductNew);
       formData.append("isProductPopular", values.isProductPopular);
       formData.append("description", values.description);
-      formData.append("shippingCharge", values.shippingCharge);
+      // formData.append("shippingCharge", values.shippingCharge);
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("hsnCode", values.hsnCode);
@@ -332,9 +332,9 @@ const AddProduct = () => {
                       >
                         {/* Populate the options dynamically */}
                         <option value={null}>--select--</option>
-                        {subCatDropbind
-                          ? subCatDropbind.map((item) => (
-                              <option key={item._id} value={item._id}>
+                        {subCategoryData
+                          ? subCategoryData.map((item) => (
+                            productForm.values.category  === item.Category&& <option key={item._id} value={item._id}>
                                 {item.name}
                               </option>
                             ))
@@ -374,8 +374,9 @@ const AddProduct = () => {
                         {/* Populate the options dynamically */}
                         <option value="">--select--</option>
 
-                        {subSubCatDropbind
-                          ? subSubCatDropbind.map((item) => (
+                        {subSubCategoryData
+                          ? subSubCategoryData.map((item) => (
+                            productForm.values.subCategory === item.SubCategory&&
                               <option key={item._id} value={item._id}>
                                 {item.name}
                               </option>
@@ -393,7 +394,7 @@ const AddProduct = () => {
                 </Row>
                 <Row className="align-items-center  g-1 mx-2">
                   {/* Ttile */}
-                  <Col sm={6}>
+                  <Col sm={12}>
                     <div className="mb-3">
                       <label
                         className="form-label"
@@ -425,7 +426,7 @@ const AddProduct = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col sm={6}>
+                  {/* <Col sm={6}>
                     <div className="mb-3">
                       <label
                         className="form-label"
@@ -456,7 +457,7 @@ const AddProduct = () => {
                         ) : null}
                       </div>
                     </div>
-                  </Col>
+                  </Col> */}
                 </Row>
 
                 <Row className="align-items-center  g-1 mx-2">
@@ -792,7 +793,7 @@ const AddProduct = () => {
                           name="hsnCode"
                           aria-label="hsnCode"
                           aria-describedby="product-orders-addon"
-                          value={productForm.values.hsnCode}
+                          value={productForm.values.hsnCode || ""}
                           onChange={productForm.handleChange}
                           onBlur={productForm.handleBlur}
                           invalid={

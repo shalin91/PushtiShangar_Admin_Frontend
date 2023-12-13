@@ -29,8 +29,8 @@ const Login = () => {
   const { loginUser } = useContext(SignContext);
   const navigate = useNavigate();
   const [UserInfo, setUserInfo] = useState({
-    email: "shalinsheth4915@gmail.com",
-    password: "shalin123",
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
