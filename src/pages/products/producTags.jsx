@@ -14,8 +14,6 @@ const ProducTags = (props) => {
           value={props.data}
           onChange={(item) => {
             props.sendTagsToParent(item);
-            console.log(props.data)
-
           }}
           name="tags"
           placeHolder="enter tags"

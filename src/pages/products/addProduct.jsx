@@ -21,6 +21,7 @@ import {
   getSubCategory,
   getSubSubCategory,
   getspecificproduct,
+  updateProduct,
 } from "../../helpers/backend_helper";
 import {
   GET_GST,
@@ -72,7 +73,7 @@ const AddProduct = () => {
 
   const dispatch = useDispatch();
   const fetchDropdownData = async () => {
-    console.log("called");
+    // console.log("called");
     try {
       const res = await getCategory();
       dispatch({
@@ -153,8 +154,7 @@ const AddProduct = () => {
     if (id) {
       getspecificproduct(id).then((pfu) => {
         setFormVAlues(pfu.product);
-        console.log(pfu.product);
-
+        console.log(pfu);
         setShowSilverGoldDropdown(pfu.product.calculationOnWeight);
         setSelectedImages(pfu.product.imageGallery);
         setSelectedTags(pfu.product.tags);
@@ -188,8 +188,7 @@ const AddProduct = () => {
       weight: (formVAlues && formVAlues.weight) || "",
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
-      // stock :(formVAlues && formVAlues.stock && formVAlues.stock.quantity) || "",
-      // shippingCharge: (formVAlues && formVAlues.shippingCharge) || "",
+  
       sku: (formVAlues && formVAlues.sku) || "",
       size: (formVAlues && formVAlues.size) || "",
       gst: (formVAlues && formVAlues.gst) || "",
@@ -233,7 +232,12 @@ const AddProduct = () => {
         
         formData.append("tags",selectedTags[i]);
       }
-      formData.append("filters", selectedItems);
+      
+      for (let i = 0; i < selectedItems.length; i++) {
+        formData.append("filters", selectedItems[i]);
+        // formData.append("imageGallery", selectedImages[i]);
+      }
+
       formData.append("color", selectedcolors);
       formData.append("material", selectedmaterials);
       formData.append("season", selectedseasons);
@@ -244,7 +248,11 @@ const AddProduct = () => {
 
       try {
         if (formVAlues) {
-          // await updateProduct(formData, formVAlues._id);
+          await updateProduct(formData, formVAlues._id);
+          navigate("/allproducts");
+          setSubmitting(false);
+
+
         } else {
           console.log(values);
           const addedProduct = await addProduct(formData);

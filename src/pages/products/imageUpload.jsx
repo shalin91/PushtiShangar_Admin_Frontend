@@ -14,20 +14,25 @@ const ImageUpload = ({getSelectedImages,images}) => {
   const [selectedFiles, setselectedFiles] = useState([]);
   function handleAcceptedFiles(files) {
     const updatedSelectedFiles = selectedFiles.concat(files);
+
     // productForm.setFieldValue("imageGallery", updatedSelectedFiles);
     files.map((file) =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
       })
     );
-    console.log(files);
     setselectedFiles(updatedSelectedFiles);
-    getSelectedImages(updatedSelectedFiles)
+    getSelectedImages(images?updatedSelectedFiles:null)
   }
-  useEffect(
-    ()=>{
-      console.log(selectedFiles)
-    },[selectedFiles])
+
+  useEffect(() => {
+    console.log(images);
+    // const updatedSelectedFiles = images.map(item => `${process.env.REACT_APP_BASE_URL}/products/${item}`);
+    setselectedFiles(images);
+  }, [images]); 
+  
+
+
 
   return (
 
@@ -70,13 +75,21 @@ const ImageUpload = ({getSelectedImages,images}) => {
                       <div className="p-2">
                         <Row className="align-items-center">
                           <Col className="col-auto">
-                            <img
+                         { typeof f === "string"?<img
                               data-dz-thumbnail=""
                               height="80"
                               className="avatar-sm rounded bg-light"
                               alt={f.name}
-                              src={f.preview}
-                            />
+                              src={`${process.env.REACT_APP_BASE_URL}/products/${f}`}
+
+                            />:<img
+                            data-dz-thumbnail=""
+                            height="80"
+                            className="avatar-sm rounded bg-light"
+                            alt={f.name}
+                            src={f.preview}
+
+                          />}
                           </Col>
                           <Col>
                             <Link
@@ -97,6 +110,7 @@ const ImageUpload = ({getSelectedImages,images}) => {
                                 const updatedSelectedFiles = [...selectedFiles];
                                 updatedSelectedFiles.splice(i, 1); // Remove the element at index i
                                 setselectedFiles(updatedSelectedFiles); // Update the state
+                                getSelectedImages(updatedSelectedFiles)
                               }}
                             >
                               <i className="ri-delete-bin-5-fill align-bottom" />

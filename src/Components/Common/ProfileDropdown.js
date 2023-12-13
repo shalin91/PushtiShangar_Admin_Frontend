@@ -27,7 +27,7 @@ const ProfileDropdown = () => {
     if (res.success) {
       setUserInfo(res);
     } else {
-      console.log(res.msg);
+      // console.log(res.msg);
     }
   };
 
