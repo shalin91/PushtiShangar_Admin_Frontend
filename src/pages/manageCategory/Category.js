@@ -139,7 +139,7 @@ const CategoryMaster = () => {
     enableReinitialize: true,
     initialValues: {
       name: (valuesForUpdate && valuesForUpdate.name) || "",
-      noOfProducts: (valuesForUpdate && valuesForUpdate.noOfProducts) || "",
+      // noOfProducts: (valuesForUpdate && valuesForUpdate.noOfProducts) || "",
       description: (valuesForUpdate && valuesForUpdate.description) || "",
       isActive: (valuesForUpdate && valuesForUpdate.isActive) || true,
     },
@@ -150,7 +150,7 @@ const CategoryMaster = () => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("description", values.description);
-      formData.append("noOfProducts", values.noOfProducts);
+      // formData.append("noOfProducts", values.noOfProducts);
       formData.append("isActive", values.isActive);
       if (files.length !== 0) {
         formData.append("image", files[0].file);
@@ -396,33 +396,7 @@ const CategoryMaster = () => {
                         ) : null}
                       </div>
 
-                      <div className="mb-3">
-                        <Label htmlFor="name" className="form-label">
-                          no of products
-                        </Label>
-                        <Input
-                          name="noOfProducts"
-                          id="noOfProducts"
-                          className="form-control"
-                          placeholder="total products under this category"
-                          type="number"
-                          onChange={categoryForm.handleChange}
-                          onBlur={categoryForm.handleBlur}
-                          value={categoryForm.values.noOfProducts || ""}
-                          invalid={
-                            categoryForm.touched.noOfProducts &&
-                            categoryForm.errors.noOfProducts
-                              ? true
-                              : false
-                          }
-                        />
-                        {categoryForm.touched.noOfProducts &&
-                        categoryForm.errors.noOfProducts ? (
-                          <FormFeedback type="invalid">
-                            {categoryForm.errors.noOfProducts}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
+                     
 
                       <div className="mb-3">
                         <Label htmlFor="id-field" className="form-label">
@@ -457,11 +431,10 @@ const CategoryMaster = () => {
                                   type="checkbox"
                                   id="isActive"
                                   label="Is Active"
-                                  name="active"
+                                  name="isActive"
                                   checked={categoryForm.values.isActive || ""}
-                          onChange={categoryForm.handleChange}
-                          onBlur={categoryForm.handleBlur}
-
+                                  onChange={categoryForm.handleChange}
+                                  onBlur={categoryForm.handleBlur}
                                 />
 
                                 <Label
@@ -484,7 +457,7 @@ const CategoryMaster = () => {
                               className="btn btn-primary"
                               id="addNewTodo"
                             >
-                              {!!isEdit ? "Update" : "Add Category"}
+                              {!!isEdit ? "Update" : "Add"}
                             </button>
                           </React.Fragment>
                         ) : (

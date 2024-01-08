@@ -22,6 +22,8 @@ import {
   getSubSubCategory,
   getspecificproduct,
   updateProduct,
+  getSize,
+  getColors,
 } from "../../helpers/backend_helper";
 import {
   GET_GST,
@@ -61,8 +63,23 @@ const AddProduct = () => {
   const [selectedmaterials, setSelectedmaterials] = useState([]);
   const [productForUpdate, setProductForUpdate] = useState([]);
   const [productSize, setProductSize] = useState([]);
+  const [Sizes, setSizes] = useState([]);
+  const [Colors, setColors] = useState([]);
 
   const { id } = useParams();
+
+  
+
+  const handleFocus = (e) => {
+    // Disable the mouse wheel for the number input
+    if (e.target.type === "number") {
+      e.target.addEventListener("wheel", preventWheel);
+    }
+  };
+
+  const preventWheel = (e) => {
+    e.preventDefault();
+  };
 
   const config = useMemo(
     () => ({
@@ -93,7 +110,6 @@ const AddProduct = () => {
         },
       });
 
- 
       const res3 = await getSubSubCategory();
       dispatch({
         type: GET_SUB_SUB_CATEGORY,
@@ -122,6 +138,12 @@ const AddProduct = () => {
           data: gstRes,
         },
       });
+      const colorRes = await getColors();
+      console.log(colorRes)
+      setColors(colorRes.colors);
+      const sizeRes = await getSize();
+      console.log(sizeRes)
+      setSizes(sizeRes.sizes);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -147,7 +169,9 @@ const AddProduct = () => {
       DailyRateData.length === 0 ||
       categoryData.length === 0 ||
       subCategoryData.length === 0 ||
-      subSubCategoryData.length === 0
+      subSubCategoryData.length === 0 ||
+      Colors.length === 0 ||
+      Sizes.length === 0
     ) {
       fetchDropdownData();
     }
@@ -155,10 +179,14 @@ const AddProduct = () => {
       getspecificproduct(id).then((pfu) => {
         setFormVAlues(pfu.product);
         console.log(pfu);
+        const filters = pfu.product.filters.map(value => {
+          return { value: value, label: value };
+      })
         setShowSilverGoldDropdown(pfu.product.calculationOnWeight);
         setSelectedImages(pfu.product.imageGallery);
         setSelectedTags(pfu.product.tags);
-        setselectedFilters(pfu.product.filters);
+        setselectedFilters(filters);
+        setselectedItems(pfu.product.filters)
         setSelectedcolors(pfu.product.color);
         setSelectedseasons(pfu.product.season);
         setSelectedmaterials(pfu.product.material);
@@ -188,11 +216,13 @@ const AddProduct = () => {
       weight: (formVAlues && formVAlues.weight) || "",
       laborCost: (formVAlues && formVAlues.laborCost) || "",
       discountOnLaborCost: (formVAlues && formVAlues.discountOnLaborCost) || "",
-  
+
       sku: (formVAlues && formVAlues.sku) || "",
       size: (formVAlues && formVAlues.size) || "",
       gst: (formVAlues && formVAlues.gst) || "",
       hsnCode: (formVAlues && formVAlues.hsnCode) || "",
+      productColor: (formVAlues && formVAlues.productColor) || "",
+      productSize: (formVAlues && formVAlues.productSize) || "",
     },
 
     validationSchema: Yup.object({
@@ -228,11 +258,12 @@ const AddProduct = () => {
       formData.append("sku", values.sku);
       formData.append("gst", values.gst);
       formData.append("hsnCode", values.hsnCode);
-      for (let i=0; i<selectedTags.length; i++){
-        
-        formData.append("tags",selectedTags[i]);
+      formData.append("productColor", values.productColor);
+      formData.append("productSize", values.productSize);
+      for (let i = 0; i < selectedTags.length; i++) {
+        formData.append("tags", selectedTags[i]);
       }
-      
+
       for (let i = 0; i < selectedItems.length; i++) {
         formData.append("filters", selectedItems[i]);
         // formData.append("imageGallery", selectedImages[i]);
@@ -251,8 +282,6 @@ const AddProduct = () => {
           await updateProduct(formData, formVAlues._id);
           navigate("/allproducts");
           setSubmitting(false);
-
-
         } else {
           console.log(values);
           const addedProduct = await addProduct(formData);
@@ -268,13 +297,15 @@ const AddProduct = () => {
     },
   });
 
+  console.log(productForm)
+
   return (
     <div className="page-content">
-        <BreadCrumb grandParent="Setup" parent="Products" child="Add Products" />
+      <BreadCrumb grandParent="Setup" parent="Products" child="Add Products" />
       <Card>
-      <CardHeader className="d-flex justify-content-between align-items-center">
-                <h4 className="card-title mb-0">Add Product</h4>
-                </CardHeader>
+        <CardHeader className="d-flex justify-content-between align-items-center">
+          <h4 className="card-title mb-0">Add Product</h4>
+        </CardHeader>
         <CardBody>
           <form onSubmit={productForm.handleSubmit}>
             <Row>
@@ -341,11 +372,15 @@ const AddProduct = () => {
                         {/* Populate the options dynamically */}
                         <option value={null}>--select--</option>
                         {subCategoryData
-                          ? subCategoryData.map((item) => (
-                            productForm.values.category  === item.Category&& <option key={item._id} value={item._id}>
-                                {item.name}
-                              </option>
-                            ))
+                          ? subCategoryData.map(
+                              (item) =>
+                                productForm.values.category ===
+                                  item.Category && (
+                                  <option key={item._id} value={item._id}>
+                                    {item.name}
+                                  </option>
+                                )
+                            )
                           : null}
                       </select>
                       {productForm.touched.subCategory &&
@@ -383,12 +418,15 @@ const AddProduct = () => {
                         <option value="">--select--</option>
 
                         {subSubCategoryData
-                          ? subSubCategoryData.map((item) => (
-                            productForm.values.subCategory === item.SubCategory&&
-                              <option key={item._id} value={item._id}>
-                                {item.name}
-                              </option>
-                            ))
+                          ? subSubCategoryData.map(
+                              (item) =>
+                                productForm.values.subCategory ===
+                                  item.SubCategory && (
+                                  <option key={item._id} value={item._id}>
+                                    {item.name}
+                                  </option>
+                                )
+                            )
                           : null}
                       </select>
                       {productForm.touched.subSubCategory &&
@@ -546,6 +584,8 @@ const AddProduct = () => {
                             <Input
                               placeholder="Enter price"
                               type="number"
+                              
+                              onFocus={handleFocus}
                               id="price"
                               name="original"
                               className="form-control"
@@ -586,6 +626,8 @@ const AddProduct = () => {
                             <Input
                               placeholder="Enter price"
                               type="number"
+                              
+                              onFocus={handleFocus}
                               id="price"
                               name="discounted"
                               className="form-control"
@@ -634,6 +676,8 @@ const AddProduct = () => {
                                 numeral: true,
                                 numeralThousandsGroupStyle: "thousand",
                               }}
+                              
+                              onFocus={handleFocus}
                               id="price"
                               name="weight"
                               className="form-control"
@@ -678,6 +722,8 @@ const AddProduct = () => {
                                 numeral: true,
                                 numeralThousandsGroupStyle: "thousand",
                               }}
+                              
+                              onFocus={handleFocus}
                               id="laborCost"
                               name="laborCost"
                               className="form-control"
@@ -722,6 +768,8 @@ const AddProduct = () => {
                                 numeral: true,
                                 numeralThousandsGroupStyle: "thousand",
                               }}
+                              
+                              onFocus={handleFocus}
                               id="price"
                               name="discountOnLaborCost"
                               className="form-control"
@@ -782,7 +830,7 @@ const AddProduct = () => {
                       ) : null}
                     </div>
                   </Col>
-                  
+
                   {/* HSN code */}
                   <Col sm={4}>
                     <div className="mb-3">
@@ -805,12 +853,14 @@ const AddProduct = () => {
                           onChange={productForm.handleChange}
                           onBlur={productForm.handleBlur}
                           invalid={
-                            productForm.errors.hsnCode && productForm.touched.hsnCode
+                            productForm.errors.hsnCode &&
+                            productForm.touched.hsnCode
                               ? true
                               : false
                           }
                         />
-                        {productForm.errors.hsnCode && productForm.touched.hsnCode ? (
+                        {productForm.errors.hsnCode &&
+                        productForm.touched.hsnCode ? (
                           <FormFeedback type="invalid">
                             {productForm.errors.hsnCode}
                           </FormFeedback>
@@ -859,7 +909,7 @@ const AddProduct = () => {
               <Col sm={4}>
                 <ImageUpload
                   getSelectedImages={setSelectedImages}
-                  images = {selectedImages}
+                  images={selectedImages}
                 ></ImageUpload>
               </Col>
             </Row>
@@ -897,23 +947,90 @@ const AddProduct = () => {
               data={selectedTags}
               sendTagsToParent={setSelectedTags}
             ></ProducTags>
-          
-                  <Col className="mt-3">
-            <Filters 
-              setSelectedcolors={setSelectedcolors}
-              selectedcolors={selectedcolors}
-              setSelectedseasons={setSelectedseasons}
-              selectedseasons={selectedseasons}
-              selectedmaterials={selectedmaterials}
-              setSelectedmaterials={setSelectedmaterials}
-              selectedFilters={selectedFilters}
-              selectedItems={selectedItems}
-              setselectedFilters={setselectedFilters}
-              setselectedItems={setselectedItems}
-              productSize={productSize}
-              setProductSize={setProductSize}
-            ></Filters>
-</Col>
+
+            <Col className="mt-3">
+              <Filters
+                setSelectedcolors={setSelectedcolors}
+                selectedcolors={selectedcolors}
+                setSelectedseasons={setSelectedseasons}
+                selectedseasons={selectedseasons}
+                selectedmaterials={selectedmaterials}
+                setSelectedmaterials={setSelectedmaterials}
+                selectedFilters={selectedFilters}
+                selectedItems={selectedItems}
+                setselectedFilters={setselectedFilters}
+                setselectedItems={setselectedItems}
+                productSize={productSize}
+                setProductSize={setProductSize}
+              ></Filters>
+            </Col>
+
+           {formVAlues?formVAlues.isVariant && <Row className="g-3">
+              <Col sm={4}>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="ProductColor">
+                    Colors
+                  </label>
+                  <select
+                    className="form-select"
+                    id="ProductColor"
+                    name="productColor"
+                    aria-label="ProductColor"
+                    onBlur={productForm.handleBlur}
+                    value={productForm.values.productColor || ""}
+                    onChange={(e) => {
+                      productForm.handleChange(e);
+                    }}
+                  >
+                    <option value={null}>--select--</option>
+                    {Colors
+                      ? Colors.map((color) => (
+                          <option key={color._id} value={color.name}>
+                            {color.name}
+                          </option>
+                        ))
+                      : null}
+                  </select>
+                  {productForm.touched.gst && productForm.errors.gst ? (
+                    <FormFeedback type="invalid">
+                      {productForm.errors.gst}
+                    </FormFeedback>
+                  ) : null}
+                </div>
+              </Col>
+              <Col sm={4}>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="ProductColor">
+                    Size
+                  </label>
+                  <select
+                    className="form-select"
+                    id="ProductColor"
+                    name="productSize"
+                    aria-label="ProductColor"
+                    onBlur={productForm.handleBlur}
+                    value={productForm.values.productSize || ""}
+                    onChange={(e) => {
+                      productForm.handleChange(e);
+                    }}
+                  >
+                    <option value={null}>--select--</option>
+                    {Sizes
+                      ? Sizes.map((size) => (
+                          <option key={size._id} value={size.size}>
+                            {size.size}
+                          </option>
+                        ))
+                      : null}
+                  </select>
+                  {productForm.touched.gst && productForm.errors.gst ? (
+                    <FormFeedback type="invalid">
+                      {productForm.errors.gst}
+                    </FormFeedback>
+                  ) : null}
+                </div>
+              </Col>
+              </Row>: null}
 
             <Col className="d-flex justify-content-center">
               <div className="m-4 form-check">
@@ -968,8 +1085,6 @@ const AddProduct = () => {
               </div>
             </Col>
             <Col className="d-flex justify-content-center">
-              
-
               {!productForm.isSubmitting ? (
                 <React.Fragment>
                   <button

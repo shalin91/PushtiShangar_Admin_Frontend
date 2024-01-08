@@ -93,7 +93,7 @@ const AddStocks = ({ refreshTable, StockForUpdate,setStockForUpdate }) => {
               date:
                 (selectedForUpdate &&
                   new Date(selectedForUpdate.date.split("T")[0])) ||
-                null, // Use `null` as a placeholder if date is not provided
+                null,
             }}
             validationSchema={validationSchema}
             onSubmit={async (values, { resetForm }) => {

@@ -228,16 +228,18 @@ const ProductMaster = () => {
                             </td>
                             <td>
                               <div className="hstack gap-2 text-center">
-                                {!item.isVariant && (
-                                  <button
-                                    className="btn btn-sm btn-soft-warning edit-list"
-                                    onClick={() => {
-                                      navigate(`/addvariation/${item._id}`);
-                                    }}
-                                  >
-                                    <i className="ri-file-edit-fill align-bottom" />
-                                  </button>
-                                )}
+                              {item.isVariant === false ? (
+  <button
+    className="btn btn-sm btn-soft-warning edit-list"
+    onClick={() => {
+      navigate(`/addvariation/${item._id}`);
+    }}
+  >
+    <i className="ri-file-edit-fill align-bottom" />
+  </button>
+) : (
+  <span>Varient</span>
+)}
                               </div>
                             </td>
                             <td>

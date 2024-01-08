@@ -24,7 +24,8 @@ import DeleteModal from "../../Components/Common/DeleteModal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
 import {
-  addCategory,
+  addsubSubCategory,
+  updatesubSubCategory,
   getCategory,
   getSubCategory,
   getSubSubCategory,
@@ -99,6 +100,8 @@ const SubSubCategoryMaster = () => {
 
   const handleEdit = (item) => {
     setShowModal(true);
+    setrecordForSubmit(item);
+    setIsEdit(true);
     console.log(item);
   };
 
@@ -279,7 +282,11 @@ const SubSubCategoryMaster = () => {
                           <td>
                             <button
                               className="btn btn-sm btn-soft-info edit-list mx-1"
-                              onClick={() => handleEdit(item)}
+                              onClick={() => handleEdit(item)
+                          
+                                
+                              }
+
                             >
                               <i className="ri-pencil-fill align-bottom" />
                             </button>
@@ -362,15 +369,21 @@ const SubSubCategoryMaster = () => {
           ) : null}
           <Formik
             initialValues={{
-              name: "",
-              Category: "",
-              SubCategory: "",
-              isActive: null,
+              name: (recordForSubmit && recordForSubmit.name) || "",
+              Category: (recordForSubmit && recordForSubmit.Category) || "",
+              SubCategory: (recordForSubmit && recordForSubmit.SubCategory) ||"",
+              isActive: (recordForSubmit && recordForSubmit.isActive) || true,
             }}
             validationSchema={categoryValidation}
             onSubmit={async (values, { resetForm }) => {
-              console.log(values);
-              await addCategory(values);
+              if (isEdit) {
+                await updatesubSubCategory(values, recordForSubmit._id);
+                setIsEdit(false);
+              } else {
+                await addsubSubCategory(values);
+              }
+              fetchData();
+              toggle();
               resetForm();
             }}
           >
@@ -463,7 +476,7 @@ const SubSubCategoryMaster = () => {
                           className="form-check-input"
                           type="checkbox"
                           id="active"
-                          name="active"
+                          name="isActive"
                           checked={values.isActive}
                           onChange={handleChange}
                           onBlur={handleBlur}

@@ -14,6 +14,9 @@ const Filters = (props) => {
   const seasonsData = useSelector((state) => state.Product.seasons);
   const materialsData = useSelector((state) => state.Product.materials);
 
+
+  
+
   const dispatch = useDispatch();
   const fetchDropdownData = async () => {
     try {
@@ -47,7 +50,14 @@ const Filters = (props) => {
     }
   };
 
+  const handleFilterChange = (selectedMulti2) => {
+    props.setselectedFilters(selectedMulti2);
+    props.setselectedItems(selectedMulti2.map((i) => i.value));
+  }
+  console.log(props,"____________props")
+
   useEffect(() => {
+    console.log(props,"____________props")
     if (
       colorsData.length === 0 ||
       seasonsData.length === 0 ||
@@ -55,7 +65,7 @@ const Filters = (props) => {
     ) {
       fetchDropdownData();
     }
-  }, []);
+  }, [props.selectedItems]);
 
   return (
     <React.Fragment>
@@ -69,12 +79,12 @@ const Filters = (props) => {
               filter by
             </label>
             <Select
-              value={props.selectedMulti2}
+              value={props.selectedFilters}
               isMulti={true}
               isClearable={true}
               onChange={(selectedMulti2) => {
-                props.setselectedFilters(selectedMulti2);
-                props.setselectedItems(selectedMulti2.map((i) => i.value));
+                handleFilterChange(selectedMulti2)
+               
               }}
               options={[
                 { value: "Color", label: "Color" },
@@ -97,6 +107,7 @@ const Filters = (props) => {
                 id="color"
                 name="color"
                 aria-label="color"
+                value={props.selectedcolors || ''}
                 onChange={(e) => {
                   props.setSelectedcolors(e.target.value);
                 }}
@@ -126,6 +137,7 @@ const Filters = (props) => {
                 id="material"
                 name="material"
                 aria-label="material"
+                value={props.selectedmaterials || ''}
                 onChange={(e) => {
                   props.setSelectedmaterials(e.target.value);
                 }}
@@ -154,6 +166,7 @@ const Filters = (props) => {
                 className="form-select"
                 id="season"
                 name="season"
+                value={props.selectedseasons || ''}
                 aria-label="season"
                 onChange={(e) => {
                   props.setSelectedseasons(e.target.value);

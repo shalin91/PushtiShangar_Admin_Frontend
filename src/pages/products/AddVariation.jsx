@@ -37,7 +37,7 @@ import ImageUpload from "./imageUpload";
 import ProducTags from "./producTags";
 import Filters from "./filters";
 import { useNavigate, useParams } from "react-router-dom";
-import { color } from "echarts";
+
 // import { getColors } from "../../../../backend/controllers/ColorController";
 
 const AddVariation = () => {
@@ -155,7 +155,9 @@ const AddVariation = () => {
       DailyRateData.length === 0 ||
       categoryData.length === 0 ||
       subCategoryData.length === 0 ||
-      subSubCategoryData.length === 0
+      subSubCategoryData.length === 0 ||
+      Colors.length === 0 ||
+      Sizes.length === 0
     ) {
       fetchDropdownData();
     }
@@ -869,6 +871,7 @@ const AddVariation = () => {
                 <Col sm={4}>
                   <ImageUpload
                     getSelectedImages={setSelectedImages}
+                    images = {selectedImages}
                   ></ImageUpload>
                 </Col>
               </Row>

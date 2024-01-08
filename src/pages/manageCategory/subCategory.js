@@ -362,7 +362,7 @@ const SubCategoryMaster = () => {
           <Formik
             initialValues={{
               name: (recordForSubmit && recordForSubmit.name) || "",
-              isActive: null,
+              isActive: (recordForSubmit && recordForSubmit.isActive) || true,
               Category: (recordForSubmit && recordForSubmit.Category) || "",
             }}
             validationSchema={categoryValidation}
@@ -441,7 +441,7 @@ const SubCategoryMaster = () => {
                           className="form-check-input"
                           type="checkbox"
                           id="active"
-                          name="active"
+                          name="isActive"
                           checked={values.isActive}
                           onChange={handleChange}
                           onBlur={handleBlur}

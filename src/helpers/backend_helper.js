@@ -98,9 +98,11 @@ export const updateSubCategory = (data, id) =>
 
 //sub sub category
 
-export const getSubSubCategory = async () =>
-  await api.create(hostedUrl + "/subsubcategory/getsubsubcategories");
-
+export const getSubSubCategory = async () => await api.create(hostedUrl + "/subsubcategory/getsubsubcategories");
+export const addsubSubCategory = (data) =>
+  api.create(hostedUrl + "/subsubcategory/addsubsubcategory", data);
+  export const updatesubSubCategory = (data, id) =>
+  api.create(hostedUrl + "/subsubcategory/updatesubsubcategory/" + id, data);
 export const getGst = async () => await api.create(hostedUrl + "/gst/getGst");
 export const getColors = async () => await api.create(hostedUrl + "/color/getcolors");
 export const getSize = async () => await api.create(hostedUrl + "/size/getSizes");
